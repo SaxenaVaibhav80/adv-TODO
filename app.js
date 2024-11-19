@@ -59,6 +59,7 @@ console.log(username,password,email)
 
 })
 
+// --------------  sending token to the client side--------------->
 
 app.post("/api/login",(req,res)=>
 {
@@ -74,6 +75,9 @@ app.post("/api/login",(req,res)=>
     }
     
 })
+
+
+// -----------------------login post req---------------------------->
 
 app.post("/login",async(req,res)=>
 {
@@ -109,12 +113,14 @@ app.post("/login",async(req,res)=>
 })
 
 
-
+// -----------------------login get req---------------------------->
 app.get("/login",(req,res)=>
 {
   res.render("login")
 })
 
+
+// -----------------------signup get req---------------------------->
 app.get("/signup",(req,res)=>
 {
     res.render("signup")
