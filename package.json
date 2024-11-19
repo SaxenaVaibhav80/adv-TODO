@@ -1,0 +1,28 @@
+{
+  "name": "adv-todo",
+  "version": "1.0.0",
+  "description": "this is adv todo for couple",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaxenaVaibhav80/adv-TODO.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SaxenaVaibhav80/adv-TODO/issues"
+  },
+  "homepage": "https://github.com/SaxenaVaibhav80/adv-TODO#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.2",
+    "socket.io": "^4.8.1",
+    "web-push": "^3.6.7"
+  }
+}
