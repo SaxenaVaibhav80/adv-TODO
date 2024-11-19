@@ -2,6 +2,8 @@ const express = require("express")
 const app = express()
 const http = require('http')
 const ejs = require("ejs")
+const userModel = require("./models/user.js")
+const db = require("./config/config.js")
 const server=http.createServer(app)
 app.set("view engine","ejs")
 app.use(express.static('public'))
@@ -10,7 +12,7 @@ const bodyParser= require("body-parser")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const dotenv = require("dotenv")
-
+dotenv.config()
 app.use(bodyParser.urlencoded({extended:true}))
 
 
@@ -46,6 +48,8 @@ console.log(username,password,email)
     const user = await userModel.create({
        
         username:username,
+        gender:gender,
+        age:age,
         password:encpass,
         email:email
     })
