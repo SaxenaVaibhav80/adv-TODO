@@ -190,9 +190,23 @@ app.get("/login",manageState,(req,res)=>
 
 // --------------main page routing----------->
 
-app.get("/TODO",authenticated,(req,res)=>
+app.get("/TODO",authenticated,async(req,res)=>
 {
-    res.render("main")
+    const token = req.cookies.token
+    if(token)
+    {
+        try{
+            const verification = jwt.verify(token,secret_key)
+            const id = verification.id
+            const user = await userModel.findOne({_id:id})
+            const name = user.firstname
+            res.render("main",{firstname:name})
+        }catch(err){
+            res.redirect("/")
+        }
+    }else{
+        res.render("main")
+    }
 })
 
 
