@@ -25,6 +25,10 @@ const userModel= new mongoose.Schema({
     },
     gender:{
         type: String,
+    },
+    mode:{
+        default: "Solo Mode",
+        type: String,
     }
 })
 

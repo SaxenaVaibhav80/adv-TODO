@@ -134,10 +134,14 @@ app.post("/api/login",(req,res)=>
 {
     const token = req.cookies.token
     if(token)
-    {   
+    {   try{
         const isvalid = jwt.verify(token, secret_key);
         const id =isvalid.id
         return res.status(200).json({ token,id });
+        }catch(err)
+        {
+            res.redirect("/")
+        }
     }
     else{
         return res.status(200).json({undefined})    
@@ -187,6 +191,48 @@ app.get("/login",manageState,(req,res)=>
 {
   res.render("login")
 })
+// acception mode from frontend-------------------->
+
+app.post("/handleMode", async (req, res) => {
+
+    const {mode} = req.body;
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+            await userModel.findOneAndUpdate(
+                { _id: id },
+                { mode: mode }
+            );
+            res.status(200).send(mode);
+        } catch (err) {
+            res.status(500).send("Error verifying token");
+        }
+    } else {
+        res.status(401).send("Login please, session expired");
+    }
+});
+
+// modeStatemanager--------------------->
+app.post("/modeState", async (req, res) => {
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+            const user = await userModel.findOne({_id:id})
+            const mode = user.mode
+            res.status(200).send(mode);
+        } catch (err) {
+            res.status(500).send("Error verifying token");
+        }
+    } else {
+        res.status(401).send("Login please, session expired");
+    }
+});
 
 // --------------main page routing----------->
 
@@ -200,7 +246,8 @@ app.get("/TODO",authenticated,async(req,res)=>
             const id = verification.id
             const user = await userModel.findOne({_id:id})
             const name = user.firstname
-            res.render("main",{firstname:name})
+            const mode=user.mode
+            res.render("main",{firstname:name,mode:mode})
         }catch(err){
             res.redirect("/")
         }
