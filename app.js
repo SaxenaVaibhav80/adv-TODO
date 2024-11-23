@@ -166,11 +166,11 @@ app.post("/login",async(req,res)=>
                 {id:user._id,name:user.firstname},
                 secret_key,
                 {
-                 expiresIn:'20s'
+                 expiresIn:'24h'
                 }
             )
             const options={
-                expires:new Date(Date.now()+20*1000),
+                expires:new Date(Date.now()+24*60*60*1000),
                 httpOnly:true
             };
             res.status(200).cookie("token",token,options)
@@ -186,7 +186,7 @@ app.post("/login",async(req,res)=>
 })
 
 
-// -----------------------login get req--------------------------->
+// -----------------------login get req---------------------------->
 app.get("/login",manageState,(req,res)=>
 {
   res.render("login")
