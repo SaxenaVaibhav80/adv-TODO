@@ -32,7 +32,7 @@ const manageState = async(req,res,next)=>
             const id = verification.id
             res.redirect("/TODO")
         }catch(err){
-            res.redirect("/")
+            res.redirect("/logout")
         }
     }else{
         next()
@@ -78,7 +78,7 @@ const authenticated = async(req,res,next)=>
             const id = verification.id
             next()
         }catch(err){
-            res.redirect("/")
+            res.redirect("/logout")
         }
     }else{
         res.redirect("/")
