@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TODO</title>
+    <link rel="icon" href="/img/todoicon.ico">
     <link href="/css/main.css" rel="stylesheet">
     
 </head>
 <body>
     <nav class="navbar">
         <a> Hello <%= firstname %></a>
+        <a id="mode"><%=mode %></a>
+        <div id="outer">
+            <div id="ball"></div>
+        </div>
+        <a href="/AddUser">Add partner</a>
+        <a href="#">Join room</a>
         <a href="#">contact us </a>
-        <a href="#">Add partner</a>
         <a href="/logout">Logout</a>
     </nav>
 

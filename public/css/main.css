@@ -15,7 +15,7 @@
 }
 
 .navbar a{
-    margin-left: 20px;
+    margin-left: 65px;
     color: rgb(50, 49, 49);
     text-decoration: none;
 }
@@ -28,4 +28,29 @@ a::after{
 }
 .navbar > :last-child{
     margin-right: 50px;
+}
+#outer{
+    border: 1px solid  rgb(81 81 81);
+    border-radius: 12px;
+    width: 35px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#ball {
+ 
+    background-color: rgb(81 81 81);
+    border-radius: 30px;
+    width: 46%;
+    height: 16.5px;
+    cursor: pointer;
+}
+
+.shift-right{
+    display: flex;
+    justify-content: flex-end;
+}
+.shift-left{
+    display: flex;
+    justify-content: flex-start;
 }
