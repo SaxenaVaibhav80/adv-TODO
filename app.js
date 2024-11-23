@@ -186,7 +186,7 @@ app.post("/login",async(req,res)=>
 })
 
 
-// -----------------------login get req---------------------------->
+// -----------------------login get req--------------------------->
 app.get("/login",manageState,(req,res)=>
 {
   res.render("login")
