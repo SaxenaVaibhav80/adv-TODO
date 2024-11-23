@@ -1,0 +1,108 @@
+*{
+    margin: 0;
+    font-family: "Open Sans", sans-serif;
+    overflow: hidden;
+}
+
+.inner-div {
+    display: flex;
+    gap: 15px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    /* background-color: rgba(255, 255, 255, 0.9); */
+    /* background-color: #f6e8e8; */
+    background: linear-gradient(135deg, #ffffff, #f6e4e4);
+    backdrop-filter: blur(8px);
+    padding: 15px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.navbar a{
+    margin-left: 20px;
+    display: block;
+    color: rgb(50, 49, 49);
+    padding: 14px 20px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.navbar a:hover {
+    background-color: #e5efed;
+    color: black;
+    border-radius: 24px; /* Rounded corners for hover effect */
+    transition: background-color 0.3s, border-radius 0.1s;
+}
+
+.navbar > :last-child{
+    margin-right: 50px;
+}
+
+.intro-section {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #f6e4e4);
+    padding: 50px 110px;
+    width: 100%;
+    min-height: calc(100vh - 80px);
+}
+
+/* Text content on the left side */
+.text-content {
+    max-width: 40%;
+    padding-top: 100px;
+    padding: 90px 50px 50px 50px;
+}
+
+.text-content h1 {
+    font-size: 46px;
+    font-weight: bold;
+    color: #333; 
+}
+
+.text-content p {
+    font-size: 20px;
+    color: #666; /* Lighter color for paragraph */
+    line-height: 1.5;
+    margin-top: 10px;
+}
+
+.codo {
+    color: rgb(205, 94, 94); /* Red color for "CoDo" */
+}
+
+.collab-do {
+    color: #ce9393; /* Light red for "Collaborate and Do" */
+    font-size: 36px;
+}
+
+/* Image content on the right side */
+.image-content img {
+    max-height: 450px; /* Set max height for the image */
+    object-fit: contain; /* Ensure the image maintains aspect ratio */
+    margin-left: 0px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #ce9393; /* Red background for button */
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 24px;
+    font-size: 20px;
+    margin-top: 20px; /* Spacing below paragraph */
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #eaa4a4; /* Darker red on hover */
+}
