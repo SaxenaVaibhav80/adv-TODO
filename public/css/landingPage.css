@@ -3,6 +3,10 @@
     font-family: "Open Sans", sans-serif;
     overflow: hidden;
 }
+body{
+    height: 100vh;
+    background: linear-gradient(135deg, #ffffff, #f6e4e4);
+}
 
 .inner-div {
     display: flex;
@@ -48,8 +52,14 @@
 .intro-section {
     display: flex;
     align-items: center;
+<<<<<<< HEAD
     background: linear-gradient(135deg, #ffffff, #f6e4e4);
     padding: 50px 110px;
+=======
+    /* padding: 50px 110px; */
+    margin-top: 50px;
+    margin-left: 190px;
+>>>>>>> a5e00239b253d0d0ad9d2c836be92de6820ba4b4
     width: 100%;
     min-height: calc(100vh - 80px);
 }
