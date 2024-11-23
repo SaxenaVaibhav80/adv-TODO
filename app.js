@@ -51,10 +51,10 @@ const checkLoginState = (req, res, next) => {
             loggedIn = true;
         } catch (err) {
             if (err.name === 'TokenExpiredError') {
-                 res.redirect("/")
+                 res.redirect("/logout")
                 } 
             else {
-                res.status(401).send("malformed token")
+                res.redirect("/logout")
             }
         }
     }
@@ -166,11 +166,11 @@ app.post("/login",async(req,res)=>
                 {id:user._id,name:user.firstname},
                 secret_key,
                 {
-                 expiresIn:'24h'
+                 expiresIn:'20s'
                 }
             )
             const options={
-                expires:new Date(Date.now()+24*60*60*1000),
+                expires:new Date(Date.now()+20*1000),
                 httpOnly:true
             };
             res.status(200).cookie("token",token,options)
