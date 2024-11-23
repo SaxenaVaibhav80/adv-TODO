@@ -255,6 +255,29 @@ app.get("/TODO",authenticated,async(req,res)=>
         res.render("main")
     }
 })
+// add user page---------------------------->
+
+app.get("/addUser",authenticated,async(req,res)=>
+{
+    const token = req.cookies.token
+    if(token)
+    {
+        try{
+            const verification = jwt.verify(token,secret_key)
+            const id = verification.id
+            const user = await userModel.findOne({_id:id})
+            const name = user.firstname
+            const mode=user.mode
+            res.render("addUser",{firstname:name})
+        }catch(err){
+            res.redirect("/")
+        }
+    }else{
+        res.render("addUser")
+    }
+   
+})
+
 
 
 // -----------------------signup get req---------------------------->

@@ -29,6 +29,9 @@ const userModel= new mongoose.Schema({
     mode:{
         default: "Solo Mode",
         type: String,
+    },
+    uid:{
+        type:String,
     }
 })
 
