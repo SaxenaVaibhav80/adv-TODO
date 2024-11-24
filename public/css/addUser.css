@@ -67,11 +67,21 @@ a::after{
     margin-left: 90px;
     color: rgb(24, 49, 83);
 }
-#btns{
+#btns {
     margin-top: 20px;
-    margin-left: 130px;
-    width: 50%;
+    margin-left: 75px;
+    justify-content: center;
+    width: 65%;
     display: flex;
+}
+.copy{
+  color: rgb(24,49,83);
+  border: 2px solid rgb(24,49,83);
+  background-color: rgb(248,226,151);
+  border-radius:7px;
+  padding: 10px 15px 10px 15px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 #generate-url-btn{
   color: rgb(24,49,83);
@@ -79,6 +89,7 @@ a::after{
   background-color: rgb(248,226,151);
   border-radius:7px;
   padding: 10px 15px 10px 15px;
+  cursor: pointer;
 }
 #discription{
     color:rgb(24,49,83) ;
