@@ -12,6 +12,8 @@ const bodyParser= require("body-parser")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const dotenv = require("dotenv")
+const socketio=require('socket.io');
+const io=socketio(server)
 const { v4: uuidv4 } = require('uuid');
 const cookiParser= require("cookie-parser")
 dotenv.config()
@@ -128,23 +130,76 @@ app.post("/signup",async(req,res)=>
 
 
 })
-//------------get uid post req handle---------------------------->
-app.post("/getuid",authenticated,(req,res)=>
-{
 
-    res.status(200).send(uuidv4())
+   let uid
+
+  //------------get uid post req handle---------------------------->
+  app.post("/getuid",authenticated,(req,res)=>
+    {
+        res.status(200).send(uuidv4())
+    })
+    
+    // settin the uid into the database------------------------------>
+    app.post("/setuid",authenticated,async(req,res)=>
+    {
+        const id = req.body.userid
+        uid=req.body.uid
+    
+        const user=await userModel.findOneAndUpdate(
+            {_id:id},
+            {uid:uid}
+        )
+    })
+
+// getting join room handler ------------------------------------>
+
+app.get("/join-room",authenticated,(req,res)=>
+{
+    res.render("joinroom")
 })
 
-// settin the uid into the database------------------------------>
-app.post("/setuid",authenticated,async(req,res)=>
-{
-    const id = req.body.userid
-    const uid=req.body.uid
 
-    const user=await userModel.findOneAndUpdate(
-        {_id:id},
-        {uid:uid}
-    )
+// handling join room handler----------------------------------->
+
+app.post("/joined",authenticated,async(req,res)=>
+{
+    const token = req.cookies.token
+    const verification=jwt.verify(token,secret_key)
+    const id= verification.id
+    const uid = req.body.id
+    
+    const user= await userModel.findOne({joinid:uid})
+    if(!user)
+    {
+        const updateduser= await userModel.findOneAndUpdate(
+            {_id:id},
+            {joinid:uid}
+        )
+        console.log(updateduser)
+    }
+
+   res.redirect("/TODO")
+})
+
+// about page handler ------------------------------------->
+
+app.get("/about",(req,res)=>
+{
+    res.render("aboutus")
+})
+
+// socket connection--------------------------------------------->
+io.on("connection",async(socket)=>
+{
+    
+const generator =  await userModel.findOne({uid:uid})
+const adder =  await userModel.findOne({joinid:uid})
+
+if(generator && adder)
+{
+    io.to(generator._id).emit("joined","joined")
+}
+
 })
 
 // --------------  sending token to the client side--------------->
