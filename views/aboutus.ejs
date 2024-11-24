@@ -12,18 +12,10 @@
       <!-- write html and add css to the landing page accordingly -->
       <!-- on nav bar there should be  login signup about contact -->
     <nav class="navbar">
-        <% if (loggedIn) { %>
-          <a href="/TODO">Task Hub</a>
-        <% } else { %>
-            <a href="/login">Login</a>
-            <a href="/signup">Signup</a>
-           
-        <% } %>
+        <a href="/TODO">Task Hub</a>
         <a href="/about">About</a>
         <a href="#contact">Contact</a>
-        <% if (loggedIn) { %>
-          <a href="/logout">Logout</a>
-      <% } %>
+        <a href="/logout">Logout</a>
     </nav>
     
     <div class="intro-section">
