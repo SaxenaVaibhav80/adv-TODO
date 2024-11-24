@@ -15,6 +15,8 @@ window.addEventListener("pageshow", (event) => {
     }
 });
 
+
+
 function checkLoginState(){
     let token
     fetch('/api/login', {
@@ -36,28 +38,44 @@ function checkLoginState(){
 }
 
 
+function  checkAdduserState(){
+    fetch("/modeState", {
+        method: "POST"
+    }).then(res=>res.text())
+    .then(modes=>{
+        if(modes=="Dual Mode")
+            {
+                outer.classList.remove("shift-left")
+                outer.classList.add("shift-right") 
+                const nav = document.getElementsByClassName("navbar")[0]
+                const thirdChild = nav.children[3]; 
+                const btn = document.getElementsByClassName("adduserbtn")[0]
+                console.log(btn)
+                if(btn == undefined)
+                {
+                    const adduserbtn = document.createElement("a")
+                    adduserbtn.textContent="Add user"
+                    adduserbtn.classList.add("adduserbtn")
+                    adduserbtn.setAttribute("href","/AddUser")
+                    nav.insertBefore(adduserbtn, thirdChild.nextSibling);
+                }  
+            }
+        else{
+                outer.classList.remove("shift-right")
+                outer.classList.add("shift-left")  
+        }
+    })
+}
+
+checkAdduserState();
+
 const outer= document.getElementById("outer")
 const ball =document.getElementById("ball")
 
 
-fetch("/modeState", {
-    method: "POST"
-}).then(res=>res.text())
-.then(modes=>{
-    if(modes=="Dual Mode")
-        {
-            outer.classList.remove("shift-left")
-            outer.classList.add("shift-right")   
-        }
-    else{
-            outer.classList.remove("shift-right")
-            outer.classList.add("shift-left")  
-    }
-})
-
 outer.addEventListener("click",async()=>
 {   const mode= document.getElementById("mode").innerHTML
-    console.log(mode)
+   
     
     if(mode==='Solo Mode')
     {
@@ -72,9 +90,20 @@ outer.addEventListener("click",async()=>
             console.log(modes)
             if(modes=="Dual Mode")
                 {
+                    const nav = document.getElementsByClassName("navbar")[0]
+                    const thirdChild = nav.children[3]; 
+                    const btn = document.getElementsByClassName("adduserbtn")[0]
                     outer.classList.remove("shift-left")
                     outer.classList.add("shift-right")
                     document.getElementById("mode").innerHTML='Dual Mode'   
+                    if(btn == undefined)
+                    {
+                        const adduserbtn = document.createElement("a")
+                        adduserbtn.textContent="Add user"
+                        adduserbtn.classList.add("adduserbtn")
+                        adduserbtn.setAttribute("href","/AddUser")
+                        nav.insertBefore(adduserbtn, thirdChild.nextSibling);
+                    }
                 }
         })
     
@@ -90,7 +119,12 @@ outer.addEventListener("click",async()=>
         .then(modes=>
         {
             if(modes=="Solo Mode")
-                {
+                {   const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
+                    const nav = document.getElementsByClassName("navbar")[0]
+                    if(adduserbtn)
+                    {
+                       nav.removeChild(adduserbtn)
+                    }
                     outer.classList.remove("shift-right")
                     outer.classList.add("shift-left")
                     document.getElementById("mode").innerHTML='Solo Mode'           
@@ -99,3 +133,13 @@ outer.addEventListener("click",async()=>
         )
     }
 })
+
+
+
+window.addEventListener("pageshow", (event) => {
+    if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+        checkAdduserState();
+    }
+});
+
+

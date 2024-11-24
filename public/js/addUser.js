@@ -1,7 +1,32 @@
 const generatebtn = document.getElementById("generate-url-btn")
 const btns= document.getElementById("btns")
 const uidDiv = document.getElementById("uid")
+const userid= localStorage.getItem("id")
 
+function getuid ()
+{
+    fetch("/getuid",{
+        method:'POST'
+    }).then(res=>res.text())
+    .then(id=>
+    {
+        uidDiv.innerHTML=id
+
+        fetch("/setuid",{
+            method:'POST',
+            headers:{
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({uid:id,userid:userid})
+        })
+    }
+    )
+}
+
+generatebtn.addEventListener("click",()=>
+{
+     getuid()
+})
 
 
 generatebtn.addEventListener("click",()=>
@@ -29,3 +54,4 @@ generatebtn.addEventListener("click",()=>
     }
 
 })
+

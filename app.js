@@ -12,6 +12,7 @@ const bodyParser= require("body-parser")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const dotenv = require("dotenv")
+const { v4: uuidv4 } = require('uuid');
 const cookiParser= require("cookie-parser")
 dotenv.config()
 const secret_key=process.env.SECRET_KEY
@@ -126,6 +127,24 @@ app.post("/signup",async(req,res)=>
  }
 
 
+})
+//------------get uid post req handle---------------------------->
+app.post("/getuid",authenticated,(req,res)=>
+{
+
+    res.status(200).send(uuidv4())
+})
+
+// settin the uid into the database------------------------------>
+app.post("/setuid",authenticated,async(req,res)=>
+{
+    const id = req.body.userid
+    const uid=req.body.uid
+
+    const user=await userModel.findOneAndUpdate(
+        {_id:id},
+        {uid:uid}
+    )
 })
 
 // --------------  sending token to the client side--------------->
