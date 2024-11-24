@@ -1,3 +1,5 @@
+const socket = io()
+
 let extracted_token
 fetch('/api/login', {
     method: 'POST',
@@ -7,6 +9,11 @@ fetch('/api/login', {
     localStorage.setItem("token", data.token); 
     localStorage.setItem("id",data.id);
     extracted_token = localStorage.getItem('token');
+})
+
+socket.on("joined",()=>
+{
+    alert("joined")
 })
 
 window.addEventListener("pageshow", (event) => {
@@ -25,6 +32,16 @@ function appendAddUser()
     adduserbtn.setAttribute("href","/AddUser")
     nav.insertBefore(adduserbtn, thirdChild.nextSibling);
 
+}
+function joinroom()
+{
+    const nav = document.getElementsByClassName("navbar")[0]
+    const fifthChild = nav.children[4]; 
+    const joinroombtn = document.createElement("a")
+    joinroombtn.textContent="Join room"
+    joinroombtn.classList.add("joinroombtn")
+    joinroombtn.setAttribute("href","/join-room")
+    nav.insertBefore(joinroombtn, fifthChild.nextSibling);
 }
 
 
@@ -58,12 +75,15 @@ function  checkAdduserState(){
             {
                 outer.classList.remove("shift-left")
                 outer.classList.add("shift-right") 
-             
+                const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                 const btn = document.getElementsByClassName("adduserbtn")[0]
                 console.log(btn)
-                if(btn == undefined)
+                console.log(joinbtn)
+               
+                if(btn == undefined && joinbtn == undefined)
                 {
                     appendAddUser()
+                    joinroom()
                 }  
             }
         else{
@@ -99,10 +119,12 @@ outer.addEventListener("click",async()=>
                     const btn = document.getElementsByClassName("adduserbtn")[0]
                     outer.classList.remove("shift-left")
                     outer.classList.add("shift-right")
+                    const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                     document.getElementById("mode").innerHTML='Dual Mode'   
-                    if(btn == undefined)
+                    if(btn == undefined && joinbtn== undefined)
                     {
                         appendAddUser()
+                        joinroom()
                     }
                 }
         })
@@ -120,10 +142,12 @@ outer.addEventListener("click",async()=>
         {
             if(modes=="Solo Mode")
                 {   const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
+                    const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                     const nav = document.getElementsByClassName("navbar")[0]
                     if(adduserbtn)
                     {
                        nav.removeChild(adduserbtn)
+                       nav.removeChild(joinbtn)
                     }
                     outer.classList.remove("shift-right")
                     outer.classList.add("shift-left")

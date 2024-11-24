@@ -32,6 +32,9 @@ const userModel= new mongoose.Schema({
     },
     uid:{
         type:String,
+    },
+    joinid:{
+        type:String
     }
 })
 
