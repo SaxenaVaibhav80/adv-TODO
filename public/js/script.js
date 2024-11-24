@@ -77,8 +77,7 @@ function  checkAdduserState(){
                 outer.classList.add("shift-right") 
                 const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                 const btn = document.getElementsByClassName("adduserbtn")[0]
-                console.log(btn)
-                console.log(joinbtn)
+                
                
                 if(btn == undefined && joinbtn == undefined)
                 {
