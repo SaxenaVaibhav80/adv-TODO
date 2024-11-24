@@ -131,7 +131,7 @@ app.post("/signup",async(req,res)=>
 
 })
 
-   let uid
+
 
   //------------get uid post req handle---------------------------->
   app.post("/getuid",authenticated,(req,res)=>
@@ -143,7 +143,7 @@ app.post("/signup",async(req,res)=>
     app.post("/setuid",authenticated,async(req,res)=>
     {
         const id = req.body.userid
-        uid=req.body.uid
+        const uid=req.body.uid
     
         const user=await userModel.findOneAndUpdate(
             {_id:id},
@@ -167,18 +167,25 @@ app.post("/joined",authenticated,async(req,res)=>
     const verification=jwt.verify(token,secret_key)
     const id= verification.id
     const uid = req.body.id
+   
+    if(uid!="")
+    {   
+        const user= await userModel.findOne({joinid:uid})
+        if(!user)
+        {
+            const updateduser= await userModel.findOneAndUpdate(
+                {_id:id},
+                {joinid:uid},
+                { new: true }
+            )
+            res.json({ redirectTo: "/TODO",countuser:false});
+        }else{
+            res.json({ redirectTo: "/TODO",countuser:true});
+        }
+        
     
-    const user= await userModel.findOne({joinid:uid})
-    if(!user)
-    {
-        const updateduser= await userModel.findOneAndUpdate(
-            {_id:id},
-            {joinid:uid}
-        )
-        console.log(updateduser)
     }
-
-   res.redirect("/TODO")
+    
 })
 
 // about page handler ------------------------------------->
@@ -189,18 +196,9 @@ app.get("/about",(req,res)=>
 })
 
 // socket connection--------------------------------------------->
-io.on("connection",async(socket)=>
-{
-    
-const generator =  await userModel.findOne({uid:uid})
-const adder =  await userModel.findOne({joinid:uid})
 
-if(generator && adder)
-{
-    io.to(generator._id).emit("joined","joined")
-}
 
-})
+
 
 // --------------  sending token to the client side--------------->
 
