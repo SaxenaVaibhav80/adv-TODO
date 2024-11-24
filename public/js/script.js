@@ -15,6 +15,17 @@ window.addEventListener("pageshow", (event) => {
     }
 });
 
+function appendAddUser()
+{
+    const nav = document.getElementsByClassName("navbar")[0]
+    const thirdChild = nav.children[3]; 
+    const adduserbtn = document.createElement("a")
+    adduserbtn.textContent="Add user"
+    adduserbtn.classList.add("adduserbtn")
+    adduserbtn.setAttribute("href","/AddUser")
+    nav.insertBefore(adduserbtn, thirdChild.nextSibling);
+
+}
 
 
 function checkLoginState(){
@@ -47,17 +58,12 @@ function  checkAdduserState(){
             {
                 outer.classList.remove("shift-left")
                 outer.classList.add("shift-right") 
-                const nav = document.getElementsByClassName("navbar")[0]
-                const thirdChild = nav.children[3]; 
+             
                 const btn = document.getElementsByClassName("adduserbtn")[0]
                 console.log(btn)
                 if(btn == undefined)
                 {
-                    const adduserbtn = document.createElement("a")
-                    adduserbtn.textContent="Add user"
-                    adduserbtn.classList.add("adduserbtn")
-                    adduserbtn.setAttribute("href","/AddUser")
-                    nav.insertBefore(adduserbtn, thirdChild.nextSibling);
+                    appendAddUser()
                 }  
             }
         else{
@@ -90,19 +96,13 @@ outer.addEventListener("click",async()=>
             console.log(modes)
             if(modes=="Dual Mode")
                 {
-                    const nav = document.getElementsByClassName("navbar")[0]
-                    const thirdChild = nav.children[3]; 
                     const btn = document.getElementsByClassName("adduserbtn")[0]
                     outer.classList.remove("shift-left")
                     outer.classList.add("shift-right")
                     document.getElementById("mode").innerHTML='Dual Mode'   
                     if(btn == undefined)
                     {
-                        const adduserbtn = document.createElement("a")
-                        adduserbtn.textContent="Add user"
-                        adduserbtn.classList.add("adduserbtn")
-                        adduserbtn.setAttribute("href","/AddUser")
-                        nav.insertBefore(adduserbtn, thirdChild.nextSibling);
+                        appendAddUser()
                     }
                 }
         })
