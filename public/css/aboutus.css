@@ -1,11 +1,11 @@
 *{
     margin: 0;
     font-family: "Open Sans", sans-serif;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 body{
     height: 100vh;
-    background: linear-gradient(135deg, #ffffff, #f6e4e4);
+    background: linear-gradient(135deg, #ffffff, #f8efef);
 }
 
 .navbar {
@@ -37,4 +37,111 @@ body{
 
 .navbar > :last-child{
     margin-right: 50px;
+}
+
+
+.intro-section {
+    position: relative;
+    height: 700px; /* Adjust the height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.intro-section img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Make the image cover the section */
+    height: 100%;
+    object-fit: cover; /* Ensures the image scales without distortion */
+    z-index: 0; /* Place the image behind the text */
+    filter: blur(1px); 
+    opacity: 0.8; /* Add transparency for better readability */
+}
+
+.content {
+    position: relative;
+    z-index: 1; /* Ensure content appears above the blurred image */
+    color: black;
+    text-align: center;
+    padding: 1rem;
+    width: 800px;
+    /* background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px; */
+}
+
+.content h1 {
+    margin: 0;
+    font-size: 3rem;
+    /* background: rgba(0, 0, 0, 0.2); */
+}
+
+.content p {
+    margin: 0.5rem 0 0;
+    font-size: 1.5rem;
+    line-height: 1.5;
+}
+
+/* Core Features Section */
+.core-features {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #ffffff, #f8efef);
+}
+
+/* Header Styling */
+.core-features-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.core-features-header p {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Feature Row Styling */
+.feature-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 20px auto;
+    max-width: 800px;
+    gap: 20px;
+}
+
+/* Feature Image Styling */
+.feature-row img {
+    flex-shrink: 0;
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Feature Content Styling */
+.feature-content {
+    text-align: left;
+}
+
+.feature-content h3 {
+    font-size: 1.8rem;
+    margin: 0 0 10px;
+}
+
+.feature-content p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+    margin: 0;
+}
+
+
+/* Alternate row layout for better visual appeal */
+.feature-row:nth-child(odd) {
+    flex-direction: row-reverse; /* Image on the right for odd rows */
 }
