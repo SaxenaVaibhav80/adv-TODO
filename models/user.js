@@ -1,42 +1,42 @@
 const mongoose= require("mongoose")
 
-
-const userModel= new mongoose.Schema({
-    firstname:{
-        type:String,
-        required:true
-    },
-    lastname:{
-        type:String,
-        required:true
-    },
-    subscription:{
-        type:Object
-    },
-    email:{
-        type:String,
-    },
-    password:{
+const userModel = new mongoose.Schema({
+    firstname: {
         type: String,
         required: true
     },
-    age:{
+    lastname: {
+        type: String,
+        required: true
+    },
+    subscription: {
+        type: Object 
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true 
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    age: {
         type: Number
     },
-    gender:{
+    gender: {
+        type: String
+    },
+    mode: {
         type: String,
+        default: "Solo Mode" 
     },
-    mode:{
-        default: "Solo Mode",
-        type: String,
-    },
-    uid:{
-        type:String,
-    },
-    joinid:{
-        type:String
+    roomId: {
+        type: String, 
+        default: null 
     }
-})
+});
+
 
 const User = mongoose.model("User", userModel);
 

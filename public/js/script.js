@@ -9,12 +9,9 @@ fetch('/api/login', {
     localStorage.setItem("token", data.token); 
     localStorage.setItem("id",data.id);
     extracted_token = localStorage.getItem('token');
+    socket.emit("token",extracted_token)
 })
 
-socket.on("joined",()=>
-{
-    alert("joined")
-})
 
 window.addEventListener("pageshow", (event) => {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -166,3 +163,9 @@ window.addEventListener("pageshow", (event) => {
 });
 
 
+
+
+socket.on("joined",(msg)=>
+{
+    alert(msg)
+})

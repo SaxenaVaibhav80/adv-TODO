@@ -147,7 +147,7 @@ app.post("/signup",async(req,res)=>
     
         const user=await userModel.findOneAndUpdate(
             {_id:id},
-            {uid:uid}
+            {roomId:uid}
         )
     })
 
@@ -166,16 +166,16 @@ app.post("/joined",authenticated,async(req,res)=>
     const token = req.cookies.token
     const verification=jwt.verify(token,secret_key)
     const id= verification.id
-    const uid = req.body.id
+    const roomid = req.body.id
    
-    if(uid!="")
+    if(roomid!="")
     {   
-        const user= await userModel.findOne({joinid:uid})
-        if(!user)
+        const user= await userModel.findOne({roomId:roomid})
+        if(user.length<=1)
         {
             const updateduser= await userModel.findOneAndUpdate(
                 {_id:id},
-                {joinid:uid},
+                {roomId:roomid},
                 { new: true }
             )
             res.json({ redirectTo: "/TODO",countuser:false});
@@ -197,7 +197,30 @@ app.get("/about",(req,res)=>
 
 // socket connection--------------------------------------------->
 
+io.on("connection",(socket)=>
+{  
+    socket.on("token",async(token)=>
+    {
 
+        if(token)
+        {
+            try{
+                const verification= jwt.verify(token,secret_key)
+                const id = verification.id
+                const user= await userModel.findOne({_id:id})
+                if(user)
+                {
+                    socket.join(user.roomId)
+                }
+
+                
+            }catch(err)
+            {
+                res.redirect("/logout")
+            }
+        }
+    })
+})
 
 
 // --------------  sending token to the client side--------------->
