@@ -3,11 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="/css/joinroom.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <title>Join user</title>
 </head>
 <body>
-    <input type="text" id="join-id">
-    <button id="joinbtn">join</button> 
+    <nav class="navbar">
+        <a> Hello <%= firstname %></a>
+        <a href="/">Home</a>
+        <a href="/TODO">Task Hub</a>
+        <a href="#">Join room</a>
+        <a href="#">contact us </a>
+        <a href="/logout">Logout</a>
+    </nav>
+    
+    <div class="join-div">
+        <h4 id="discription">Join link and get collab with your friend</h4>
+        <input id="join-id" placeholder="example.. 4n5pxq24kpiob12og9"></input>
+        <div id="joinbtn">join</div> 
+    </div>
+   
 </body>
 <script src="/js/joinroom.js"></script>
 </html>

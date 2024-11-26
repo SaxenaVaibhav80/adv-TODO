@@ -34,7 +34,7 @@ const userModel = new mongoose.Schema({
     roomId: {
         type: String, 
         default: null 
-    }
+    },
 });
 
 

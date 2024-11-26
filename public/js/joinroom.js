@@ -2,6 +2,11 @@ const joinbtn = document.getElementById("joinbtn");
 
 joinbtn.addEventListener("click", async () => {   
     const id = document.getElementById("join-id").value;
+    console.log(id)
+    if(id=="")
+    {
+        alert("enter id please")
+    }
     document.getElementById("join-id").value = "";
     
     try {

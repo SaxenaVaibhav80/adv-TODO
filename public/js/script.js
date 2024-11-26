@@ -165,7 +165,12 @@ window.addEventListener("pageshow", (event) => {
 
 
 
-socket.on("joined",(msg)=>
+socket.on("join",(msg)=>
 {
     alert(msg)
+})
+
+socket.on("redirectToMain",()=>
+{
+    window.location.href="/"
 })

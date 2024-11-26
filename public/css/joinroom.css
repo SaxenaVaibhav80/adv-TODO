@@ -1,0 +1,78 @@
+body {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    justify-content: center;
+    font-family: "Josefin Sans", sans-serif;
+}
+.navbar{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    padding: 25px 0px 25px 0px;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 7px 6px -2px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    z-index:2;
+    font-family: "Open Sans", sans-serif;
+}
+
+.navbar a{
+    margin-left: 65px;
+    color: rgb(50, 49, 49);
+    text-decoration: none;
+}
+
+a:visited{
+    color: rgb(50, 49, 49);
+}
+a::after{
+    color: rgb(50, 49, 49);
+}
+.navbar > :last-child{
+    margin-right: 50px;
+}
+
+.join-div{
+    width: 464px;
+    padding-top: 30px;
+    height: 200px;
+    border-radius: 15px;
+    background-color: rgb(240, 241, 243);
+    /* margin-left: 30px; */
+    text-align: center;
+
+}
+#join-id {
+    opacity: 0.6;
+    width: 68%;
+    padding-left: 10px;
+    border-radius: 10px;
+    border: 2px solid rgb(24, 49, 83);
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 70px;
+}
+
+#joinbtn {
+    margin-left: 82px;
+    margin-top: 25px;
+    color: rgb(24, 49, 83);
+    border: 2px solid rgb(24, 49, 83);
+    background-color: rgb(248, 226, 151);
+    border-radius: 7px;
+    padding: 10px 15px 10px 15px;
+    cursor: pointer;
+    width: 59%;
+}
+
+#discription{
+    color:rgb(24,49,83) ;
+}
+::placeholder{
+    margin-left: 10px;
+}

@@ -153,9 +153,24 @@ app.post("/signup",async(req,res)=>
 
 // getting join room handler ------------------------------------>
 
-app.get("/join-room",authenticated,(req,res)=>
+app.get("/join-room",authenticated,async(req,res)=>
 {
-    res.render("joinroom")
+    const token = req.cookies.token
+    if(token)
+    {
+        try{
+            const verification = jwt.verify(token,secret_key)
+            const id = verification.id
+            const user = await userModel.findOne({_id:id})
+            const name = user.firstname
+            const mode=user.mode
+            res.render("joinroom",{firstname:name})
+        }catch(err){
+            res.redirect("/")
+        }
+    }else{
+        res.render("joinroom")
+    }
 })
 
 
@@ -170,7 +185,8 @@ app.post("/joined",authenticated,async(req,res)=>
    
     if(roomid!="")
     {   
-        const user= await userModel.findOne({roomId:roomid})
+        const user= await userModel.find({roomId:roomid})
+        console.log(user)
         if(user.length<=1)
         {
             const updateduser= await userModel.findOneAndUpdate(
@@ -207,16 +223,12 @@ io.on("connection",(socket)=>
             try{
                 const verification= jwt.verify(token,secret_key)
                 const id = verification.id
-                const user= await userModel.findOne({_id:id})
-                if(user)
-                {
-                    socket.join(user.roomId)
-                }
-
+                
+                socket.join(id)
                 
             }catch(err)
             {
-                res.redirect("/logout")
+               io.to(id).emit("redirectToMain","/")
             }
         }
     })
@@ -393,12 +405,6 @@ app.get("/logout",(req,res)=>
     }
     res.redirect("/")  
 })
-
-
-
-
-
-
 
 
 server.listen(1000)
