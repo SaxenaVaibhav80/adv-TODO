@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/contactus.css">
     <title>Contact us</title>
 </head>
-<body>
+<body> 
     <nav class="navbar">
         <a> Hello <%= firstname %></a>
         <a href="/">Home</a>
@@ -16,9 +16,18 @@
         <a href="/logout">Logout</a>
     </nav>
 
+    <div class="intro-section">
+        <img src="\img\contactus.jpg" alt="Contact us image">
+        <div class="content">
+            <h1>Connect with GoalRush</h1>
+            <p>Your journey towards achieving goals starts here.</p><br>
+        </div>
+    </div>
+
     <div class="contact-main-body">
         <div class="left">
-           
+            <h2>Reach Out To Us</h2>
+            <p>We value your feedback and inquiries. Whether you have a question about our features or suggestions for improvement, your voice matters to us. Please fill out the contact form below, and we will get back to you as soon as possible.</p>
         </div>
         <form class="info-mail"  method="post">
           <input type="text" placeholder="Username" name="name">
@@ -27,6 +36,8 @@
           <div id="mail-send-btn">Submit</div>
         </form>
     </div>
+    <br>
+    <br>
     
 </body>
 </html>
