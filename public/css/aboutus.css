@@ -144,7 +144,6 @@ body{
     margin: 0;
 }
 
-
 /* Alternate row layout for better visual appeal */
 .feature-row:nth-child(odd) {
     flex-direction: row-reverse; /* Image on the right for odd rows */
