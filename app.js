@@ -21,7 +21,27 @@ const secret_key=process.env.SECRET_KEY
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookiParser())
 
+// function for user get user by _id------>
 
+
+async function userby_id(req)
+{ 
+    const token = req.cookies.token
+    if(token)
+    {
+        try{
+            const verification = jwt.verify(token,secret_key)
+            const id = verification.id
+            const  user = await userModel.findOne({_id:id})
+            return user
+        }catch(err){
+            res.redirect("/logout")
+        }
+    }else{
+        res.redirect("/logout")
+    }
+  
+}
 
 // ----------------manage state----------------------->
 
@@ -112,7 +132,7 @@ app.post("/signup",async(req,res)=>
  const exist = await userModel.findOne({email:email})
  
  if(exist){
-     res.status(401).send("user already exist")
+     res.status(409).send("user already exist")
  }
  else{
     const encpass= await bcrypt.hash(password,10)
@@ -178,9 +198,8 @@ app.get("/join-room",authenticated,async(req,res)=>
 
 app.post("/joined",authenticated,async(req,res)=>
 {
-    const token = req.cookies.token
-    const verification=jwt.verify(token,secret_key)
-    const id= verification.id
+    const user =  await userby_id(req)
+    const id = user._id
     const roomid = req.body.id
    
     if(roomid!="")
@@ -298,6 +317,8 @@ app.get("/login",manageState,(req,res)=>
 {
   res.render("login")
 })
+
+
 // acception mode from frontend-------------------->
 
 app.post("/handleMode", async (req, res) => {
@@ -322,15 +343,15 @@ app.post("/handleMode", async (req, res) => {
     }
 });
 
+
 // modeStatemanager--------------------->
-app.post("/modeState", async (req, res) => {
+
+app.post("/modeState",authenticated, async (req, res) => {
     const token = req.cookies.token;
 
     if (token) {
         try {
-            const verification = jwt.verify(token, secret_key);
-            const id = verification.id;
-            const user = await userModel.findOne({_id:id})
+            const user =  await userby_id(req)
             const mode = user.mode
             res.status(200).send(mode);
         } catch (err) {
@@ -349,9 +370,8 @@ app.get("/TODO",authenticated,async(req,res)=>
     if(token)
     {
         try{
-            const verification = jwt.verify(token,secret_key)
-            const id = verification.id
-            const user = await userModel.findOne({_id:id})
+
+            const user = await userby_id(req)
             const name = user.firstname
             const mode=user.mode
             res.render("main",{firstname:name,mode:mode})
@@ -362,6 +382,8 @@ app.get("/TODO",authenticated,async(req,res)=>
         res.render("main")
     }
 })
+
+
 // add user page---------------------------->
 
 app.get("/addUser",authenticated,async(req,res)=>
@@ -370,12 +392,8 @@ app.get("/addUser",authenticated,async(req,res)=>
     if(token)
     {
         try{
-            const verification = jwt.verify(token,secret_key)
-            const id = verification.id
-            const user = await userModel.findOne({_id:id})
-            const name = user.firstname
-            const mode=user.mode
-            res.render("addUser",{firstname:name})
+            const user =  await userby_id(req)
+            res.render("addUser",{firstname:user.firstname})
         }catch(err){
             res.redirect("/")
         }
@@ -385,9 +403,20 @@ app.get("/addUser",authenticated,async(req,res)=>
    
 })
 
+// ---------------------contact us route--------------------------->
+
+app.get("/contactus",authenticated,async(req,res)=>
+{
+
+    const user =  await userby_id(req)
+
+    res.render("contactus",{firstname:user.firstname})
+})
+
 
 
 // -----------------------signup get req---------------------------->
+
 app.get("/signup",manageState,(req,res)=>
 {
     res.render("signup")

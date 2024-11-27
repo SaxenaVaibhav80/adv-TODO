@@ -1,3 +1,4 @@
+
 body {
     margin: 0;
     height: 100vh;
@@ -5,9 +6,8 @@ body {
     justify-content: center;
     align-items: center;
     font-family: "Open Sans", sans-serif;
-    background: linear-gradient(135deg, #ffffff, #c0a098);
+    background: linear-gradient(135deg, #ffffff, #B5A192);
 }
-
 #loginuser{
     width: 100px;
     height:100px;

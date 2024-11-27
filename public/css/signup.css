@@ -1,11 +1,12 @@
 body {
     margin: 0;
     height: 100vh;
-    display: flex;
+    display: flex
+;
     justify-content: center;
     align-items: center;
     font-family: "Open Sans", sans-serif;
-    background: linear-gradient(135deg, #ffffff, #c0a098);
+    background: linear-gradient(135deg, #ffffff, #B5A192);
 }
 
 #signupuser{
@@ -72,6 +73,7 @@ body {
 /* Login button */
 .signup-button {
     background-color: #918983;;
+    /* background-color: #978479; */
     color: white;
     border: none;
     padding: 10px 0;
