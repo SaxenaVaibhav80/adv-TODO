@@ -27,6 +27,10 @@ joinbtn.addEventListener("click", async () => {
         {
             alert("room full")
         }
+        if(data.msg=="noRoom")
+        {
+            alert("No room Found")
+        }
     } catch (error) {
         console.error("Error:", error);
     }

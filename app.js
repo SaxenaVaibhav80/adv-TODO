@@ -206,7 +206,7 @@ app.post("/joined",authenticated,async(req,res)=>
     {   
         const user= await userModel.find({roomId:roomid})
         console.log(user)
-        if(user.length<=1)
+        if(user.length==1)
         {
             const updateduser= await userModel.findOneAndUpdate(
                 {_id:id},
@@ -214,8 +214,14 @@ app.post("/joined",authenticated,async(req,res)=>
                 { new: true }
             )
             res.json({ redirectTo: "/TODO",countuser:false});
-        }else{
+        }
+        else if(user.length>=2)
+        {
             res.json({ redirectTo: "/TODO",countuser:true});
+        }
+        else if(user.length<=0)
+        {
+            res.json({msg:"noRoom"})
         }
         
     
@@ -242,7 +248,6 @@ io.on("connection",(socket)=>
             try{
                 const verification= jwt.verify(token,secret_key)
                 const id = verification.id
-                
                 socket.join(id)
                 
             }catch(err)

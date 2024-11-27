@@ -54,3 +54,16 @@ a::after{
     display: flex;
     justify-content: flex-start;
 }
+
+#lists{
+    display: flex;
+    border:1px solid black;
+    justify-content: center;
+    margin-top: 200px;
+}
+
+#me,#other{
+    border: 1px solid red;
+    width:200px;
+    height: 200px;
+}
