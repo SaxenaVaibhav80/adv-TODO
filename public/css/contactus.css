@@ -15,6 +15,7 @@ body {
     padding: 25px 0px 25px 0px;
     position: fixed;
     top: 0;
+    /* background-color: rgb(150 130 112); */
     backdrop-filter: blur(4px);
     z-index:2;
     font-family: "Open Sans", sans-serif;
@@ -41,13 +42,32 @@ a::after{
 .contact-main-body {
     display: flex;
     width: 976px;
-    margin-top: 200px;
+    margin-top: 170px;
     height: 570px;
     border-radius: 20px;
     z-index: 3;
-    background-color: rgb(111 88 67);
-    margin-bottom: 50px;
+    /* background-color: rgb(111 88 67); */
+    background-color: rgb(150 130 112);
+    margin-bottom: 70px;
     padding-bottom: 40px;
+}
+
+.left {
+    width: 70%;
+    position: relative; /* To ensure the image and text stack properly */
+}
+
+.left .background-image {
+    position: absolute; /* Make the image position absolute within the parent */
+    top: 0;
+    left: 0;
+    padding: 22px;
+    width: 100%; /* Cover the entire width of the parent container */
+    height: 100%; 
+    object-fit: cover; /* Ensure the image scales proportionally */
+    z-index: -1; /* Place the image behind the text */
+    border-radius: 20px;
+    opacity: 0.3; /* Add transparency for better readability */
 }
 
 .contact-main-body .left h2 {
@@ -79,7 +99,8 @@ a::after{
 
 input{
     display: block;
-    background-color: rgb(111 88 67);
+    /* background-color: rgb(111 88 67); */
+    background-color: rgb(150 130 112);
     margin-bottom: 20px;
     border-style: none;
     border-bottom: 1px solid black;
@@ -87,10 +108,11 @@ input{
     width: 315px;
 }
 textarea{
-    background-color: rgb(111 88 67);
+    /* background-color: rgb(111 88 67); */
+    background-color: rgb(150 130 112);
     outline: none;
     width: 300px;
-    height: 300px;
+    height: 200px;
     overflow: auto;
     border-color: black;
     resize: none;
@@ -105,9 +127,10 @@ textarea{
 
 #mail-send-btn{
     padding: 10px 15px;
+    background-color: beige;
     border: 1px solid black;
     border-radius: 10px;
-    color: white;
+    color: black;
     cursor: pointer;
     text-align: center;
 }
