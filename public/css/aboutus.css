@@ -96,6 +96,7 @@ body{
 .core-features-header h2 {
     font-size: 2.5rem;
     margin-bottom: 10px;
+    /* color: #9f6650; */
 }
 
 .core-features-header p {
@@ -122,6 +123,7 @@ body{
     height: 180px;
     object-fit: cover;
     border-radius: 10px;
+    border: 2px solid black;
 }
 
 /* Feature Content Styling */
@@ -132,11 +134,12 @@ body{
 .feature-content h3 {
     font-size: 1.8rem;
     margin: 0 0 10px;
+    color: #402815;
 }
 
 .feature-content p {
     font-size: 1rem;
-    color: #555;
+    color: #82593e;
     line-height: 1.5;
     margin: 0;
 }
