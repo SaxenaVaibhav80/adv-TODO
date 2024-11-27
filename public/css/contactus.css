@@ -68,3 +68,8 @@ textarea{
     border-color: black;
     resize: none;
 }
+
+::placeholder{
+    color: white;
+    font-family: "Josefin Sans", sans-serif;
+}
