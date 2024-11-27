@@ -1,5 +1,8 @@
 body {
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(191,182,165);
     height: 100vh;
     margin: 0;
     font-family: "Josefin Sans", sans-serif;
@@ -11,7 +14,6 @@ body {
     padding: 25px 0px 25px 0px;
     position: fixed;
     top: 0;
-    box-shadow: 0 7px 6px -2px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(8px);
     z-index:2;
     font-family: "Open Sans", sans-serif;
@@ -31,4 +33,38 @@ a::after{
 }
 .navbar > :last-child{
     margin-right: 50px;
+}
+.contact-main-body {
+    display: flex;
+    width: 976px;
+    margin-top: 83px;
+    height: 570px;
+    border-radius: 20px;
+    background-color: rgb(111 88 67);
+}
+
+.info-mail{
+    width: 60%;;
+    border: 1px solid black;
+    border-radius: 0 20px 20px 0;
+}
+.left{
+    width: 40%;
+}
+
+input{
+    display: block;
+    background-color: rgb(111 88 67);
+    border-style: none;
+    border-bottom: 1px solid black;
+    outline: none;
+}
+textarea{
+    background-color: rgb(111 88 67);
+    outline: none;
+    width: 300px;
+    height: 300px;
+    overflow: auto;
+    border-color: black;
+    resize: none;
 }
