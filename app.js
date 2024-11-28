@@ -20,12 +20,13 @@ dotenv.config()
 const secret_key=process.env.SECRET_KEY
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookiParser())
+const userSockets = []
+
 
 // function for user get user by _id------>
 
-
-async function userby_id(req)
-{ 
+async function userby_id(req,res)
+{   
     const token = req.cookies.token
     if(token)
     {
@@ -35,12 +36,38 @@ async function userby_id(req)
             const  user = await userModel.findOne({_id:id})
             return user
         }catch(err){
-            res.redirect("/logout")
+           console.log(err)
         }
     }else{
-        res.redirect("/logout")
+        console.log("err")
     }
   
+}
+
+// --------------- updation in user function----------------->
+
+async function userUpdate(req, prop, value) {
+    console.log("wokring")
+    const token = req.cookies.token;
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+
+
+            const user = await userModel.findOneAndUpdate(
+                { _id: id }, 
+                { [prop]: value },
+                { new: true } 
+            );
+
+            return user;
+        } catch (err) {
+            console.log(err);
+        }
+    } else {
+        console.log("No token found");
+    }
 }
 
 // ----------------manage state----------------------->
@@ -198,7 +225,7 @@ app.get("/join-room",authenticated,async(req,res)=>
 
 app.post("/joined",authenticated,async(req,res)=>
 {
-    const user =  await userby_id(req)
+    const user =  await userby_id(req,res)
     const id = user._id
     const roomid = req.body.id
    
@@ -238,26 +265,23 @@ app.get("/about",(req,res)=>
 
 // socket connection--------------------------------------------->
 
-io.on("connection",(socket)=>
-{  
-    socket.on("token",async(token)=>
-    {
 
-        if(token)
-        {
-            try{
-                const verification= jwt.verify(token,secret_key)
-                const id = verification.id
-                socket.join(id)
-                
-            }catch(err)
-            {
-               io.to(id).emit("redirectToMain","/")
+
+io.on("connection", (socket) => {
+
+
+    socket.on("token", async (token) => {
+        if (token) {
+            try {
+                const verification = jwt.verify(token, secret_key);
+                const userId = verification.id;
+
+            } catch (err) {
+                console.log(err);
             }
         }
-    })
-})
-
+    });
+});
 
 // --------------  sending token to the client side--------------->
 
@@ -335,10 +359,19 @@ app.post("/handleMode", async (req, res) => {
         try {
             const verification = jwt.verify(token, secret_key);
             const id = verification.id;
-            await userModel.findOneAndUpdate(
-                { _id: id },
-                { mode: mode }
-            );
+            if(mode==="Solo Mode")
+            {
+                await userModel.findOneAndUpdate(
+                    { _id: id },
+                    { mode: mode,roomId:null }
+                );
+            }else{
+                await userModel.findOneAndUpdate(
+                    { _id: id },
+                    { mode: mode }
+                );
+            }
+           
             res.status(200).send(mode);
         } catch (err) {
             res.status(500).send("Error verifying token");
@@ -356,8 +389,19 @@ app.post("/modeState",authenticated, async (req, res) => {
 
     if (token) {
         try {
-            const user =  await userby_id(req)
+            const verify = jwt.verify(token,secret_key)
+            const id = verify.id
+            const user =  await userModel.findOne({_id:id})
             const mode = user.mode
+            if(mode==="Solo Mode")
+            {
+
+                const user=await userModel.findOneAndUpdate(
+                    {_id:id},
+                    {roomId:null}
+                )
+
+            }
             res.status(200).send(mode);
         } catch (err) {
             res.status(500).send("Error verifying token");
@@ -376,7 +420,7 @@ app.get("/TODO",authenticated,async(req,res)=>
     {
         try{
 
-            const user = await userby_id(req)
+            const user = await userby_id(req,res)
             const name = user.firstname
             const mode=user.mode
             res.render("main",{firstname:name,mode:mode})
@@ -397,7 +441,7 @@ app.get("/addUser",authenticated,async(req,res)=>
     if(token)
     {
         try{
-            const user =  await userby_id(req)
+            const user =  await userby_id(req,res)
             res.render("addUser",{firstname:user.firstname})
         }catch(err){
             res.redirect("/")
@@ -413,7 +457,7 @@ app.get("/addUser",authenticated,async(req,res)=>
 app.get("/contactus",authenticated,async(req,res)=>
 {
 
-    const user =  await userby_id(req)
+    const user =  await userby_id(req,res)
 
     res.render("contactus",{firstname:user.firstname})
 })
