@@ -152,8 +152,13 @@ outer.addEventListener("click",async()=>
         
             if(modes.mode=="Solo Mode")
                 {   
-                   
+                   if(modes.joinid!=null)
+                   {
+                    socket.emit("todisconnect",modes.joinid)
+                   }else{
                     socket.emit("todisconnect",modes.roomid)
+                   }
+                    
                     const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
                     const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                     const nav = document.getElementsByClassName("navbar")[0]
@@ -188,9 +193,10 @@ function sendroomID()
     }).then(res=>res.text())
     .then(data=>
     {   
+    
         const joinbtn = document.getElementsByClassName("joinroombtn")[0]
         const addbtn = document.getElementsByClassName("adduserbtn")[0]
-    
+
         if(data.length!=0)
         {
             
@@ -270,25 +276,25 @@ socket.on("force_leave",(id)=>
 })
 
 
-fetch("/accessUid",{
-    method:"POST"
-}).then(res=>res.text())
-.then(id=>
-{
-   if(id!=null)
-   {
-    fetch("/remove",{
-        method:"POST",
-        headers:{
-           "Content-Type": "application/json",
-        },
-        body:JSON.stringify({id:id})
-    }).then(()=>
-    {
-        checkAdduserState()
-    })
-   }
-})
+// fetch("/accessUid",{
+//     method:"POST"
+// }).then(res=>res.text())
+// .then(id=>
+// {
+//    if(id!=null)
+//    {
+//     fetch("/remove",{
+//         method:"POST",
+//         headers:{
+//            "Content-Type": "application/json",
+//         },
+//         body:JSON.stringify({id:id})
+//     }).then(()=>
+//     {
+//         checkAdduserState()
+//     })
+//    }
+// })
     
 
 

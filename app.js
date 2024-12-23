@@ -226,34 +226,34 @@ app.post("/accessUid",authenticated,async(req,res)=>
 
 // --------------------remove user--------------------------------->
 
-app.post("/remove",authenticated,async(req,res)=>
+// app.post("/remove",authenticated,async(req,res)=>
 
-{   
-    // console.log("remove call hua")
-    const user = await userby_id(req,res)
-    const userid=user._id
-    const id = req.body.id
-    const joinid = await userModel.find({joinId:id})
-    const roomid= await userModel.find({roomId:id})
-    // console.log(joinid.length,roomid.length)
-    if(roomid.length==0 && joinid.length==1)
-    {
-        // console.log("else me gayi")
-        const update= await userModel.findOneAndUpdate(
-            {_id:userid},
-            {mode:"Solo Mode",joinId:null},
-            {new:true}
-        )
+// {   
+//     // console.log("remove call hua")
+//     const user = await userby_id(req,res)
+//     const userid=user._id
+//     const id = req.body.id
+//     const joinid = await userModel.find({joinId:id})
+//     const roomid= await userModel.find({roomId:id})
+//     // console.log(joinid.length,roomid.length)
+//     if(roomid.length==0 && joinid.length==1)
+//     {
+//         // console.log("else me gayi")
+//         const update= await userModel.findOneAndUpdate(
+//             {_id:userid},
+//             {mode:"Solo Mode",joinId:null},
+//             {new:true}
+//         )
 
-        // console.log("user",update)
+//         // console.log("user",update)
         
-        res.redirect("/TODO")
-    }
-    else{
-        res.redirect("/TODO")
-    }
+//         res.redirect("/TODO")
+//     }
+//     else{
+//         res.redirect("/TODO")
+//     }
 
-})
+// })
 
 // getting join room handler ------------------------------------>
 
@@ -358,8 +358,9 @@ io.on("connection", (socket) => {
                 socket.on("todisconnect",(data)=>
                 {
                     // console.log(data)
-                    socket.leave(data);
+                   
                     io.to(data).emit("force_leave",data);
+                    socket.leave(data);
                     socket.disconnect(true);
                 })
 
@@ -456,22 +457,24 @@ app.get("/login",manageState,(req,res)=>
 
 // ------------------------updateuserroomid---------------------->
 
-app.post("/makeMyRoomidEmpty",authenticated,async(req,res)=>
-{
+app.post("/makeMyRoomidEmpty", authenticated, async (req, res) => {
+    const { roomid, mode } = req.body;
 
-    // console.log("make call")
-    const roomid = req.body.roomid
-    const mode = req.body.mode
-    // console.log(roomid)
-    const user = await userModel.findOneAndUpdate(
-        {joinId:roomid},
-        {joinId:null,mode:mode},
-        {new:true}
-    )
-    // console.log(user)
+    const users = await userModel.updateMany(
+        {
+            $or: [
+                { joinId: roomid },
+                { roomId: roomid },
+            ],
+        },
+        {
+            $set: { joinId: null, roomId: null, mode: mode },
+        }
+    );
 
-    res.redirect("/TODO")
-})
+    res.redirect("/TODO");
+});
+
 
 
 // acception mode from frontend-------------------->
@@ -487,21 +490,27 @@ app.post("/handleMode", async (req, res) => {
             const id = verification.id;
             const user =await userby_id(req,res)
             const roomid= user.roomId
+            const joinid = user.joinId
 
-            if(mode==="Solo Mode")
-            {
-                await userModel.findOneAndUpdate(
-                    { _id: id },
-                    { mode: mode,roomId:null,joinId:null }
-                );
-            }else{
-                await userModel.findOneAndUpdate(
-                    { _id: id },
-                    { mode: mode }
-                );
-            }
-           
-            res.status(200).json({mode,roomid});
+            // if(mode==="Solo Mode")
+            // {
+            //     await userModel.findOneAndUpdate(
+            //         { _id: id },
+            //         { mode: mode,roomId:null,joinId:null }
+            //     );
+            // }else{
+            //     await userModel.findOneAndUpdate(
+            //         { _id: id },
+            //         { mode: mode }
+            //     );
+            // }
+
+            await userModel.findOneAndUpdate(
+                { _id: id },
+                { mode: mode }
+            );
+            
+            res.status(200).json({mode,roomid,joinid});
         } catch (err) {
             res.status(500).send("Error verifying token");
         }
