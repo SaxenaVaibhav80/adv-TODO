@@ -16,11 +16,12 @@ const socketio=require('socket.io');
 const io=socketio(server)
 const { v4: uuidv4 } = require('uuid');
 const cookiParser= require("cookie-parser")
+const { Socket } = require("dgram")
 dotenv.config()
 const secret_key=process.env.SECRET_KEY
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookiParser())
-const userSockets = []
+
 
 
 // function for user get user by _id------>
@@ -196,7 +197,63 @@ app.post("/signup",async(req,res)=>
             {_id:id},
             {roomId:uid}
         )
-    })
+   })
+
+// ------------accessing the stored room id to send it to socket so that i will join as room with that id------------------->
+
+app.post("/accessUid",authenticated,async(req,res)=>
+{   
+    
+    const user = await userby_id(req,res)
+    if(user || user!=null)
+    {
+        const roomid=user.roomId
+        const joinid=user.joinId
+        if(roomid!=null)
+        {
+            console.log(roomid)
+            res.send(roomid)
+        }else{
+            console.log(joinid)
+            res.send(joinid)
+        }
+        
+    }
+   
+    
+    
+})
+
+// --------------------remove user--------------------------------->
+
+app.post("/remove",authenticated,async(req,res)=>
+
+{   
+    // console.log("remove call hua")
+    const user = await userby_id(req,res)
+    const userid=user._id
+    const id = req.body.id
+    const joinid = await userModel.find({joinId:id})
+    const roomid= await userModel.find({roomId:id})
+    // console.log(joinid.length,roomid.length)
+    if(roomid.length==0 && joinid.length==1)
+    {
+        // console.log("else me gayi")
+        const update= await userModel.findOneAndUpdate(
+            {_id:userid},
+            {mode:"Solo Mode",joinId:null},
+            {new:true}
+        )
+
+        // console.log("user",update)
+        
+        res.redirect("/TODO")
+    }
+    else{
+        res.redirect("/TODO")
+    }
+
+})
 
 // getting join room handler ------------------------------------>
 
@@ -213,7 +270,7 @@ app.get("/join-room",authenticated,async(req,res)=>
             const mode=user.mode
             res.render("joinroom",{firstname:name})
         }catch(err){
-            res.redirect("/")
+            res.redirect("/logout")
         }
     }else{
         res.render("joinroom")
@@ -231,26 +288,21 @@ app.post("/joined",authenticated,async(req,res)=>
    
     if(roomid!="")
     {   
-        const user= await userModel.find({roomId:roomid})
-        console.log(user)
-        if(user.length==1)
+        const user= await userModel.find({joinId:roomid})
+        // console.log(user)
+        if(user.length==0)
         {
             const updateduser= await userModel.findOneAndUpdate(
                 {_id:id},
-                {roomId:roomid},
+                {joinId:roomid},
                 { new: true }
             )
             res.json({ redirectTo: "/TODO",countuser:false});
         }
-        else if(user.length>=2)
+        else if(user.length>=1)
         {
             res.json({ redirectTo: "/TODO",countuser:true});
-        }
-        else if(user.length<=0)
-        {
-            res.json({msg:"noRoom"})
-        }
-        
+        }    
     
     }
     
@@ -265,24 +317,79 @@ app.get("/about",(req,res)=>
 
 // socket connection--------------------------------------------->
 
-
-
 io.on("connection", (socket) => {
 
-
     socket.on("token", async (token) => {
+       
         if (token) {
             try {
+                
+               
                 const verification = jwt.verify(token, secret_key);
                 const userId = verification.id;
+                
+                socket.on("roomid",async(id)=>
+                {
+                  await join(id) 
+                //   console.log("join call")
+        
+                })
+                async function join(id)
+                {
+                    
+                    await socket.join(id)
+                    // console.log("joined",id)
+                    
+                    // const socketsInRoom = await io.in(id).fetchSockets();
+                    // console.log(`Active Sockets: ${socketsInRoom.length}`);
+                    // socketsInRoom.forEach((s) => {
+                    //     console.log(`Socket ID: ${s.id}`);
+                    // });
+                }
+
+                socket.on("add",(id,data)=>
+                {
+                    // console.log(id)
+                    // console.log(data)
+                    io.to(id).emit("data",data)
+
+                })
+
+                socket.on("todisconnect",(data)=>
+                {
+                    // console.log(data)
+                    socket.leave(data);
+                    io.to(data).emit("force_leave",data);
+                    socket.disconnect(true);
+                })
+
+                socket.on("leaveme",(id)=>
+                {
+                    socket.leave(id);
+                })
+            
+                // -------- checks how many sockets are active----------->
+                // const socketsInRoom = await io.in(id).fetchSockets(); checks for rooms available for particular id 
+
+        
+              
+            
+                
+                
+               
 
             } catch (err) {
                 console.log(err);
             }
+
+
         }
     });
 });
 
+
+
+    
 // --------------  sending token to the client side--------------->
 
 app.post("/api/login",(req,res)=>
@@ -347,23 +454,45 @@ app.get("/login",manageState,(req,res)=>
   res.render("login")
 })
 
+// ------------------------updateuserroomid---------------------->
+
+app.post("/makeMyRoomidEmpty",authenticated,async(req,res)=>
+{
+
+    // console.log("make call")
+    const roomid = req.body.roomid
+    const mode = req.body.mode
+    // console.log(roomid)
+    const user = await userModel.findOneAndUpdate(
+        {joinId:roomid},
+        {joinId:null,mode:mode},
+        {new:true}
+    )
+    // console.log(user)
+
+    res.redirect("/TODO")
+})
+
 
 // acception mode from frontend-------------------->
 
 app.post("/handleMode", async (req, res) => {
 
-    const {mode} = req.body;
+    const mode = req.body.mode;
     const token = req.cookies.token;
 
     if (token) {
         try {
             const verification = jwt.verify(token, secret_key);
             const id = verification.id;
+            const user =await userby_id(req,res)
+            const roomid= user.roomId
+
             if(mode==="Solo Mode")
             {
                 await userModel.findOneAndUpdate(
                     { _id: id },
-                    { mode: mode,roomId:null }
+                    { mode: mode,roomId:null,joinId:null }
                 );
             }else{
                 await userModel.findOneAndUpdate(
@@ -372,7 +501,7 @@ app.post("/handleMode", async (req, res) => {
                 );
             }
            
-            res.status(200).send(mode);
+            res.status(200).json({mode,roomid});
         } catch (err) {
             res.status(500).send("Error verifying token");
         }
@@ -393,6 +522,7 @@ app.post("/modeState",authenticated, async (req, res) => {
             const id = verify.id
             const user =  await userModel.findOne({_id:id})
             const mode = user.mode
+            console.log(mode)
             if(mode==="Solo Mode")
             {
 

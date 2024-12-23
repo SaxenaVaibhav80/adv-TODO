@@ -32,6 +32,9 @@ a::after{
 .navbar > :last-child{
     margin-right: 50px;
 }
+.hide{
+    display: none;
+}
 .uid-div {
     margin-left: 95px;
     width: 464px;

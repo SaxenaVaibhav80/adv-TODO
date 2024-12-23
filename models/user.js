@@ -35,6 +35,10 @@ const userModel = new mongoose.Schema({
         type: String, 
         default: null 
     },
+    joinId:{
+        type: String, 
+        default: null 
+    }
 });
 
 

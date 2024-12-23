@@ -1,6 +1,6 @@
 const socket = io()
 
-let extracted_token
+
 fetch('/api/login', {
     method: 'POST',
 })
@@ -8,10 +8,11 @@ fetch('/api/login', {
 .then(data => {
     localStorage.setItem("token", data.token); 
     localStorage.setItem("id",data.id);
-    extracted_token = localStorage.getItem('token');
+    const extracted_token = localStorage.getItem('token');
     socket.emit("token",extracted_token)
 })
 
+checkAdduserState();
 
 window.addEventListener("pageshow", (event) => {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -43,7 +44,7 @@ function joinroom()
 
 
 function checkLoginState(){
-    let token
+    
     fetch('/api/login', {
         method: 'POST',
     })
@@ -51,11 +52,9 @@ function checkLoginState(){
     .then(data => {
     
         localStorage.setItem("token", data.token); 
-        localStorage.setItem("id",data.id);
-        token = localStorage.getItem('token');
-    
+        localStorage.setItem("id",data.id);    
     })
-    const extracted_token=token
+    const extracted_token=localStorage.getItem('token');
     if(extracted_token ===  undefined)
     {   
       location.reload()
@@ -67,29 +66,38 @@ function  checkAdduserState(){
     fetch("/modeState", {
         method: "POST"
     }).then(res=>res.text())
-    .then(modes=>{
+    .then(async(modes)=>{
+        
+        console.log("modes =", modes)
         if(modes=="Dual Mode")
             {
+                console.log(modes)
                 outer.classList.remove("shift-left")
                 outer.classList.add("shift-right") 
                 const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                 const btn = document.getElementsByClassName("adduserbtn")[0]
-                
+                document.getElementById("mode").innerHTML='Dual Mode'   
                
                 if(btn == undefined && joinbtn == undefined)
                 {
                     appendAddUser()
                     joinroom()
                 }  
+                
+                 sendroomID()
+                
+
             }
         else{
+            console.log(modes)
                 outer.classList.remove("shift-right")
                 outer.classList.add("shift-left")  
+                document.getElementById("mode").innerHTML='Solo Mode'   
         }
     })
 }
 
-checkAdduserState();
+
 
 const outer= document.getElementById("outer")
 const ball =document.getElementById("ball")
@@ -97,7 +105,7 @@ const ball =document.getElementById("ball")
 
 outer.addEventListener("click",async()=>
 {   const mode= document.getElementById("mode").innerHTML
-   
+//    console.log(mode)
     
     if(mode==='Solo Mode')
     {
@@ -107,11 +115,12 @@ outer.addEventListener("click",async()=>
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ mode: "Dual Mode" }),
-        }).then(res=>res.text())
+        }).then(res=>res.json())
         .then(modes=>{
-            console.log(modes)
-            if(modes=="Dual Mode")
-                {
+        
+            if(modes.mode =="Dual Mode")
+                {  
+                   
                     const btn = document.getElementsByClassName("adduserbtn")[0]
                     outer.classList.remove("shift-left")
                     outer.classList.add("shift-right")
@@ -122,7 +131,11 @@ outer.addEventListener("click",async()=>
                         appendAddUser()
                         joinroom()
                     }
+
+                    sendroomID()
                 }
+
+
         })
     
     }else{
@@ -133,11 +146,15 @@ outer.addEventListener("click",async()=>
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ mode: "Solo Mode" }),
-        }).then(res=>res.text())
+        }).then(res=>res.json())
         .then(modes=>
-        {
-            if(modes=="Solo Mode")
-                {   const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
+        {   
+        
+            if(modes.mode=="Solo Mode")
+                {   
+                   
+                    socket.emit("todisconnect",modes.roomid)
+                    const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
                     const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                     const nav = document.getElementsByClassName("navbar")[0]
                     if(adduserbtn)
@@ -164,13 +181,116 @@ window.addEventListener("pageshow", (event) => {
 
 
 
-
-socket.on("join",(msg)=>
+function sendroomID()
 {
-    alert(msg)
+    fetch("/accessUid",{
+        method:"POST"
+    }).then(res=>res.text())
+    .then(data=>
+    {   
+        const joinbtn = document.getElementsByClassName("joinroombtn")[0]
+        const addbtn = document.getElementsByClassName("adduserbtn")[0]
+    
+        if(data.length!=0)
+        {
+            
+            socket.emit("roomid",data)
+    
+            if(addbtn != undefined && joinbtn!= undefined)
+            {
+                joinbtn.classList.add("hide")
+                addbtn.classList.add("hide")
+            }
+        }else{
+            joinbtn.classList.remove("hide")
+            addbtn.classList.remove("hide")
+        }
+        
+    }
+    )
+    
+    
+}
+
+const add= document.getElementById("btn")
+
+add.addEventListener("click",()=>
+{
+    fetch("/accessUid",{
+        method:"POST"
+    }).then(res=>res.text())
+    .then(id=>
+    {
+        if(id!=null)
+        {
+            const input= document.getElementById("inputtask")
+            const data = input.value
+            socket.emit("add",id,data)
+        }
+      
+    }
+    )
+    
+    
 })
 
-socket.on("redirectToMain",()=>
+socket.on("data",(info)=>
 {
-    window.location.href="/"
+    console.log(info)
 })
+
+socket.on("force_leave",(id)=>
+{  
+    console.log("i got leave message ")
+    // fech krk db me roomid ki value null karwao 
+
+    fetch("/makeMyRoomidEmpty",{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ roomid:id,mode:"Solo Mode"}),
+    })
+    // mode single krwao 
+
+    const outer= document.getElementById("outer")
+    const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
+    const joinbtn = document.getElementsByClassName("joinroombtn")[0]
+    const nav = document.getElementsByClassName("navbar")[0]
+    if(adduserbtn)
+    {
+       nav.removeChild(adduserbtn)
+       nav.removeChild(joinbtn)
+    }
+    outer.classList.remove("shift-right")
+    outer.classList.add("shift-left")
+    document.getElementById("mode").innerHTML='Solo Mode'      
+    // ui change kre (dual to single)
+    socket.emit("leaveme",(id))
+})
+
+
+fetch("/accessUid",{
+    method:"POST"
+}).then(res=>res.text())
+.then(id=>
+{
+   if(id!=null)
+   {
+    fetch("/remove",{
+        method:"POST",
+        headers:{
+           "Content-Type": "application/json",
+        },
+        body:JSON.stringify({id:id})
+    }).then(()=>
+    {
+        checkAdduserState()
+    })
+   }
+})
+    
+
+
+
+
