@@ -10,7 +10,7 @@ body{
     display: flex;
     padding: 10px 0px 10px 0px;
     align-items: center;
-    width: calc(100% - 60px);
+    width: calc(100% - 50px);
     justify-content: flex-end;
     /* padding: 24px 0px 17px 0px; */
     position: fixed;
@@ -43,7 +43,7 @@ body{
     display: block;
     width: 25px;
     cursor: pointer;
-    margin-left: 13px;
+    margin-left: 10px;
 }
 
 /* #style:hover{
@@ -241,6 +241,7 @@ a::after{
 #lists {
     /* display: flex
 ; */
+    overflow-x: auto;
     justify-content: center;
     /* margin-top: 200px; */
     /* border: 1px solid black; */
@@ -254,13 +255,9 @@ a::after{
     box-shadow: inset 0 -1px 0 0 transparent;
 }
 
-
-
-
-
 .progress-ring {
     position: relative;
-    top:540px;
+    top:550px;
     left: 55px;
     width: 150px;
     height: 150px;
@@ -296,4 +293,25 @@ a::after{
     font-size: 24px;
     font-weight: bold;
     color: #333;
+}
+
+
+::-webkit-scrollbar {
+    width: 5px;  
+    height: 10px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;  
+    border-radius: 10px;
+    transition: background-color 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555; 
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgb(111 88 67);
+    border-radius: 10px; 
 }

@@ -211,10 +211,8 @@ app.post("/accessUid",authenticated,async(req,res)=>
         const joinid=user.joinId
         if(roomid!=null)
         {
-            console.log(roomid)
             res.send(roomid)
-        }else{
-            console.log(joinid)
+        }else if(joinid!=null){
             res.send(joinid)
         }
         
@@ -539,7 +537,6 @@ app.post("/modeState",authenticated, async (req, res) => {
             const id = verify.id
             const user =  await userModel.findOne({_id:id})
             const mode = user.mode
-            console.log(mode)
             if(mode==="Solo Mode")
             {
 
