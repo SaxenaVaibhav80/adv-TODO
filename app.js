@@ -217,9 +217,6 @@ app.post("/accessUid",authenticated,async(req,res)=>
         }
         
     }
-   
-    
-    
 })
 
 // --------------------remove user--------------------------------->
@@ -283,10 +280,12 @@ app.post("/joined",authenticated,async(req,res)=>
     const user =  await userby_id(req,res)
     const id = user._id
     const roomid = req.body.id
-   
-    if(roomid!="")
+    const isroomAvailable = await userModel.find({roomId:roomid})
+
+    if(roomid!="" && isroomAvailable.length!=0)
     {   
-        const user= await userModel.find({joinId:roomid})
+        const user= await userModel.find({joinId:roomid}) 
+
         // console.log(user)
         if(user.length==0)
         {
@@ -295,13 +294,15 @@ app.post("/joined",authenticated,async(req,res)=>
                 {joinId:roomid},
                 { new: true }
             )
-            res.json({ redirectTo: "/TODO",countuser:false});
+            res.json({ redirectTo: "/TODO",countuser:false,alert:false});
         }
         else if(user.length>=1)
         {
-            res.json({ redirectTo: "/TODO",countuser:true});
+            res.json({ redirectTo: "/TODO",countuser:true,alert:false});
         }    
     
+    }else{
+        res.json({ redirectTo: "/TODO",alert:"no room found"});
     }
     
 })

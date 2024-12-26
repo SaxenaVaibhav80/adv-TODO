@@ -19,17 +19,18 @@ joinbtn.addEventListener("click", async () => {
             });
             
             const data = await response.json();
-            if (data.redirectTo) {
-                // Redirect to the received URL
-                window.location.href = data.redirectTo;
-            }
+            if(data.alert)
+                {
+                    alert("no room found")
+                }
+            
             if(data.countuser==true)
             {
                 alert("room full")
             }
-            if(data.msg=="noRoom")
-            {
-                alert("No room Found")
+            if (data.redirectTo) {
+                // Redirect to the received URL
+                window.location.href = data.redirectTo;
             }
         } catch (error) {
             console.error("Error:", error);

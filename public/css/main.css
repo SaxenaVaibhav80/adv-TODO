@@ -197,7 +197,6 @@ a::after{
     text-align: center;
     margin-top: 50px;
 }
-
 #progress-bar {
     width: 80%;
     height: 2px;
@@ -206,10 +205,9 @@ a::after{
     border: 1px solid black;
     overflow: hidden;
     position: relative;
-    top: 600px;
+    top: 375px;
     left: 30px;
 }
-
 #progress-fill {
     height: 100%;
     background-color: #5c5c5c;
@@ -217,16 +215,6 @@ a::after{
     transition: width 1s linear;
 }
 
-#timer {
-    position: relative;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #5c5c5c;
-    width: 80px;
-    top: 565px;
-    left: 57px;
-}
 
 
 
@@ -254,13 +242,22 @@ a::after{
     transition: width 0.3s ease;
     box-shadow: inset 0 -1px 0 0 transparent;
 }
-
 .progress-ring {
     position: relative;
-    top:550px;
+    top: 330px;
     left: 55px;
     width: 150px;
     height: 150px;
+}
+#timer {
+    position: relative;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #5c5c5c;
+    width: 80px;
+    top: 335px;
+    left: 57px;
 }
 
 .progress-ring svg {
@@ -290,7 +287,7 @@ a::after{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 24px;
+    font-size: 15px;
     font-weight: bold;
     color: #333;
 }
@@ -315,3 +312,33 @@ a::after{
     background-color: rgb(111 88 67);
     border-radius: 10px; 
 }
+
+#suggestdiv {
+    background-color: #d9d9d9;
+    margin-top: 71px;
+    width: 175px;
+    /* border: 1px solid black; */
+    padding: 15px 10px 10px 10px;
+    height: 8em;
+    border-radius: 15px;
+    margin-left: 26px;
+}
+
+#suggestedPara{
+    white-space: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: #4f4d4d;
+}
+
+#suggestedbtn{
+    text-align: center;
+    background-color: #a6a6a6;
+    margin-top: 15px;
+    border-radius: 10px;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+
+

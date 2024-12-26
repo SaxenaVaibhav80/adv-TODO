@@ -402,10 +402,12 @@ progressstyle.addEventListener("click", () => {
         // Collapse slider
         slider.style.width = "0";
         navbar.style.width = "calc(100% - 50px)";
+        list.style.width = "1450px";
     } else {
         // Expand slider
         slider.style.width = "250px"; 
         navbar.style.width = "calc(100% - 300px)";
+        list.style.width = "1200px";
     }
     isSliderExpanded = !isSliderExpanded; 
 });
@@ -414,11 +416,13 @@ timestyle.addEventListener("click", () => {
     if (isSliderExpanded) {
         // Collapse slider
         slider.style.width = "0";
-        navbar.style.width = "calc(100% - 40px)";
+        navbar.style.width = "calc(100% - 50px)";
+        list.style.width = "1450px";
     } else {
         // Expand slider
         slider.style.width = "250px"; 
         navbar.style.width = "calc(100% - 300px)";
+        list.style.width = "1200px";
     }
     isSliderExpanded = !isSliderExpanded; 
 });
