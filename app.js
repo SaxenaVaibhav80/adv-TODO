@@ -317,27 +317,27 @@ app.get("/about",(req,res)=>
 
 // socket connection--------------------------------------------->
 
-io.on("connection", (socket) => {
+io.on("connection", async(socket) => {
 
-    socket.on("token", async (token) => {
-       
-        if (token) {
-            try {
-                
-               
-                const verification = jwt.verify(token, secret_key);
-                const userId = verification.id;
-                
+                // console.log(socket)
+
+                // const socketsInRoom = await io.fetchSockets();
+                // console.log(`Active Sockets: ${socketsInRoom.length}`);
+                // socketsInRoom.forEach((s) => {
+                //     console.log(`Socket ID: ${s.id}`);
+                // });
+
                 socket.on("roomid",async(id)=>
                 {
                   await join(id) 
-                //   console.log("join call")
+                  console.log("join call")
         
                 })
                 async function join(id)
                 {
                     
                     await socket.join(id)
+                    // console.log(socket)
                     // console.log("joined",id)
                     
                     // const socketsInRoom = await io.in(id).fetchSockets();
@@ -372,21 +372,7 @@ io.on("connection", (socket) => {
                 // -------- checks how many sockets are active----------->
                 // const socketsInRoom = await io.in(id).fetchSockets(); checks for rooms available for particular id 
 
-        
-              
-            
-                
-                
-               
-
-            } catch (err) {
-                console.log(err);
-            }
-
-
-        }
     });
-});
 
 
 
@@ -520,6 +506,28 @@ app.post("/handleMode", async (req, res) => {
 });
 
 
+app.post("/handlelightMode",authenticated,async(req,res)=>
+{
+    const mode = req.body.mode;
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+            await userModel.findOneAndUpdate(
+                { _id: id },
+                { theme: mode }
+            );
+            res.status(200).json({mode});
+        } catch (err) {
+            res.status(500).send("Error verifying token");
+        }
+    } else {
+        res.status(401).send("Login please, session expired");
+    }
+})
+
 // modeStatemanager--------------------->
 
 app.post("/modeState",authenticated, async (req, res) => {
@@ -549,6 +557,25 @@ app.post("/modeState",authenticated, async (req, res) => {
         res.status(401).send("Login please, session expired");
     }
 });
+app.post("/themeState",authenticated, async (req, res) => {
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            const verify = jwt.verify(token,secret_key)
+            const id = verify.id
+            const user =  await userModel.findOne({_id:id})
+            const mode = user.theme
+            res.status(200).send(mode);
+        } catch (err) {
+            res.status(500).send("Error verifying token");
+        }
+    } else {
+        res.status(401).send("Login please, session expired");
+    }
+});
+
+
 
 // --------------main page routing----------->
 

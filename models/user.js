@@ -31,6 +31,10 @@ const userModel = new mongoose.Schema({
         type: String,
         default: "Solo Mode" 
     },
+    theme:{
+        type: String, 
+        default:"Light mode"
+    },
     roomId: {
         type: String, 
         default: null 
