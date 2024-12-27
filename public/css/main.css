@@ -317,20 +317,20 @@ a::after{
     background-color: rgb(111 88 67);
     border-radius: 10px; 
 }
-
 #suggestdiv {
     background-color: #d9d9d9;
     margin-top: 71px;
     width: 175px;
     /* border: 1px solid black; */
     padding: 15px 10px 10px 10px;
-    height: 8em;
+    height: 7.5em;
     border-radius: 15px;
     margin-left: 26px;
 }
 
 #suggestedPara{
     white-space: normal;
+    font-size: 14px;
     text-overflow: ellipsis;
     overflow: hidden;
     color: #4f4d4d;
