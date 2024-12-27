@@ -3,7 +3,7 @@ body {
     flex-direction: column; /* Stack sections vertically */
     justify-content: center;
     align-items: center;
-    background-color: rgb(191,182,165);
+    background-color: #ffffff;
     height: 100vh;
     margin: 0;
     font-family: "Josefin Sans", sans-serif;
@@ -39,123 +39,137 @@ a::after{
 .navbar > :last-child{
     margin-right: 50px;
 }
-.contact-main-body {
+
+.contact-main-top{
+    margin-top: -37vh;
+    background-color: rgb(191,182,165);
+    width: 100%;
     display: flex;
-    width: 976px;
-    margin-top: 170px;
-    height: 570px;
-    border-radius: 20px;
-    z-index: 3;
-    /* background-color: rgb(111 88 67); */
-    background-color: rgb(150 130 112);
-    margin-bottom: 70px;
-    padding-bottom: 40px;
+    justify-content: center; /* Horizontally center */
+    align-items: center;
 }
 
-.left {
-    width: 70%;
-    position: relative; /* To ensure the image and text stack properly */
-}
-
-.left .background-image {
-    position: absolute; /* Make the image position absolute within the parent */
-    top: 0;
-    left: 0;
-    padding: 22px;
-    width: 100%; /* Cover the entire width of the parent container */
-    height: 100%; 
-    object-fit: cover; /* Ensure the image scales proportionally */
-    z-index: -1; /* Place the image behind the text */
-    border-radius: 20px;
-    opacity: 0.3; /* Add transparency for better readability */
-}
-
-.contact-main-body .left h2 {
-    margin-top: 150px;
-    padding-left: 45px;
-    margin-bottom: 10px;
-    color: rgb(250, 249, 235);
-    font-size: 2rem;
-    font-weight: bold;
-}
-
-.contact-main-body .left p {
-    padding-left: 45px;
-    color: rgb(250, 249, 235);
-    margin-bottom: 20px;
-    line-height: 1.5;
-    font-size: 1rem;
-    max-width: 700px; 
-}
-
-.info-mail {
-   
-    padding-top: 60px;
-    margin-left: 120px;
-}
-.left{
-    width: 40%;
-}
-
-input{
-    display: block;
-    /* background-color: rgb(111 88 67); */
-    background-color: rgb(150 130 112);
-    margin-bottom: 20px;
-    border-style: none;
-    border-bottom: 1px solid black;
-    outline: none;
-    width: 315px;
-    cursor:pointer;
-    
-}
-textarea{
-    /* background-color: rgb(111 88 67); */
-    background-color: rgb(150 130 112);
-    outline: none;
-    width: 300px;
-    height: 200px;
-    overflow: auto;
-    border-color: black;
-    resize: none;
-    margin-bottom: 20px;
-    padding: 10px 10px 0 10px;
-}
-
-::placeholder{
-    color: white;
-    font-family: "Josefin Sans", sans-serif;
-    opacity: 0.5;
-}
-
-#mail-send-btn{
-    padding: 10px 15px;
-    background-color: rgb(191, 182, 165);
-    border-radius: 10px;
-    color: rgb(68, 68, 68);
-    cursor: pointer;
+.main-text{
+    width: 45%;
     text-align: center;
-    
+    margin-top: 42vh;
+    margin-bottom: 12vh;
 }
 
-
-::-webkit-scrollbar {
-    width: 5px;  
-    height: 10px; 
+.sign1{
+    width: 14%;
+    margin-top: 14vh;
+}
+ 
+.sign2{
+    width: 14%;
+    margin-top: 51vh;
 }
 
-::-webkit-scrollbar-thumb {
-    background-color: #888;  
-    border-radius: 10px;
-    transition: background-color 0.3s;
+.contact-us {
+    background-color: #ffffff;
+    text-align: center;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background-color: #555; 
+h1 {
+    font-size: 56px;
+    color: rgb(102, 55, 38);
+    margin-bottom: 20px;
 }
 
-::-webkit-scrollbar-track {
-    background-color: rgb(111 88 67);
-    border-radius: 10px; 
+.contact-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.contact-form {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 36%; /* Adjust width as needed */
+    margin-left: 27vh;
+
+}
+
+.newsletter {
+    background-color: rgb(150 130 112);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 24%; /* Adjust width as needed */
+    margin-right: 27vh;
+}
+
+.contact-form input, .contact-form textarea {
+    background-color: rgb(249, 241, 236);
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+.newsletter input {
+    background-color: rgb(249, 241, 236);
+    width: 92%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+textarea {
+    /* background-color: rgb(150 130 112); */
+    outline: none;
+    height: 100px;
+    overflow: auto;
+    resize: none;
+}
+
+.email-phone {
+    display: flex;
+    justify-content: space-between;
+    gap: 2vh;
+    margin-right: -3vh;
+}
+
+.contact-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(150 130 112);
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.newsletter button {
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(87, 72, 57);
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.contact-form button:hover, .newsletter button:hover {
+    background-color: rgb(54, 44, 35);
+}
+
+.newsletter h3 {
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.newsletter p {
+    font-size: 16px;
+    color: #dddddd;
+    margin-bottom: 20px;
 }
 
