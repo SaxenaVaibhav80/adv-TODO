@@ -3,6 +3,7 @@ const app = express()
 const http = require('http')
 const ejs = require("ejs")
 const userModel = require("./models/user.js")
+const tasks = require("./tasks/task.js")
 const db = require("./config/config.js")
 const server=http.createServer(app)
 app.set("view engine","ejs")
@@ -595,6 +596,13 @@ app.get("/TODO",authenticated,async(req,res)=>
         res.render("main")
     }
 })
+
+// -------------sending tasks as suggestions------------------->
+
+app.get('/api/random-task', authenticated,(req, res) => {
+    const randomNumber = Math.floor(Math.random() * tasks.length); 
+    res.send(tasks[randomNumber]);
+  });
 
 
 // add user page---------------------------->

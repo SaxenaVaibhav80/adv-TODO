@@ -466,3 +466,18 @@ function updateProgress(value) {
 
 
 setTimeout(() => updateProgress(70), 1000); 
+
+
+const suggestedbtn=document.getElementById("suggestedbtn")
+
+suggestedbtn.addEventListener("click",()=>
+{
+    fetch("/api/random-task",{
+        method:"GET"
+    }).then(res=>res.text())
+    .then(task=>
+    {
+        document.getElementById("suggestedPara").innerHTML=task
+    }
+    )
+})
