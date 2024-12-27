@@ -121,6 +121,7 @@ a::after{
 
 
 #slider {
+    user-select: none;
     background-color: #f0f0f0;
     height: 100vh;
     /* border-right: 1px solid #d3cfcf; */
@@ -130,6 +131,7 @@ a::after{
     white-space: nowrap;
 }
 #outer{
+    user-select: none;
     border: 1px solid  rgb(81 81 81);
     border-radius: 12px;
     width: 35px;
@@ -140,6 +142,7 @@ a::after{
 }
 
 #ball {
+    user-select: none;
     background-color: rgb(192 192 192);
     border-radius: 30px;
     width: 46%;
@@ -148,6 +151,7 @@ a::after{
 }
 
 #lightouter {
+    user-select: none;
     border: 1px solid rgb(81 81 81);
     border-radius: 12px;
     width: 35px;
@@ -163,6 +167,7 @@ a::after{
 
 #lightball {
  
+    user-select: none;
     background-color: rgb(192 192 192);
     border: 1px solid rgb(50 50 50);
     border-radius: 30px;
@@ -275,7 +280,7 @@ a::after{
 }
 
 .progress-circle {
-    stroke: #838383;
+    stroke: #a9a9a9;
     stroke-width: 7;
     stroke-dasharray: 440; 
     stroke-dashoffset: 440; 
@@ -332,6 +337,7 @@ a::after{
 }
 
 #suggestedbtn{
+    user-select: none;
     text-align: center;
     background-color: #a6a6a6;
     margin-top: 15px;
