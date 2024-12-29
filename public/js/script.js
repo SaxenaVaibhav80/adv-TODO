@@ -1,4 +1,6 @@
 const socket = io()
+window.onload = startCountdown;
+
 
 
 fetch('/api/login', {
@@ -83,7 +85,7 @@ function  checkAdduserState(){
                 document.getElementById("outer").classList.add("shift-right") 
                 const joinbtn = document.getElementsByClassName("joinroombtn")[0]
                 const btn = document.getElementsByClassName("adduserbtn")[0]
-                document.getElementById("mode").innerHTML='Dual Mode'   
+                // document.getElementById("mode").innerHTML='Dual Mode'   
                
                 if(btn == undefined && joinbtn == undefined)
                 {
@@ -97,7 +99,7 @@ function  checkAdduserState(){
         else{
                 document.getElementById("outer").classList.remove("shift-right")
                 document.getElementById("outer").classList.add("shift-left")  
-                document.getElementById("mode").innerHTML='Solo Mode'   
+                // document.getElementById("mode").innerHTML='Solo Mode'   
         }
     })
 }
@@ -125,9 +127,6 @@ function themestate(){
         }
     })
 }
-
-
-
 
 
 outer.addEventListener("click",async()=>
@@ -353,25 +352,25 @@ socket.on("force_leave",(id)=>
 })
 
 
-fetch("/accessUid",{
-    method:"POST"
-}).then(res=>res.text())
-.then(id=>
-{
-   if(id!=null)
-   {
-    fetch("/remove",{
-        method:"POST",
-        headers:{
-           "Content-Type": "application/json",
-        },
-        body:JSON.stringify({id:id})
-    }).then(()=>
-    {
-        checkAdduserState()
-    })
-   }
-})
+// fetch("/accessUid",{
+//     method:"POST"
+// }).then(res=>res.text())
+// .then(id=>
+// {
+//    if(id!=null)
+//    {
+//     fetch("/remove",{
+//         method:"POST",
+//         headers:{
+//            "Content-Type": "application/json",
+//         },
+//         body:JSON.stringify({id:id})
+//     }).then(()=>
+//     {
+//         checkAdduserState()
+//     })
+//    }
+// })
     
 const progressstyle= document.getElementsByClassName("progressstyle")[0]
 const timestyle= document.getElementsByClassName("timestyle")[0]
@@ -427,6 +426,8 @@ timestyle.addEventListener("click", () => {
     isSliderExpanded = !isSliderExpanded; 
 });
 
+
+
 function startCountdown() {
     const progressFill = document.querySelector("#progress-fill");
     const timerElement = document.getElementById("timer");
@@ -434,14 +435,18 @@ function startCountdown() {
 
     function updateTimer() {
 
-       
+
         const now = new Date();
         const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
         const secondsLeft = totalDaySeconds - currentSeconds;
         const hours = Math.floor(secondsLeft / 3600);
         const minutes = Math.floor((secondsLeft % 3600) / 60);
         const seconds = secondsLeft % 60;
-        timerElement.textContent = `Time left: ${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        timerElement.textContent = `Time left: ${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+       
+        if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:59:59") {
+           window.location.href="/"
+        }
         const progressPercentage = (currentSeconds / totalDaySeconds) * 100;
         progressFill.style.width = `${progressPercentage}%`;
     }
@@ -450,7 +455,7 @@ function startCountdown() {
     updateTimer();
 }
 
-window.onload = startCountdown;
+
 
 
 function updateProgress(value) {
