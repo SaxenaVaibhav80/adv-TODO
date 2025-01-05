@@ -281,10 +281,10 @@ function displaySoloMode(user) {
             btn.addEventListener('click', () => {
                 document.getElementById('overlay').classList.add('show');
             });
-
+            document.getElementById("progressValue").innerHTML=0
             div.appendChild(img);
             div.appendChild(btn);
-
+            
             lists.appendChild(div);
         }
     } else {
@@ -307,7 +307,7 @@ function displaySoloMode(user) {
                 skills.setAttribute("src", task.imgUrl);
         
                 more.classList.add("more");
-                more.setAttribute("src", "/img/more(1).png");
+                more.setAttribute("src", "/img/more (1).png");
         
                 const moreElement = document.createElement("div");
                 moreElement.classList.add("moreinfo")
@@ -689,8 +689,9 @@ function updateProgress(value) {
 // make event listner when click on (task done) then fetch req krenge whn pr calculate hoke progress db me save ho jyegi or response me whi progress mil jyegi jo ki hum js se dom manipulate krk set krlenge  !!!!! 
 
 
-
-setTimeout(() => updateProgress(90), 1000); 
+const percentage= document.getElementById(progressValue)
+const value=percentage.innerHTML
+setTimeout(() => updateProgress(value), 1000); 
 
 
 const suggestedbtn=document.getElementById("suggestedbtn")
@@ -816,7 +817,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
               container.appendChild(taskDiv)
             }
             document.getElementById('overlay').classList.remove('show');
-            
+
         }else {
             alert('Error adding task!');
         }
