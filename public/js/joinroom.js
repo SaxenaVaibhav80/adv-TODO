@@ -1,3 +1,4 @@
+const socket=io()
 
 const joinbtn = document.getElementById("joinbtn");
 joinbtn.addEventListener("click", async () => {   
@@ -9,6 +10,7 @@ joinbtn.addEventListener("click", async () => {
     }
     else{
         try {
+
             document.getElementById("join-id").value = "";
             const response = await fetch("/joined", {
                 method: "POST",
@@ -29,8 +31,10 @@ joinbtn.addEventListener("click", async () => {
                 alert("room full")
             }
             if (data.redirectTo) {
-                // Redirect to the received URL
+                const name = localStorage.getItem("name")
+                await socket.emit("ijoined",{id,name})  // message pehle phuchega or joining baad me hogi room ki  
                 window.location.href = data.redirectTo;
+
             }
         } catch (error) {
             console.error("Error:", error);

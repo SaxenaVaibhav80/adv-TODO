@@ -1,7 +1,5 @@
 const socket = io()
-window.onload = startCountdown;
-
-
+// window.onload = startCountdown;
 
 fetch('/api/login', {
     method: 'POST',
@@ -10,7 +8,8 @@ fetch('/api/login', {
 .then(data => {
     localStorage.setItem("token", data.token); 
     localStorage.setItem("id",data.id);
-    const extracted_token = localStorage.getItem('token');
+    localStorage.setItem("name",data.name);
+    // const extracted_token = localStorage.getItem('token');
     // socket.emit("token",extracted_token)
 })
 
@@ -26,23 +25,26 @@ window.addEventListener("pageshow", (event) => {
 function appendAddUser()
 {
     const nav = document.getElementsByClassName("navbar")[0]
-    const thirdChild = nav.children[1]; 
+    const thirdChild = nav.children[5]; 
     const adduserbtn = document.createElement("a")
     adduserbtn.textContent="Add user"
     adduserbtn.classList.add("adduserbtn")
     adduserbtn.setAttribute("href","/AddUser")
+    adduserbtn.classList.remove("hide")
     nav.insertBefore(adduserbtn, thirdChild.nextSibling);
 
 }
 function joinroom()
 {
+
     const nav = document.getElementsByClassName("navbar")[0]
-    const fifthChild = nav.children[2]; 
+    const fifthChild = nav.children[6]; 
     const joinroombtn = document.createElement("a")
     joinroombtn.textContent="Join room"
     joinroombtn.classList.add("joinroombtn")
     joinroombtn.setAttribute("href","/join-room")
     nav.insertBefore(joinroombtn, fifthChild.nextSibling);
+    console.log(nav)
 }
 
 
@@ -104,6 +106,14 @@ function  checkAdduserState(){
     })
 }
 
+fetch("/usersname",{
+    method:"GET",
+}).then((res)=>res.json())
+.then((data)=>
+{
+    console.log(data)
+})
+
 
 function themestate(){
     fetch("/themeState", {
@@ -122,90 +132,268 @@ function themestate(){
         else{
             document.getElementById("lightouter").classList.remove("shift-right")
             document.getElementById("lightouter").classList.add("shift-left")  
-                document.getElementById("light").setAttribute("src","/img/lightmode.png")
-                document.getElementById("lmode").innerHTML='Light mode'   
+            document.getElementById("light").setAttribute("src","/img/lightmode.png")
+            document.getElementById("lmode").innerHTML='Light mode'   
         }
     })
 }
 
 
-outer.addEventListener("click",async()=>
-{   const mode= document.getElementById("mode").innerHTML
-//    console.log(mode)
-    
-    if(mode==='Solo Mode')
-    {
-        await fetch("/handleMode", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mode: "Dual Mode" }),
-        }).then(res=>res.json())
-        .then(modes=>{
+outer.addEventListener("click",async(event)=>
+    {   const mode= document.getElementById("mode").innerHTML
+    //    console.log(mode)
         
-            if(modes.mode =="Dual Mode")
-                {  
-                   
-                    const btn = document.getElementsByClassName("adduserbtn")[0]
-                    outer.classList.remove("shift-left")
-                    outer.classList.add("shift-right")
-                    const joinbtn = document.getElementsByClassName("joinroombtn")[0]
-                    document.getElementById("mode").innerHTML='Dual Mode'   
-                    if(btn == undefined && joinbtn== undefined)
-                    {
-                        appendAddUser()
-                        joinroom()
-                    }
-
-                    sendroomID()
-                }
-
-
-        })
+        if(mode==='Solo Mode')
+        {
+            await fetch("/handleMode", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ mode: "Dual Mode" }),
+            }).then(res=>res.json())
+            .then(modes=>{
+            
+                if(modes.mode =="Dual Mode")
+                    {  
+                       
+                        const btn = document.getElementsByClassName("adduserbtn")[0]
+                        outer.classList.remove("shift-left")
+                        outer.classList.add("shift-right")
+                        const joinbtn = document.getElementsByClassName("joinroombtn")[0]
+                        document.getElementById("mode").innerHTML='Dual Mode'   
+                        console.log(joinbtn,btn)
+                        if(btn == undefined && joinbtn== undefined)
+                        {
+                            console.log("join function call hua")
+                            appendAddUser()
+                            joinroom()
+                        }
     
-    }else{
-       
-        await fetch("/handleMode", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ mode: "Solo Mode" }),
-        }).then(res=>res.json())
-        .then(modes=>
-        {   
-        
-            if(modes.mode=="Solo Mode")
-                {   
-                   if(modes.joinid!=null)
-                   {
-                    socket.emit("todisconnect",modes.joinid)
-                   }else{
-                    socket.emit("todisconnect",modes.roomid)
-                   }
-                    
-                    const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
-                    const joinbtn = document.getElementsByClassName("joinroombtn")[0]
-                    const nav = document.getElementsByClassName("navbar")[0]
-                    if(adduserbtn)
-                    {
-                       nav.removeChild(adduserbtn)
-                       nav.removeChild(joinbtn)
+                        sendroomID()
                     }
-                    outer.classList.remove("shift-right")
-                    outer.classList.add("shift-left")
-                    document.getElementById("mode").innerHTML='Solo Mode'           
-                }
+            })
+        
+        }else{
+           
+            await fetch("/handleMode", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ mode: "Solo Mode" }),
+            }).then(res=>res.json())
+            .then(modes=>
+            {   
+            
+                if(modes.mode=="Solo Mode")
+                    {   
+    
+                       if(modes.joinid!=null)
+                       {
+                        socket.emit("todisconnect",modes.joinid)
+                       }else{
+                        socket.emit("todisconnect",modes.roomid)
+                       }
+                        
+                        const adduserbtn = document.getElementsByClassName("adduserbtn")[0]
+                        const joinbtn = document.getElementsByClassName("joinroombtn")[0]
+                        const nav = document.getElementsByClassName("navbar")[0]
+                        if(adduserbtn)
+                        {
+                           nav.removeChild(adduserbtn)
+                           nav.removeChild(joinbtn)
+                        }
+                        outer.classList.remove("shift-right")
+                        outer.classList.add("shift-left")
+                        document.getElementById("mode").innerHTML='Solo Mode'           
+                    }
+            }
+            )
         }
-        )
+    
+        fetch("/getCurrent", { method: "GET" })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
+            return res.json();
+        })
+        .then((data) => {
+    
+            console.log("data",data)
+            if (data.mode === "solo") {
+                console.log("Mode: Solo");
+                displaySoloMode(data.user);
+            } else if (data.mode === "dual") {
+                console.log("Mode: Dual");
+                displayDualMode(data.users);
+            }
+        })
+        .catch((error) => console.error("Error fetching current tasks:", error));
+    
+        event.stopPropagation();
+    
+    })
+    
+    
+
+fetch("/getCurrent", { method: "GET" })
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error("Failed to fetch data");
+        }
+        return res.json();
+    })
+    .then((data) => {
+
+        console.log("data",data)
+        if (data.mode === "solo") {
+            console.log("Mode: Solo");
+            displaySoloMode(data.user);
+        } else if (data.mode === "dual") {
+            console.log("Mode: Dual");
+            displayDualMode(data.users);
+        }
+    })
+.catch((error) => console.error("Error fetching current tasks:", error));
+
+function displaySoloMode(user) {
+    const name = user.tasks.name; 
+    const progress = user.tasks.progress; 
+    const tasks = user.tasks.tasks;
+
+    const lists = document.getElementById("lists"); 
+    lists.innerHTML = ""; 
+
+    if (tasks.length === 0) {
+        if (!document.querySelector(".emptymsg")) {
+            const div = document.createElement("div");
+            div.classList.add("emptymsg");
+
+            const img = document.createElement("img");
+            img.setAttribute("src", "/img/notasks.png");
+            img.classList.add("empty");
+
+            const btn = document.createElement("div");
+            btn.textContent = "Add items to lists";
+            btn.id = "addTODO";
+            btn.addEventListener('click', () => {
+                document.getElementById('overlay').classList.add('show');
+            });
+
+            div.appendChild(img);
+            div.appendChild(btn);
+
+            lists.appendChild(div);
+        }
+    } else {
+        if (!document.getElementsByClassName("flex-container")[0]) {
+            
+            const flexContainer = document.createElement("div");
+            flexContainer.classList.add("flex-container");
+        
+            tasks.forEach((task) => {
+                const main = document.createElement("div");
+                main.classList.add("main");
+        
+                // Icon container
+                const icon = document.createElement("div");
+                icon.classList.add("icon");
+        
+                const more = document.createElement("img");
+                const skills = document.createElement("img");
+                skills.classList.add("skills");
+                skills.setAttribute("src", task.imgUrl);
+        
+                more.classList.add("more");
+                more.setAttribute("src", "/img/more(1).png");
+        
+                const moreElement = document.createElement("div");
+                moreElement.classList.add("moreinfo")
+                const created = document.createElement("div");
+                const priority = document.createElement("div");
+                const status = document.createElement("div");
+        
+                created.classList.add("more-element");
+                status.classList.add("more-element");
+                priority.classList.add("more-element");
+
+        
+                status.textContent = `Status: ${task.status}`;
+                priority.textContent = `Priority: ${task.priority}`;
+                created.textContent = `Created at: ${task.created_at}`;
+        
+                moreElement.appendChild(priority);
+                moreElement.appendChild(created);
+                moreElement.appendChild(status);
+        
+                icon.appendChild(more);
+                icon.appendChild(moreElement);
+                icon.appendChild(skills);
+                main.appendChild(icon);
+        
+                // Title
+                const title = document.createElement("h3");
+                title.classList.add("title");
+                title.textContent = task.title;
+                main.appendChild(title);
+        
+                // Data
+                const data = document.createElement("div");
+                data.classList.add("data");
+                data.textContent = task.data;
+                main.appendChild(data);
+        
+                // Footer
+                const footer = document.createElement("div");
+                footer.classList.add("footer");
+        
+                const updationDiv = document.createElement("div");
+                updationDiv.classList.add("updation-div");
+        
+                const del = document.createElement("img");
+                const edit = document.createElement("img");
+                const recycle = document.createElement("img");
+        
+                del.setAttribute("src", "/img/bin.png");
+                del.classList.add("bin", "footer-icon");
+        
+                edit.setAttribute("src", "/img/editing.png");
+                edit.classList.add("edit", "footer-icon");
+        
+                recycle.setAttribute("src", "/img/sync.png");
+                recycle.classList.add("recycle", "footer-icon");
+        
+                updationDiv.appendChild(del);
+                updationDiv.appendChild(edit);
+                updationDiv.appendChild(recycle);
+        
+                footer.appendChild(updationDiv);
+        
+                const statusFooter = document.createElement("div");
+                statusFooter.classList.add("status");
+                statusFooter.textContent = "Complete";
+        
+                footer.appendChild(statusFooter);
+        
+                main.appendChild(footer);
+        
+                flexContainer.appendChild(main); // Corrected this line
+            });
+        
+            lists.appendChild(flexContainer);
+        }
+        
     }
-})
+}
 
+// Function to display Dual Mode data
+function displayDualMode(users) {
+    console.log("Users:", users);
+}
 
-
-
-louter.addEventListener("click",async()=>
+louter.addEventListener("click",async(event)=>
     {   const lmode= document.getElementById("lmode").innerHTML
         
         if(lmode==='Light mode')
@@ -250,6 +438,9 @@ louter.addEventListener("click",async()=>
             }
             )
         }
+
+        event.stopPropagation();
+
     })
     
 
@@ -262,37 +453,45 @@ window.addEventListener("pageshow", (event) => {
 
 
 
-function sendroomID()
+async function sendroomID()
 {
-    fetch("/accessUid",{
+    await fetch("/accessUid",{
         method:"POST"
     }).then(res=>res.text())
-    .then(data=>
+    .then(async(data)=>
     {   
     
         const joinbtn = document.getElementsByClassName("joinroombtn")[0]
-        const addbtn = document.getElementsByClassName("adduserbtn")[0]
+        const addbtn  = document.getElementsByClassName("adduserbtn")[0]
 
-        if(data.length!=0)
-        {
-            
-            socket.emit("roomid",data)
     
-            if(addbtn != undefined && joinbtn!= undefined)
+        if(data.length!=0 && data!="false")
+        {
+            await socket.emit("roomid",data)
+    
+            if(addbtn!=undefined && joinbtn!= undefined)
             {
                 joinbtn.classList.add("hide")
                 addbtn.classList.add("hide")
             }
-        }else{
-            joinbtn.classList.remove("hide")
-            addbtn.classList.remove("hide")
+        }else if(data=="false"){
+               joinbtn.classList.remove("hide")
+               addbtn.classList.remove("hide")
         }
         
     }
     )
     
+    // fetch("/usersname",{
+    //     method:"GET",
+    // }).then((res)=>res.json())
+    // .then((data)=>
+    // {
+    //     console.log(data)
+    // })
     
 }
+
 
 // const add= document.getElementById("btn")
 
@@ -315,6 +514,18 @@ function sendroomID()
     
     
 // })
+
+socket.on("joineduser",()=>{
+    console.log("i joined")
+
+    fetch("/usersname",{
+        method:"GET",
+    }).then((res)=>res.json())
+    .then((data)=>
+    {
+        console.log(data)
+    })
+})
 
 socket.on("data",(info)=>
 {
@@ -347,8 +558,10 @@ socket.on("force_leave",(id)=>
     outer.classList.remove("shift-right")
     outer.classList.add("shift-left")
     document.getElementById("mode").innerHTML='Solo Mode'      
-    // ui change kre (dual to single)
     socket.emit("leaveme",(id))
+
+
+
 })
 
 
@@ -413,48 +626,51 @@ progressstyle.addEventListener("click", () => {
 
 timestyle.addEventListener("click", () => {
     if (isSliderExpanded) {
-        // Collapse slider
+
         slider.style.width = "0";
         navbar.style.width = "calc(100% - 50px)";
         list.style.width = "1450px";
     } else {
-        // Expand slider
+
         slider.style.width = "250px"; 
         navbar.style.width = "calc(100% - 300px)";
         list.style.width = "1200px";
     }
     isSliderExpanded = !isSliderExpanded; 
 });
+const progressFill = document.querySelector("#progress-fill");
+const timerElement = document.getElementById("timer");
+const totalDaySeconds = 24 * 60 * 60; 
 
+function updateTimer() {
 
+    const now = new Date();
+    const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const secondsLeft = totalDaySeconds - currentSeconds;
+    const hours = Math.floor(secondsLeft / 3600);
+    const minutes = Math.floor((secondsLeft % 3600) / 60);
+    const seconds = secondsLeft % 60;
+    timerElement.textContent = `Time left: ${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+   
+    if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:59:20") {
 
-function startCountdown() {
-    const progressFill = document.querySelector("#progress-fill");
-    const timerElement = document.getElementById("timer");
-    const totalDaySeconds = 24 * 60 * 60; 
+     location.reload()
 
-    function updateTimer() {
-
-
-        const now = new Date();
-        const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
-        const secondsLeft = totalDaySeconds - currentSeconds;
-        const hours = Math.floor(secondsLeft / 3600);
-        const minutes = Math.floor((secondsLeft % 3600) / 60);
-        const seconds = secondsLeft % 60;
-        timerElement.textContent = `Time left: ${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-       
-        if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:59:59") {
-           window.location.href="/"
-        }
-        const progressPercentage = (currentSeconds / totalDaySeconds) * 100;
-        progressFill.style.width = `${progressPercentage}%`;
     }
-    setInterval(updateTimer, 1000);
-    
-    updateTimer();
+    const progressPercentage = (currentSeconds / totalDaySeconds) * 100;
+    progressFill.style.width = `${progressPercentage}%`;
 }
 
+const timer=setInterval(updateTimer, 1000);
+
+// function startCountdown() {
+   
+    
+    
+//     timer.close()
+    
+//     updateTimer();
+// }
 
 
 
@@ -470,7 +686,11 @@ function updateProgress(value) {
 }
 
 
-setTimeout(() => updateProgress(70), 1000); 
+// make event listner when click on (task done) then fetch req krenge whn pr calculate hoke progress db me save ho jyegi or response me whi progress mil jyegi jo ki hum js se dom manipulate krk set krlenge  !!!!! 
+
+
+
+setTimeout(() => updateProgress(90), 1000); 
 
 
 const suggestedbtn=document.getElementById("suggestedbtn")
@@ -486,3 +706,138 @@ suggestedbtn.addEventListener("click",()=>
     }
     )
 })
+
+document.getElementById('close').addEventListener('click', () => {
+    document.getElementById('overlay').classList.remove('show');
+});
+
+document.getElementById("addit").addEventListener("click", (e) => {
+
+    const category = document.getElementById('category').value;
+    const title = document.getElementById('title').value;
+    const priority = document.getElementById('priority').value;
+    const data = document.getElementById('data').value;
+   
+
+    if(priority==="")
+    {
+        alert("Please select some Priority")
+        return;
+    }
+    if(category==="")
+    {
+        alert("Please select some category")
+        return;
+    }
+    
+    const created_at = new Date().toLocaleString('en-IN', { 
+        timeZone: 'Asia/Kolkata',
+        hour12: true 
+    }).slice(10,);
+  
+    console.log(created_at)
+   
+    const imgUrl = '/img/users.png';
+
+    const task = {
+        title: title,
+        data: data,
+        imgUrl: imgUrl,
+        created_at: created_at,
+        status: "pending", 
+        priority: priority
+    };
+
+    
+    fetch('/TODO', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            title: task.title,
+            priority: task.priority,
+            data: task.data,
+            imgUrl: task.imgUrl,
+            created_at: task.created_at
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const lists = document.getElementById("lists")
+        document.getElementById('title').value=""
+        document.getElementById('data').value="";
+     
+        if (data.status === 'added') {
+            if(document.getElementsByClassName("emptymsg")[0]){
+                document.getElementsByClassName("emptymsg")[0].style.display="none"
+            }
+            if (!document.getElementsByClassName("flex-container")[0]) {
+                const flexContainer = document.createElement("div");
+                flexContainer.classList.add("flex-container");
+                flexContainer.style.display = "flex";
+                flexContainer.style.flexWrap = "wrap";
+                flexContainer.style.gap = "1rem";
+
+                const taskDiv = document.createElement("div");
+                taskDiv.classList.add("task-tile", `${data.taskid}`);
+                taskDiv.style.border = "1px solid #ccc";
+                taskDiv.style.borderRadius = "8px";
+                taskDiv.style.padding = "10px";
+                taskDiv.style.width = "calc(33.33% - 1rem)";
+
+                taskDiv.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.data}</p>
+                <p><strong>Created on:</strong> ${task.created_at}</p>
+                <img src="${task.imgUrl}" alt="${task.title}" />
+                <p>Status: ${task.status}</p>
+                 `;
+                flexContainer.appendChild(taskDiv);
+                lists.appendChild(flexContainer);
+
+            }else{
+            const taskDiv = document.createElement("div");
+            taskDiv.classList.add("task-tile", `${data.taskid}`);
+            taskDiv.style.border = "1px solid #ccc";
+            taskDiv.style.borderRadius = "8px";
+            taskDiv.style.padding = "10px";
+            taskDiv.style.width = "calc(33.33% - 1rem)";
+
+
+            taskDiv.innerHTML = `
+                <h3>${task.title}</h3>
+                <p>${task.data}</p>
+                <p><strong>Created on:</strong> ${task.created_at}</p>
+                <img src="${task.imgUrl}" alt="${task.title}" />
+                <p>Status: ${task.status}</p>
+            `;
+              const container=document.getElementsByClassName("flex-container")[0]
+              container.appendChild(taskDiv)
+            }
+            document.getElementById('overlay').classList.remove('show');
+            
+        }else {
+            alert('Error adding task!');
+        }
+
+        
+        if(data.mode == "dual") {
+            console.log("message wala chala");
+            socket.emit("message", (task, data.id));
+        }
+
+        
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the task!');
+    });
+});
+
+document.getElementById("plus").addEventListener("click",()=>
+    {
+        document.getElementById('overlay').classList.add('show');
+    })
+
+

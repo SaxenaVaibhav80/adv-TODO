@@ -10,6 +10,7 @@
     
 </head>
 <body>
+<div class="body">
     <div id="sidebar">
       
         <img src="/img/direction.png" id="slidericon">
@@ -81,7 +82,8 @@
     </div>
     <div>
         <nav class="navbar">
-            
+            <a class="navaddtask">Add tasks</a>
+            <img src="/img/more.png" id="plus">
             <div id="lightouter">
                 <div id="lightball"><img src="/img/lightmode.png" id="light"></div>
             </div>
@@ -102,12 +104,41 @@
     
         
         <div id="lists">
-            <% console.log(tasks) %>
+           
+        
         </div>
     </div>
+</div>
+<div id="overlay">
+    <div id="taskform">
+        <img id="close" src="/img/close.png">
+          <div id="formcontent">
+            <input placeholder=" Add title" id="title" name="title" required>
+            <select name="category" id="category">
+                <option value="" selected>Select task catagory</option>
+                <option value="help">help</option>
+                <option value="food">food</option>
+                <option value="skills">skills</option>
+                <option value="learn">learn</option>
+              </select>
+        
+              <select name="priority" id="priority">
+                <option value="" selected>Select task priority</option>
+                <option value="high">high</option>
+                <option value="moderate">moderate</option>
+                <option value="low">low</option>
+              </select>
     
-
-
+              <textarea id="data" name="data" placeholder="Enter description" required></textarea>
+    
+              <button type="submit" id="addit"> Add Task</button>
+          </div>
+    </div>  
+</div>
+    
 <script src="/js/script.js"></script>
 </body>
+
 </html>
+
+

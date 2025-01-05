@@ -12,6 +12,9 @@ const taskModel = new mongoose.Schema({
          type:String,
          default:null
         },
+        name:{
+         type:String
+        },
         tasks:[
             {
                 title: {
@@ -31,6 +34,10 @@ const taskModel = new mongoose.Schema({
                 status:{
                     type:String,
                     default:"pending"
+                },
+                priority:{
+                    type:String,
+                    default:"moderate"
                 },
                 
             }

@@ -4,6 +4,7 @@ const http = require('http')
 const ejs = require("ejs")
 const userModel = require("./models/user.js")
 const taskModel = require("./models/tasks.js")
+const mongoose=require("mongoose")
 const tasks = require("./tasks/task.js")
 const db = require("./config/config.js")
 const server=http.createServer(app)
@@ -46,221 +47,6 @@ async function userby_id(req,res)
     }
   
 }
-// ---------------------------function to manage task---------------->
-
-async function handleSoloOrUnlinkedDualMode(currentData, userId, date, mode, name, res) {
-
-    console.log("solo manager wala chala ")
-
-    if (currentData.current.date !== date) {
-        if (currentData.current.tasks.length > 0) {
-            if (currentData.history.length >= 30) {
-        
-                await taskModel.findOneAndUpdate(
-                    { userid: userId },
-                    { $pop: { history: -1 } },
-                    { new: true }
-                );
-
-           
-                await taskModel.findOneAndUpdate(
-                    { userid: userId },
-                    {
-                        $push: {
-                            history: {
-                                date: currentData.current.date,
-                                data: currentData.current.tasks,
-                            },
-                        },
-                        $set: {
-                            "current.tasks": [],
-                            "current.date": date,
-                        },
-                    },
-                    { new: true }
-                );
-            } else {
-              
-                await taskModel.findOneAndUpdate(
-                    { userid: userId },
-                    {
-                        $push: {
-                            history: {
-                                date: currentData.current.date,
-                                data: currentData.current.tasks,
-                            },
-                        },
-                        $set: {
-                            "current.tasks": [],
-                            "current.date": date,
-                        },
-                    },
-                    { new: true }
-                );
-            }
-        } else {
-            
-            await taskModel.findOneAndUpdate(
-                { userid: userId },
-                {
-                    $set: {
-                        "current.date": date,
-                        "current.tasks": [],
-                    },
-                },
-                { new: true }
-            );
-        }
-    }
-
-    const updatedData = await taskModel.findOne({ userid: userId });
-    res.render("main", { mode: mode, firstname: name, tasks: updatedData.current });
-}
-
-// ------------------------- for dual mode having room id ------------------------>
-
-async function handleDualModeWithRoomId(users, roomId, date, res, firstname) {
-
-    console.log("roomid task manager wala chla");
-    
-    for (const user of users) {
-        const userid = user._id;
-
-        const taskData = await taskModel.findOne({ userid });
-
-        if (!taskData) {
-            console.log(`No tasks found for user: ${userid}`);
-            continue;
-        }
-        if (taskData.current.date !== date) {
-            if (taskData.current.tasks.length > 0) {
-                const historyEntry = {
-                    date: taskData.current.date,
-                    data: taskData.current.tasks,
-                };
-                if (taskData.history.length >= 30) {
-                    await taskModel.findOneAndUpdate(
-                        { userid },
-                        { $pop: { history: -1 } },
-                        { new: true }
-                    );
-                }
-                await taskModel.findOneAndUpdate(
-                    { userid },
-                    {
-                        $push: { history: historyEntry },
-                        $set: {
-                            "current.tasks": [],
-                            "current.date": date,
-                        },
-                    },
-                    { new: true }
-                );
-            } else {
-                await taskModel.findOneAndUpdate(
-                    { userid },
-                    {
-                        $set: {
-                            "current.date": date,
-                            "current.tasks": [],
-                        },
-                    },
-                    { new: true }
-                );
-            }
-        }
-    }
-
-    const updatedTasks = await taskModel.find({
-        userid: { $in: users.map((user) => user._id) },
-    });
-
-    console.log(updatedTasks);
-
-    res.render("main", {
-        mode: "Dual Mode",
-        tasks: updatedTasks,
-        firstname: firstname,
-    });
-}
-
-
-// --------------------- for dual mode having join id---------------->
-
-async function handleDualModeWithJoinId(users, joinId, date, res, firstname) {
-
-    console.log("joinid task manager wala chla");
-
-    for (const user of users) {
-        const userid = user._id;
-
-      
-        const taskData = await taskModel.findOne({ userid });
-
-        if (!taskData) {
-            console.log(`No tasks found for user: ${userid}`);
-            continue;
-        }
-
-        
-        if (taskData.current.date !== date) {
-            if (taskData.current.tasks.length > 0) {
-               
-                const historyUpdate = {
-                    date: taskData.current.date,
-                    data: taskData.current.tasks,
-                };
-
-                if (taskData.history.length >= 30) {
-                    await taskModel.findOneAndUpdate(
-                        { userid },
-                        { $pop: { history: -1 } },
-                        { new: true }
-                    );
-                }
-
-        
-                await taskModel.findOneAndUpdate(
-                    { userid },
-                    {
-                        $push: { history: historyUpdate },
-                        $set: {
-                            "current.tasks": [],
-                            "current.date": date,
-                        },
-                    },
-                    { new: true }
-                );
-            } else {
-                
-                await taskModel.findOneAndUpdate(
-                    { userid },
-                    {
-                        $set: {
-                            "current.date": date,
-                            "current.tasks": [],
-                        },
-                    },
-                    { new: true }
-                );
-            }
-        }
-    }
-
-
-    const updatedData = await taskModel.find({
-        userid: { $in: users.map((user) => user._id) },
-    });
-
-    console.log(updatedData);
-
-    res.render("main", {
-        mode: "Dual Mode",
-        tasks: updatedData,
-        firstname: firstname,
-    });
-}
-
 
 // ----------------manage state----------------------->
 
@@ -372,13 +158,13 @@ app.post("/signup",async(req,res)=>
     const task = await taskModel.create({
        userid:user._id,
        current:{
+        name:user.firstname,
         date:formattedDate
        },
        history:[]
     })
     res.redirect("/")
  }
-
 
 })
 
@@ -416,10 +202,59 @@ app.post("/accessUid",authenticated,async(req,res)=>
             res.send(roomid)
         }else if(joinid!=null){
             res.send(joinid)
+        }else{
+            res.send(false)
         }
         
     }
 })
+//--------------------------- adding data to the db ----------------------------------------->
+
+
+app.post('/TODO', authenticated,async(req, res) => {
+   
+    const { imgUrl,title, priority, data,created_at} = req.body;
+    const user = await userby_id(req,res)
+    console.log(created_at)
+    const id = user._id
+
+    const newTask = {
+        _id: new mongoose.Types.ObjectId(),
+        title:title,
+        data:data,
+        imgUrl: imgUrl,
+        created_at: created_at,
+        priority:priority,
+    };
+
+    const current= await taskModel.findOneAndUpdate(
+        {userid:id},
+        {
+            $push: { 'current.tasks': newTask }, 
+            $set: { 'current.name':user.firstname},
+        },
+        { new: true } 
+    )
+
+    const taskId = newTask._id;
+
+    if(user.mode=="Solo Mode" || user.mode=="Dual Mode" && roomId==null && joinId==null)
+    {
+        res.json({ status: 'added', mode:"solo",taskid:taskId});
+    }
+    if(user.mode =="Dual Mode" && (user.roomId)!=null)
+    {
+        res.json({ status: 'added',mode:"dual",id:user.roomId,taskid:taskId});
+    }
+    if(user.mode =="Dual Mode" && (user.joinId)!=null)
+    {
+        res.json({ status:'added',mode:"dual",id:user.roomId,taskid:taskId});
+    }
+    
+});
+
+
+
 
 // --------------------remove user--------------------------------->
 
@@ -508,6 +343,41 @@ app.post("/joined",authenticated,async(req,res)=>
     }
     
 })
+// ----------------------------- sending users-------------------------------->
+
+app.get("/usersname",authenticated,async(req,res)=>
+{
+    const users= await userby_id(req,res)
+    console.log("user",users)
+    const roomid= users.roomId
+    const joinid= users.joinId
+
+    console.log(roomid,joinid)
+
+    if(roomid)
+    {
+       const other = await userModel.findOne({joinId:roomid})
+       console.log(other)
+       if(other!=null || other!=undefined)
+       {
+        res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
+       }else{
+        res.status(200).json({selfname:users.firstname,selfid:users._id,othername:null,otherid:null,mode:"dual"})
+       }
+       
+    }
+    else if(joinid)
+    {
+       console.log(roomid)
+       const other = await userModel.findOne({roomId:joinid})
+       console.log("other",other)
+       res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
+    }
+    else{
+
+        res.status(200).json({name:users.firstname,id:users._id,mode:"solo"})
+    }
+})
 
 // about page handler ------------------------------------->
 
@@ -542,6 +412,11 @@ io.on("connection", async(socket) => {
         //     console.log(`Socket ID: ${s.id}`);
         // });
     }
+    socket.on("ijoined",(data)=>
+    {
+        console.log("joinid",data.id)
+        io.to(data.id).emit("joineduser")
+    })
     socket.on("add",(id,data)=>
     {
         // console.log(id)
@@ -577,8 +452,9 @@ app.post("/api/login",(req,res)=>
     if(token)
     {   try{
         const isvalid = jwt.verify(token, secret_key);
+        const name = isvalid.name
         const id =isvalid.id
-        return res.status(200).json({ token,id });
+        return res.status(200).json({ token,id,name});
         }catch(err)
         {
             res.redirect("/")
@@ -720,7 +596,7 @@ app.post("/handlelightMode",authenticated,async(req,res)=>
     }
 })
 
-// modeStatemanager--------------------->
+// -------------------------------------------modeStatemanager--------------------->
 
 app.post("/modeState",authenticated, async (req, res) => {
     const token = req.cookies.token;
@@ -748,7 +624,7 @@ app.post("/modeState",authenticated, async (req, res) => {
         res.status(401).send("Login please, session expired");
     }
 });
-// ----------------handle theme state-------------------------------------->
+// ----------------------------------handle theme state-------------------------------------->
 
 
 app.post("/themeState",authenticated, async (req, res) => {
@@ -769,13 +645,241 @@ app.post("/themeState",authenticated, async (req, res) => {
     }
 });
 
+// --------------------- for dual mode having join id---------------->
+
+async function handleDualModeWithJoinId(users, joinId, date, res, firstname) {
+
+    console.log("joinid task manager wala chla");
+
+    for (const user of users) {
+        const userid = user._id;
+
+      
+        const taskData = await taskModel.findOne({ userid });
+
+        if (!taskData) {
+            console.log(`No tasks found for user: ${userid}`);
+            continue;
+        }
+
+        
+        if (taskData.current.date !== date) {
+            if (taskData.current.tasks.length > 0) {
+               
+                const historyUpdate = {
+                    date: taskData.current.date,
+                    data: taskData.current.tasks,
+                };
+
+                if (taskData.history.length >= 30) {
+                    await taskModel.findOneAndUpdate(
+                        { userid },
+                        { $pop: { history: -1 } },
+                        { new: true }
+                    );
+                }
+
+        
+                await taskModel.findOneAndUpdate(
+                    { userid },
+                    {
+                        $push: { history: historyUpdate },
+                        $set: {
+                            "current.tasks": [],
+                            "current.date": date,
+                            "current.name": firstname,
+                        },
+                    },
+                    { new: true }
+                );
+            } else {
+                
+                await taskModel.findOneAndUpdate(
+                    { userid },
+                    {
+                        $set: {
+                            "current.date": date,
+                            "current.tasks": [],
+                            "current.name": firstname,
+                        },
+                    },
+                    { new: true }
+                );
+            }
+        }
+    }
 
 
-// --------------main page routing----------->
+    // const updatedData = await taskModel.find({
+    //     userid: { $in: users.map((user) => user._id) },
+    // });
+
+    // console.log(updatedData);
+
+    res.render("main", {
+        mode: "Dual Mode",
+        firstname: firstname,
+    });
+}
+
+// -----------------------------------------function to manage task------------------------------------------------->
+
+async function handleSoloOrUnlinkedDualMode(currentData, userId, date, mode, name, res) {
+
+    console.log("solo manager wala chala ")
+
+    if (currentData.current.date !== date) {
+        if (currentData.current.tasks.length > 0) {
+            if (currentData.history.length >= 30) {
+        
+                await taskModel.findOneAndUpdate(
+                    { userid: userId },
+                    { $pop: { history: -1 } },
+                    { new: true }
+                );
+
+           
+                await taskModel.findOneAndUpdate(
+                    { userid: userId },
+                    {
+                        $push: {
+                            history: {
+                                date: currentData.current.date,
+                                data: currentData.current.tasks,
+                            },
+                        },
+                        $set: {
+                            "current.tasks": [],
+                            "current.date": date,
+                            "current.name": name,
+                        },
+                    },
+                    { new: true }
+                );
+            } else {
+              
+                await taskModel.findOneAndUpdate(
+                    { userid: userId },
+                    {
+                        $push: {
+                            history: {
+                                date: currentData.current.date,
+                                data: currentData.current.tasks,
+                            },
+                        },
+                        $set: {
+                            "current.tasks": [],
+                            "current.date": date,
+                            "current.name": name,
+                        },
+                    },
+                    { new: true }
+                );
+            }
+        } else {
+            
+            await taskModel.findOneAndUpdate(
+                { userid: userId },
+                {
+                    $set: {
+                        "current.date": date,
+                        "current.tasks": [],
+                        "current.name": name,
+                    },
+                },
+                { new: true }
+            );
+        }
+    }
+
+    // const updatedData = await taskModel.findOne({ userid: userId });
+    res.render("main", { mode: mode, firstname: name});
+}
+
+// ---------------------------------------------for dual mode having room id ------------------------------------------>
+
+async function handleDualModeWithRoomId(users, roomId, date, res, firstname) {
+    console.log("roomid task manager wala chla");
+
+    for (const user of users) {
+        const userid = user._id;
+
+        const taskData = await taskModel.findOne({ userid });
+
+        if (!taskData) {
+            console.log(`No tasks found for user: ${userid}`);
+            continue;
+        }
+
+        if (taskData.current.date !== date) {
+            if (taskData.current.tasks.length > 0) {
+                const historyEntry = {
+                    date: taskData.current.date,
+                    data: taskData.current.tasks,
+                };
+
+                if (taskData.history.length >= 30) {
+                    await taskModel.findOneAndUpdate(
+                        { userid },
+                        { $pop: { history: -1 } },
+                        { new: true }
+                    );
+                }
+
+                await taskModel.findOneAndUpdate(
+                    { userid },
+                    {
+                        $push: { history: historyEntry },
+                        $set: {
+                            "current.tasks": [],
+                            "current.date": date,
+                            "current.name": firstname,
+                        },
+                    },
+                    { new: true }
+                );
+            } else {
+                await taskModel.findOneAndUpdate(
+                    { userid },
+                    {
+                        $set: {
+                            "current.date": date,
+                            "current.tasks": [],
+                            "current.name": firstname,
+                        },
+                    },
+                    { new: true }
+                );
+            }
+        }
+    }
+
+    // // Fetch only `current` data for each user
+    // const currentData = await Promise.all(
+    //     users.map(async (user) => {
+    //         const taskData = await taskModel.findOne(
+    //             { userid: user._id },
+    //             { current: 1, _id: 0 } // Project only `current` field
+    //         );
+    //         return { userid: user._id, current: taskData?.current || null };
+    //     })
+    // );
+
+    // console.log("Current Data of Users:", currentData);
+
+    // // Render response
+    res.render("main", {
+        mode: "Dual Mode",
+        firstname: firstname,
+    });
+}
+
+
+// ------------------------------------------------------main page routing------------------------------------------------>
 
 app.get("/TODO", authenticated, async (req, res) => {
     const token = req.cookies.token;
-
+    console.log("called")
     if (token) {
         try {
             const user = await userby_id(req, res);
@@ -821,7 +925,117 @@ app.get("/TODO", authenticated, async (req, res) => {
 });
 
 
-// -------------sending tasks as suggestions------------------->
+app.get("/getCurrent", authenticated, async (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    try {
+    
+        const user = await userby_id(req, res);
+        const { mode, roomId, joinId, _id: userId } = user;
+
+ 
+        const currentData = await taskModel.findOne({ userid: userId });
+
+        if (!currentData) {
+            return res.status(404).json({ error: "No data found for this user." });
+        }
+
+        if (mode === "Solo Mode"|| (mode === "Dual Mode" && user.roomId == null && user.joinId == null)) {
+            return res.json({
+                mode: "solo",
+                user: {
+                    name: user.name,
+                    tasks: currentData.current,
+                    progress: currentData.progress
+                }
+            });
+        }
+
+      
+        const filter = roomId ? { roomId } : { joinId };
+        const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.joinId }] });
+
+      
+        const relatedTasks = await Promise.all(
+            relatedUsers.map(async (relatedUser) => {
+                const tasksData = await taskModel.findOne({ userid: relatedUser._id });
+                return {
+                    name: relatedUser.name,
+                    tasks: tasksData ? tasksData.current : [],
+                    progress: tasksData ? tasksData.progress : null
+                };
+            })
+        );
+
+        return res.json({ mode: "dual", users: relatedTasks });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Server error" });
+    }
+});
+
+
+app.get("/getCurrent", authenticated, async (req, res) => {
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    try {
+      
+        const user = await userby_id(req, res);
+        const { mode, roomId, joinId, _id: userId } = user;
+
+      
+        const currentData = await taskModel.findOne({ userid: userId });
+
+        if (!currentData) {
+            return res.status(404).json({ error: "No data found for this user." });
+        }
+
+       
+        if (mode === "Solo Mode" || (mode==="Dual Mode" && roomId==null && joinId==null)) {
+            return res.json({
+                mode: "solo",
+                user: {
+                    name: user.firstname,
+                    tasks: currentData.current,
+                    progress: currentData.current.progress
+                }
+            });
+        }
+
+      s
+        const filter = roomId ? { roomId } : { joinId };
+        const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.joinId }] });
+
+        
+        const relatedTasks = await Promise.all(
+            relatedUsers.map(async (relatedUser) => {
+                const tasksData = await taskModel.findOne({ userid: relatedUser._id });
+                return {
+                    name: relatedUser.firstname,
+                    tasks: tasksData ? tasksData.current : [],
+                    progress: tasksData.current.progress ? tasksData.current.progress : 0
+                };
+            })
+        );
+
+        return res.json({ mode: "dual", users: relatedTasks });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Server error" });
+    }
+});
+
+
+
+// ------------------------------------------sending tasks as suggestions------------------------------------------------>
 
 app.get('/api/random-task', authenticated,(req, res) => {
     const randomNumber = Math.floor(Math.random() * tasks.length); 
@@ -829,7 +1043,7 @@ app.get('/api/random-task', authenticated,(req, res) => {
   });
 
 
-// ------------------------------add user page---------------------------->
+// ---------------------------------------------------add user page---------------------------->
 
 app.get("/addUser",authenticated,async(req,res)=>
 {
@@ -848,7 +1062,7 @@ app.get("/addUser",authenticated,async(req,res)=>
    
 })
 
-// ---------------------contact us route--------------------------->
+// ---------------------------------------------------contact us route--------------------------->
 
 app.get("/contactus",authenticated,async(req,res)=>
 {
@@ -860,7 +1074,7 @@ app.get("/contactus",authenticated,async(req,res)=>
 
 
 
-// -----------------------signup get req---------------------------->
+// ----------------------------------------------------signup get req---------------------------->
 
 app.get("/signup",manageState,(req,res)=>
 {
