@@ -25,7 +25,7 @@ window.addEventListener("pageshow", (event) => {
 function appendAddUser()
 {
     const nav = document.getElementsByClassName("navbar")[0]
-    const thirdChild = nav.children[5]; 
+    const thirdChild = nav.children[3]; 
     const adduserbtn = document.createElement("a")
     adduserbtn.textContent="Add user"
     adduserbtn.classList.add("adduserbtn")
@@ -38,7 +38,7 @@ function joinroom()
 {
 
     const nav = document.getElementsByClassName("navbar")[0]
-    const fifthChild = nav.children[6]; 
+    const fifthChild = nav.children[4]; 
     const joinroombtn = document.createElement("a")
     joinroombtn.textContent="Join room"
     joinroombtn.classList.add("joinroombtn")
@@ -585,59 +585,6 @@ socket.on("force_leave",(id)=>
 //    }
 // })
     
-const progressstyle= document.getElementsByClassName("progressstyle")[0]
-const timestyle= document.getElementsByClassName("timestyle")[0]
-const slidericon = document.getElementById("slidericon");
-const slider = document.getElementById("slider");
-const navbar = document.querySelector(".navbar");
-const list=document.getElementById("lists")
-
-let isSliderExpanded = false; 
-
-slidericon.addEventListener("click", () => {
-    if (isSliderExpanded) {
-        // Collapse slider
-        slider.style.width = "0";
-        navbar.style.width = "calc(100% - 50px)";
-        list.style.width = "1450px";
-    } else {
-        // Expand slider
-        slider.style.width = "250px"; 
-        navbar.style.width = "calc(100% - 300px)";
-        list.style.width = "1200px";
-    }
-    isSliderExpanded = !isSliderExpanded; 
-});
-
-progressstyle.addEventListener("click", () => {
-    if (isSliderExpanded) {
-        // Collapse slider
-        slider.style.width = "0";
-        navbar.style.width = "calc(100% - 50px)";
-        list.style.width = "1450px";
-    } else {
-        // Expand slider
-        slider.style.width = "250px"; 
-        navbar.style.width = "calc(100% - 300px)";
-        list.style.width = "1200px";
-    }
-    isSliderExpanded = !isSliderExpanded; 
-});
-
-timestyle.addEventListener("click", () => {
-    if (isSliderExpanded) {
-
-        slider.style.width = "0";
-        navbar.style.width = "calc(100% - 50px)";
-        list.style.width = "1450px";
-    } else {
-
-        slider.style.width = "250px"; 
-        navbar.style.width = "calc(100% - 300px)";
-        list.style.width = "1200px";
-    }
-    isSliderExpanded = !isSliderExpanded; 
-});
 const progressFill = document.querySelector("#progress-fill");
 const timerElement = document.getElementById("timer");
 const totalDaySeconds = 24 * 60 * 60; 
@@ -688,10 +635,7 @@ function updateProgress(value) {
 
 // make event listner when click on (task done) then fetch req krenge whn pr calculate hoke progress db me save ho jyegi or response me whi progress mil jyegi jo ki hum js se dom manipulate krk set krlenge  !!!!! 
 
-
-const percentage= document.getElementById(progressValue)
-const value=percentage.innerHTML
-setTimeout(() => updateProgress(value), 1000); 
+setTimeout(() => updateProgress(0), 1000); 
 
 
 const suggestedbtn=document.getElementById("suggestedbtn")

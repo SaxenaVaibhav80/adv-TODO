@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<!-- 
+<img src="/img/direction.png" id="slidericon">
+
+        
+    
+        <a href="/logout" class="iconlink">
+            
+        </a> -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,48 +19,90 @@
 </head>
 <body>
 <div class="body">
-    <div id="sidebar">
-      
-        <img src="/img/direction.png" id="slidericon">
+    <div id="left-slider">
+      <div class="profilediv">
+        <div id="profile">
+            <svg height="40" width="40" style="font-family: 'Josefin Sans'">
+                <text x="11" y="31" fill="white" font-size="27"><%= firstname.charAt(0).toUpperCase()%></text>
+            </svg>
+        </div>
+        <a id="name"> Hello <%= firstname %></a>
+      </div>
 
-        <a href="/" class="iconlink">
-            <div id="style" class="homestyle">
-                <img src="/img/newhome.png" id="homeicon">
-            </div>
-        </a>
-        <a href="/contactus" class="iconlink">
-            <div id="style" class="contactstyle" >
-                <img src="/img/phone3.png" id="contacticon">
-            </div>
-        </a>
-        <div id="style" class="progressstyle">
-            <img src="/img/speedometer.png" id="progressicon">
+      <a href="/" class="iconlink">
+        <div class="home">
+              <div id="style" class="homestyle">
+                  <img src="/img/newhome.png" id="homeicon">
+              </div>  
+              <div class="home-description">Home</div>
         </div>
-        <div id="style" class="timestyle">
-            <img src="/img/timer2.png" id="timeicon">
+      </a>
+
+      <a href="/contactus" class="iconlink">
+        <div class="contact">
+                <div id="style" class="contactstyle" >
+                    <img src="/img/phone3.png" id="contacticon">
+                </div>
+            <div class="contact-description">Contact us </div>
         </div>
-        <a href="/dashboard" class="iconlink">
-            <div id="style" class="profilestyle">
-                <img src="/img/user3.png" id="profileicon">
-            </div>
-        </a>
-        
-        <a href="/setting" class="iconlink">
+      </a>
+      
+      <a href="/setting" class="iconlink">
+        <div class="setting">
             <div id="style" class="settingstyle">
                 <img src="/img/settings.png" id="settingicon">
             </div>
-        </a>
-        <a href="/logout" class="iconlink">
+            <div class="setting-description">Settings</div>
+        </div>
+      </a>
+
+      <a href="/logout" class="iconlink">
+        <div class="logout">
             <div id="style" class="logoutstyle">
                 <img src="/img/logout2.png" id="logouticon">
             </div>
+            <div class="logout-description">Logout</div>
+        </div>
+      </a>
+      
+    </div>
+    <div>
+        <nav class="navbar">
+           
+            <div id="lightouter">
+                <div id="lightball"><img src="/img/lightmode.png" id="light"></div>
+            </div>
+            <a id="lmode">Light mode</a>
+            <a id="mode"><%=mode %></a>
+            <div id="outer">
+                <div id="ball"></div>
+            </div>
+            <a class="navaddtask">Add tasks</a> 
+            <img src="/img/more.png" id="plus">
+        </nav>
+    
+        
+        <div id="lists">
+           
+        
+        </div>
+        
+    </div>
+    <!-- -------------------changes -->
+    <div id="right-slider">
+        <a href="/dashboard" class="dashboard-link" target="_blank">
+            <div class="dashboard">
+                <img src="/img/user3.png" id="dashboardprofileicon">
+                <div class="dash-description">Dashboard</div>
+            </div>
+        </a>
+        <a href="/history" class="history-link" target="_blank">
+            <div class="history">
+                <img src="/img/history.png" id="historyicon">
+                <div class="history-description">Previous 30 Tasks</div>
+            </div>
         </a>
     
-        <!-- <img src="/img/user3.png" id="modeicon"> -->
-        <!-- <img src="/img/logout2.png" id="logouticon"> -->
-    </div>
-    <div id="slider">
-
         <div id="suggestdiv">
             <p id="suggestedPara"> 
                 Get task recommendations that help you add tasks to your task list, which will improve your life.
@@ -79,34 +129,6 @@
         </div>
         
         <p id="timer"></p>
-    </div>
-    <div>
-        <nav class="navbar">
-            <a class="navaddtask">Add tasks</a>
-            <img src="/img/more.png" id="plus">
-            <div id="lightouter">
-                <div id="lightball"><img src="/img/lightmode.png" id="light"></div>
-            </div>
-            <a id="lmode">Light mode</a>
-            <a id="mode"><%=mode %></a>
-            <div id="outer">
-                <div id="ball"></div>
-            </div>
-            <a id="name"> Hello <%= firstname %></a>
-
-            <div id="profile">
-                <svg height="40" width="40" style="font-family: 'Josefin Sans'">
-                    <text x="11" y="31" fill="white" font-size="27"><%= firstname.charAt(0).toUpperCase()%></text>
-                </svg>
-            </div>
-            
-        </nav>
-    
-        
-        <div id="lists">
-           
-        
-        </div>
     </div>
 </div>
 <div id="overlay">

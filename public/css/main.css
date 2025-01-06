@@ -16,33 +16,40 @@ body{
 }
 .navaddtask{
     margin-right: 10px;
+    margin-left: 60px;
+    color: rgb(50, 49, 49);
+    text-decoration: none;
 }
 
 .navbar {
     display: flex;
     padding: 10px 0px 10px 0px;
     align-items: center;
-    width: calc(100% - 50px);
     justify-content: flex-end;
-    /* padding: 24px 0px 17px 0px; */
+    width: 1240px;
     position: fixed;
-    /* border-bottom: 1px solid #cecece; */
-    top: 0;
+    top: 13px;
     backdrop-filter: blur(8px);
     z-index: 2;
-    transition: width 0.3s ease;
 }
+
 .joinroombtn,.adduserbtn{
     margin-left: 65px;
     color: rgb(50, 49, 49);
     text-decoration: none;
 }
-#mode,#name{
+#mode{
     margin-left: 65px;
     color: rgb(50, 49, 49);
     text-decoration: none;
 }
-#lmode,.navaddtask{
+#name{
+    margin-left: 15px;
+    font-size: 19px;
+    color: rgb(50, 49, 49);
+    text-decoration: none;
+}
+#lmode{
     margin-left: 10px;
     color: rgb(50, 49, 49);
     text-decoration: none;
@@ -51,39 +58,26 @@ body{
     display: block;
     width: 17px;
 }
-#slidericon {
-    display: block;
-    width: 25px;
-    cursor: pointer;
-    margin-left: 10px;
-}
 
 /* #style:hover{
     background-color: #c3c3c3;
 } */ 
  
-.timestyle, .progressstyle {
-    cursor: pointer;
-    width: 31px;
-    border-radius: 15px;
-    padding-top: 13px;
-    height: 28px;
-    padding-left: 13px;
-    background-color: #d1d1d1;
-    margin-top: 20px;
-}
 .contactstyle {
     cursor: pointer;
     border-radius: 15px;
     padding-top: 12px;
     height: 28px;
+    width: 28px;
     padding-left: 13px;
-    background-color: #d1d1d1;
-    margin-top: 20px;
+    background-color: #b3b3b3;
 }
 .iconlink {
     display: block;
-    width: 42px;
+    width: 90%;
+    margin-left: 20px;
+    margin-bottom: 15px;
+    text-decoration: none;
 }
 a:visited{
     color: rgb(50, 49, 49);
@@ -106,29 +100,21 @@ a::after{
 .homestyle {
     cursor: pointer;
     border-radius: 15px;
-    margin-top: 65px;
     padding-top: 11px;
     height: 28px;
+    width: 28px;
     padding-left: 13px;
-    background-color: #d1d1d1;
+    background-color: #b3b3b3;
 }
 
-.profilestyle {
-    margin-top: 250px;
-    border-radius: 15px;
-    padding-top: 11px;
-    height: 30px;
-    padding-left: 13px;
-    background-color: #d1d1d1;
-}
 
 .settingstyle, .logoutstyle {
-    margin-top: 20px;
     border-radius: 15px;
     padding-top: 11px;
     height: 29px;
+    width: 29px;
     padding-left: 13px;
-    background-color: #d1d1d1;
+    background-color: #b3b3b3;
 }
 
 
@@ -137,7 +123,7 @@ a::after{
     background-color: #f0f0f0;
     height: 100vh;
     /* border-right: 1px solid #d3cfcf; */
-    width: 0;
+    width: 400px;
     transition: width 0.3s ease;
     overflow: hidden;
     white-space: nowrap;
@@ -222,7 +208,7 @@ a::after{
     border: 1px solid black;
     overflow: hidden;
     position: relative;
-    top: 375px;
+    top: 245px;
     left: 30px;
 }
 #progress-fill {
@@ -233,7 +219,11 @@ a::after{
 }
 
 
-
+#dashboardprofileicon,#historyicon{
+    width: 20px;
+    height: 20px;
+    padding-right: 10px;
+}
 
 #profile {
     background-color: #a4a4a4;
@@ -250,7 +240,7 @@ a::after{
     justify-content: center;
     /* margin-top: 200px; */
     /* border: 1px solid black; */
-    width: 1450px;
+    width: 950px;
     background-color: #fafafa;
     margin-left: 7px;
     border-radius: 12px;
@@ -261,8 +251,8 @@ a::after{
 }
 .progress-ring {
     position: relative;
-    top: 330px;
-    left: 55px;
+    top: 196px;
+    left: 69px;
     width: 150px;
     height: 150px;
 }
@@ -272,11 +262,10 @@ a::after{
     font-size: 16px;
     font-weight: bold;
     color: #5c5c5c;
-    width: 80px;
-    top: 335px;
-    left: 57px;
+    width: 156px;
+    top: 200px;
+    left: 75px;
 }
-
 .progress-ring svg {
     transform: rotate(-90deg); 
 }
@@ -331,18 +320,18 @@ a::after{
 }
 #suggestdiv {
     background-color: #d9d9d9;
-    margin-top: 71px;
-    width: 175px;
+    margin-top: 25px;
+    width: 190px;
     /* border: 1px solid black; */
     padding: 15px 10px 10px 10px;
     height: 7.5em;
     border-radius: 15px;
-    margin-left: 26px;
+    margin-left: 37px;
 }
 
 #suggestedPara{
     white-space: normal;
-    font-size: 14px;
+    font-size: 15px;
     text-overflow: ellipsis;
     overflow: hidden;
     color: #4f4d4d;
@@ -366,14 +355,14 @@ a::after{
 }
 
 .emptymsg{
-    margin-left: 30%;
+    margin-left: 23%;
 }
 
 #addTODO{
     cursor: pointer;
     text-align: center;
     width: 27%;
-    margin-left: 41px;
+    margin-left: 48px;
     padding: 10px 0 10px 0;
     top: 75%;
     position: absolute;
@@ -573,3 +562,78 @@ a::after{
      height: 25px;
    }
 
+#right-slider{
+    width: 400px;
+    height: 100vh;
+}
+#left-slider{
+    width: 400px;
+    height: 100vh;
+}
+
+.dashboard-link{
+    background-color: #d9d9d9;
+    padding: 11px;
+    margin-left: 15px;
+    border-radius: 12px;
+    width: 80%;
+    color: #3e3e3e;
+    cursor: pointer;
+    display: block;
+    margin-top: 90px;
+    text-decoration: none;
+}
+.history-link{
+    background-color: #d9d9d9;
+    padding: 11px;
+    margin-left: 15px;
+    border-radius: 12px;
+    width: 80%;
+    color: #3e3e3e;
+    cursor: pointer;
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+}
+
+
+.dashboard,.history{
+    display: flex;
+    align-items: center;
+}
+.home{
+    margin-top: 40px;
+}
+.home,.contact,.setting,.logout{
+    display: flex;
+    align-items: center;
+    background-color: #d9d9d9;
+    padding: 7px;
+    border-radius: 12px;
+    color: #3e3e3e;
+    cursor: pointer;
+}
+.logout{
+    margin-top: 400px;
+}
+
+.dashboard-link:hover,.history-link:hover{
+    background-color:#b5b5b5;
+    color: white;
+}
+
+.profilediv{
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    margin-left: 30px;
+}
+
+.contact-description,.home-description,.setting-description,.logout-description{
+    margin-left: 10px;
+    color: #3e3e3e;
+}
+
+.history-description,.dash-description{
+    margin-left: 6px;
+}
