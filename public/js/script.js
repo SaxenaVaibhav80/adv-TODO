@@ -234,7 +234,7 @@ outer.addEventListener("click",async(event)=>
     
         event.stopPropagation();
     
-    })
+})
     
     
 

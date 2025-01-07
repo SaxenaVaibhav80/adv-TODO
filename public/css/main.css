@@ -76,7 +76,7 @@ body{
     display: block;
     width: 90%;
     margin-left: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     text-decoration: none;
 }
 a:visited{
@@ -613,7 +613,7 @@ a::after{
     cursor: pointer;
 }
 .logout{
-    margin-top: 400px;
+    margin-top: 420px;
 }
 
 .dashboard-link:hover,.history-link:hover{
@@ -743,45 +743,43 @@ a::after{
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for the status button */
+
 .status-button {
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
     border: none;
-    border-radius: 25px; /* Rounded corners */
+    border-radius: 25px; 
     cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transition for color changes */
+    transition: all 0.3s ease;
     text-transform: uppercase;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
-/* Default yellow color for Pending status */
+
 .status-button.pending {
     background-color: yellow;
     color: #333;
 }
 
-/* Green color for Complete status */
+
 .status-button.complete {
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50; 
     color: white;
 }
 
-/* Hover effects for the button */
 .status-button:hover {
-    transform: scale(1.05); /* Slightly enlarge on hover */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    transform: scale(1.05); 
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Focus effect for accessibility */
+
 .status-button:focus {
     outline: none;
-    box-shadow: 0px 0px 8px rgba(0, 0, 255, 0.5); /* Blue glow on focus */
+    box-shadow: 0px 0px 8px rgba(0, 0, 255, 0.5); 
 }
 
 
-/* My Day header */
 .my-day {
     text-align: left;
     margin-top: 40px;
