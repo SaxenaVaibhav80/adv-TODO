@@ -480,13 +480,13 @@ a::after{
     cursor: pointer;
 }
 
-.flex-container{
+/* .flex-container{
    display : "flex";
    flex-wrap :"wrap";
    gap: 1rem;
-}
+} */
 
-.footer-icon{
+/* .footer-icon{
     height: 15px;
     width:15px;
    }
@@ -494,8 +494,8 @@ a::after{
    .data{
      
      margin: 10px 5px 9px 9px;
-   }
-   .footer {
+   } */
+   /* .footer {
        border-radius: 0px 0 9px 8px;
        height: 20px;
        margin-top: 10px;
@@ -503,29 +503,28 @@ a::after{
        display: flex
    ;
        align-items: center;
-   }
-   .icon{
+   } */
+   /* .icon{
      padding: 10px;
      text-align: center;
      background-color: #c0c0c0;
      border-radius:12px;
      margin: 10px;
      
-   }
+   } */
    
-   .main {
-       /* border: 1px solid green; */
-       width: 300px;
+   /* .main { */
+       /* width: 300px;
        padding: 1px 0px 0 0;
        border-radius: 12px;
        background-color: #dedede;
-   }
-   .skills{
+   } */
+   /* .skills{
      height: 120px;
      width: 120px;
-   }
+   } */
    
-   .status {
+   /* .status {
       margin-left: 152px;
        border-radius: 10px;
        background-color: #b3b3b3;
@@ -538,15 +537,15 @@ a::after{
        position: absolute;
        top: 30px;
        left: 270px;
-   }
+   } */
    
-   .title{
+   /* .title{
      margin-left: 10px;
      margin-bottom: 0;
      color: #525252;
-   }
+   } */
    
-   .moreinfo{
+   /* .moreinfo{
       display: none;
      position: absolute;
        left: 37%;
@@ -556,11 +555,11 @@ a::after{
        background: #f9f9f9;
        text-align: left;
    
-   }
+   } */
    
-   .more-element{
+   /* .more-element{
      height: 25px;
-   }
+   } */
 
 #right-slider{
     width: 400px;
@@ -638,6 +637,151 @@ a::after{
     margin-left: 6px;
 }
 
+/* Flex container */
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* Main task card container */
+.main {
+    width: 800px;
+    height: 80px;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #dedede;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+}
+
+/* First part: Image section */
+.icon {
+    width: 82px;
+    height: 82px;
+    border-radius: 12px;
+    background-color: #c0c0c0;
+    margin-right: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.skills {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Second part: Written content (title, description, created on) */
+.written-part {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #525252;
+}
+
+.data {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.created-on {
+    font-size: 12px;
+    color: #999;
+    text-align: right;
+}
+
+/* Third part: Status and options */
+.status-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-left: 60px;
+    margin-right: 20px;
+}
+
+.status {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #4caf50; /* Green for completion */
+    color: white;
+    font-weight: 600;
+    margin-bottom: 10px;
+    width: 80px;
+    height: 30px;
+    font-size: 20px;
+}
+
+.options {
+    display: flex;
+    gap: 10px;
+    margin-left: 15px;
+}
+
+.footer-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+/* Hover effect for task card */
+.main:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the status button */
+.status-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for color changes */
+    text-transform: uppercase;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Default yellow color for Pending status */
+.status-button.pending {
+    background-color: yellow;
+    color: #333;
+}
+
+/* Green color for Complete status */
+.status-button.complete {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+
+/* Hover effects for the button */
+.status-button:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+}
+
+/* Focus effect for accessibility */
+.status-button:focus {
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(0, 0, 255, 0.5); /* Blue glow on focus */
+}
+
+
+/* My Day header */
 .my-day {
     text-align: left;
     margin-top: 40px;
@@ -653,3 +797,20 @@ a::after{
     font-size: 18px;
     color: gray;
 }
+
+.my-day {
+    text-align: left;
+    margin-top: 40px;
+    margin-left: 40px;
+}
+
+.my-day h2 {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.my-day p {
+    font-size: 18px;
+    color: gray;
+}
+

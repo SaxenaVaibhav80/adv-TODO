@@ -263,6 +263,8 @@ function displaySoloMode(user) {
     const progress = user.tasks.progress; 
     const tasks = user.tasks.tasks;
 
+    console.log("Tasks:", tasks); // Debugging
+
     const lists = document.getElementById("lists"); 
     lists.innerHTML = ""; 
 
@@ -281,9 +283,7 @@ function displaySoloMode(user) {
     myDayDiv.appendChild(title);
     myDayDiv.appendChild(date);
 
-    // Add this div to the white space (parent container)
     lists.appendChild(myDayDiv);
-
 
     if (tasks.length === 0) {
         if (!document.querySelector(".emptymsg")) {
@@ -300,112 +300,185 @@ function displaySoloMode(user) {
             btn.addEventListener('click', () => {
                 document.getElementById('overlay').classList.add('show');
             });
-            document.getElementById("progressValue").innerHTML=0
+            document.getElementById("progressValue").innerHTML = 0;
             div.appendChild(img);
             div.appendChild(btn);
             
             lists.appendChild(div);
         }
     } else {
-        if (!document.getElementsByClassName("flex-container")[0]) {
-            
-            const flexContainer = document.createElement("div");
-            flexContainer.classList.add("flex-container");
-        
-            tasks.forEach((task) => {
-                const main = document.createElement("div");
-                main.classList.add("main");
-        
-                // Icon container
-                const icon = document.createElement("div");
-                icon.classList.add("icon");
-        
-                const more = document.createElement("img");
-                const skills = document.createElement("img");
-                skills.classList.add("skills");
-                skills.setAttribute("src", task.imgUrl);
-        
-                more.classList.add("more");
-                more.setAttribute("src", "/img/more (1).png");
-        
-                const moreElement = document.createElement("div");
-                moreElement.classList.add("moreinfo")
-                const created = document.createElement("div");
-                const priority = document.createElement("div");
-                const status = document.createElement("div");
-        
-                created.classList.add("more-element");
-                status.classList.add("more-element");
-                priority.classList.add("more-element");
+        const flexContainer = document.createElement("div");
+        flexContainer.classList.add("flex-container");
 
-        
-                status.textContent = `Status: ${task.status}`;
-                priority.textContent = `Priority: ${task.priority}`;
-                created.textContent = `Created at: ${task.created_at}`;
-        
-                moreElement.appendChild(priority);
-                moreElement.appendChild(created);
-                moreElement.appendChild(status);
-        
-                icon.appendChild(more);
-                icon.appendChild(moreElement);
-                icon.appendChild(skills);
-                main.appendChild(icon);
-        
-                // Title
-                const title = document.createElement("h3");
-                title.classList.add("title");
-                title.textContent = task.title;
-                main.appendChild(title);
-        
-                // Data
-                const data = document.createElement("div");
-                data.classList.add("data");
-                data.textContent = task.data;
-                main.appendChild(data);
-        
-                // Footer
-                const footer = document.createElement("div");
-                footer.classList.add("footer");
-        
-                const updationDiv = document.createElement("div");
-                updationDiv.classList.add("updation-div");
-        
-                const del = document.createElement("img");
-                const edit = document.createElement("img");
-                const recycle = document.createElement("img");
-        
-                del.setAttribute("src", "/img/bin.png");
-                del.classList.add("bin", "footer-icon");
-        
-                edit.setAttribute("src", "/img/editing.png");
-                edit.classList.add("edit", "footer-icon");
-        
-                recycle.setAttribute("src", "/img/sync.png");
-                recycle.classList.add("recycle", "footer-icon");
-        
-                updationDiv.appendChild(del);
-                updationDiv.appendChild(edit);
-                updationDiv.appendChild(recycle);
-        
-                footer.appendChild(updationDiv);
-        
-                const statusFooter = document.createElement("div");
-                statusFooter.classList.add("status");
-                statusFooter.textContent = "Complete";
-        
-                footer.appendChild(statusFooter);
-        
-                main.appendChild(footer);
-        
-                flexContainer.appendChild(main); // Corrected this line
+        tasks.forEach((task) => {
+            console.log("Task:", task); // Debugging
+
+            const main = document.createElement("div");
+            main.classList.add("main");
+
+            // First part: Image (icon section)
+            const icon = document.createElement("div");
+            icon.classList.add("icon");
+
+            const skills = document.createElement("img");
+            skills.classList.add("skills");
+            skills.setAttribute("src", task.imgUrl || "/img/default.png"); // Fallback image
+
+            icon.appendChild(skills);
+            main.appendChild(icon);
+
+            // Second part: Written content
+            const writtenPart = document.createElement("div");
+            writtenPart.classList.add("written-part");
+
+            const title = document.createElement("h3");
+            title.classList.add("title");
+            title.textContent = task.title || "Untitled Task";
+
+            const data = document.createElement("div");
+            data.classList.add("data");
+            data.textContent = task.data || "No details provided";
+
+            const createdOn = document.createElement("div");
+            createdOn.classList.add("created-on");
+            createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
+
+            writtenPart.appendChild(title);
+            writtenPart.appendChild(data);
+            writtenPart.appendChild(createdOn);
+            main.appendChild(writtenPart);
+
+            // Third part: Status and options
+            const statusOptions = document.createElement("div");
+            statusOptions.classList.add("status-options");
+
+            // Status Button
+            const statusButton = document.createElement("button");
+            statusButton.classList.add("status-button", "pending"); // Set the initial class to 'pending'
+            statusButton.textContent = "Pending..."; // Default text
+
+            // Add click event to toggle status
+            statusButton.addEventListener("click", () => {
+                if (statusButton.classList.contains("pending")) {
+                    statusButton.textContent = "Complete";
+                    statusButton.classList.remove("pending");
+                    statusButton.classList.add("complete");
+                } else {
+                    statusButton.textContent = "Pending...";
+                    statusButton.classList.remove("complete");
+                    statusButton.classList.add("pending");
+                }
             });
-        
-            lists.appendChild(flexContainer);
-        }
-        
+
+            statusOptions.appendChild(statusButton);
+
+            const options = document.createElement("div");
+            options.classList.add("options");
+
+            const edit = document.createElement("img");
+            edit.setAttribute("src", "/img/editing.png");
+            edit.classList.add("footer-icon");
+
+            const del = document.createElement("img");
+            del.setAttribute("src", "/img/bin.png");
+            del.classList.add("footer-icon");
+
+            const refresh = document.createElement("img");
+            refresh.setAttribute("src", "/img/sync.png");
+            refresh.classList.add("footer-icon");
+
+            options.appendChild(edit);
+            options.appendChild(del);
+            options.appendChild(refresh);
+
+            statusOptions.appendChild(options);
+            main.appendChild(statusOptions);
+
+            flexContainer.appendChild(main);
+        });
+
+        lists.appendChild(flexContainer);
     }
 }
+        
+//                 const moreElement = document.createElement("div");
+//                 moreElement.classList.add("moreinfo")
+//                 const created = document.createElement("div");
+//                 const priority = document.createElement("div");
+//                 const status = document.createElement("div");
+        
+//                 created.classList.add("more-element");
+//                 status.classList.add("more-element");
+//                 priority.classList.add("more-element");
+
+        
+//                 status.textContent = `Status: ${task.status}`;
+//                 priority.textContent = `Priority: ${task.priority}`;
+//                 created.textContent = `Created at: ${task.created_at}`;
+        
+//                 moreElement.appendChild(priority);
+//                 moreElement.appendChild(created);
+//                 moreElement.appendChild(status);
+        
+//                 icon.appendChild(more);
+//                 icon.appendChild(moreElement);
+//                 icon.appendChild(skills);
+//                 main.appendChild(icon);
+        
+//                 // Title
+//                 const title = document.createElement("h3");
+//                 title.classList.add("title");
+//                 title.textContent = task.title;
+//                 main.appendChild(title);
+        
+//                 // Data
+//                 const data = document.createElement("div");
+//                 data.classList.add("data");
+//                 data.textContent = task.data;
+//                 main.appendChild(data);
+        
+//                 // Footer
+//                 const footer = document.createElement("div");
+//                 footer.classList.add("footer");
+        
+//                 const updationDiv = document.createElement("div");
+//                 updationDiv.classList.add("updation-div");
+        
+//                 const del = document.createElement("img");
+//                 const edit = document.createElement("img");
+//                 const recycle = document.createElement("img");
+        
+//                 del.setAttribute("src", "/img/bin.png");
+//                 del.classList.add("bin", "footer-icon");
+        
+//                 edit.setAttribute("src", "/img/editing.png");
+//                 edit.classList.add("edit", "footer-icon");
+        
+//                 recycle.setAttribute("src", "/img/sync.png");
+//                 recycle.classList.add("recycle", "footer-icon");
+        
+//                 updationDiv.appendChild(del);
+//                 updationDiv.appendChild(edit);
+//                 updationDiv.appendChild(recycle);
+        
+//                 footer.appendChild(updationDiv);
+        
+//                 const statusFooter = document.createElement("div");
+//                 statusFooter.classList.add("status");
+//                 statusFooter.textContent = "Complete";
+        
+//                 footer.appendChild(statusFooter);
+        
+//                 main.appendChild(footer);
+        
+//                 flexContainer.appendChild(main); // Corrected this line
+//             });
+        
+//             lists.appendChild(flexContainer);
+//         }
+        
+//     }
+// }
 
 // Function to display Dual Mode data
 function displayDualMode(users) {
