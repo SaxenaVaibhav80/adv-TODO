@@ -350,7 +350,7 @@ a::after{
 
 .empty{
     height: 520px;
-    margin-top: 100px;
+    margin-top: 20px;
     display: block;
 }
 
@@ -636,4 +636,20 @@ a::after{
 
 .history-description,.dash-description{
     margin-left: 6px;
+}
+
+.my-day {
+    text-align: left;
+    margin-top: 40px;
+    margin-left: 40px;
+}
+
+.my-day h2 {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.my-day p {
+    font-size: 18px;
+    color: gray;
 }

@@ -266,6 +266,25 @@ function displaySoloMode(user) {
     const lists = document.getElementById("lists"); 
     lists.innerHTML = ""; 
 
+    // Add "My Day" and the date dynamically
+    const myDayDiv = document.createElement("div");
+    myDayDiv.classList.add("my-day");
+
+    const title = document.createElement("h2");
+    title.textContent = "My Day";
+
+    const date = document.createElement("p");
+    const today = new Date();
+    const options = { weekday: "long", day: "numeric", month: "long" };
+    date.textContent = today.toLocaleDateString("en-US", options);
+
+    myDayDiv.appendChild(title);
+    myDayDiv.appendChild(date);
+
+    // Add this div to the white space (parent container)
+    lists.appendChild(myDayDiv);
+
+
     if (tasks.length === 0) {
         if (!document.querySelector(".emptymsg")) {
             const div = document.createElement("div");
