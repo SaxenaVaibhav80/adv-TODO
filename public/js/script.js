@@ -691,7 +691,7 @@ function updateTimer() {
     const seconds = secondsLeft % 60;
     timerElement.textContent = `Time left: ${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
    
-    if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:59:20") {
+    if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:56:55") {
 
      location.reload()
 
