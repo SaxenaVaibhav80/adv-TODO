@@ -394,7 +394,7 @@ function displaySoloMode(user) {
             statusOptions.appendChild(options);
             main.appendChild(statusOptions);
 
-            flexContainer.appendChild(main);
+                    flexContainer.appendChild(main);
         });
 
         lists.appendChild(flexContainer);
