@@ -649,12 +649,14 @@ a::after{
 /* Main task card container */
 .main {
     width: 800px;
-    height: 80px;
+    /* height: 80px; */
     padding: 15px;
     border-radius: 12px;
     background-color: #dedede;
-    display: flex;
+    display: flex
+;
     justify-content: space-evenly;
+    align-items: center;
     margin-bottom: 15px;
 }
 
@@ -826,8 +828,3 @@ a::after{
     margin-bottom:"15px";
 }
 
-.flex-container{
-    display :"flex";
-    flex-wrap:"wrap";
-    gap:"1rem";
-}
