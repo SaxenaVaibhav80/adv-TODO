@@ -818,40 +818,75 @@ document.getElementById("addit").addEventListener("click", (e) => {
 
                 const taskDiv = document.createElement("div");
                 taskDiv.classList.add("task-tile", `${data.taskid}`);
-                taskDiv.style.border = "1px solid #ccc";
-                taskDiv.style.borderRadius = "8px";
-                taskDiv.style.padding = "10px";
-                taskDiv.style.width = "calc(33.33% - 1rem)";
+                taskDiv.style.width = "800px";
+                taskDiv.style.height = "80px";
+                taskDiv.style.padding = "15px";
+                taskDiv.style.borderRadius = "12px";
+                taskDiv.style.backgroundColor = "#dedede";
+                taskDiv.style.display = "flex";
+                taskDiv.style.justifyContent = "space-evenly";
+                taskDiv.style.marginBottom = "15px";
+                // taskDiv.style.border = "1px solid #ccc";
+                // taskDiv.style.borderRadius = "8px";
+                // taskDiv.style.padding = "10px";
+                // taskDiv.style.width = "calc(33.33% - 1rem)";
 
                 taskDiv.innerHTML = `
-                <h3>${task.title}</h3>
-                <p>${task.data}</p>
-                <p><strong>Created on:</strong> ${task.created_at}</p>
-                <img src="${task.imgUrl}" alt="${task.title}" />
-                <p>Status: ${task.status}</p>
-                 `;
+                    <div class="icon">
+                        <img src="${data.imgUrl}" alt="${data.title}" class="skills"/>
+                    </div>
+                    <div class="written-part">
+                        <h3 class="title">${data.title}</h3>
+                        <p class="data">${data.data}</p>
+                        <p class="created-on"><strong>Created on:</strong> ${data.created_at}</p>
+                    </div>
+                    <div class="status-options">
+                        <button class="status-button ${data.status.toLowerCase()}">${data.status}</button>
+                        <div class="options">
+                            <img src="/img/editing.png" class="footer-icon" alt="edit" />
+                            <img src="/img/bin.png" class="footer-icon" alt="delete" />
+                            <img src="/img/sync.png" class="footer-icon" alt="refresh" />
+                        </div>
+                    </div>
+                `;
+          
                 flexContainer.appendChild(taskDiv);
                 lists.appendChild(flexContainer);
-
             }else{
             const taskDiv = document.createElement("div");
             taskDiv.classList.add("task-tile", `${data.taskid}`);
-            taskDiv.style.border = "1px solid #ccc";
-            taskDiv.style.borderRadius = "8px";
-            taskDiv.style.padding = "10px";
-            taskDiv.style.width = "calc(33.33% - 1rem)";
+            taskDiv.style.width = "800px";
+            taskDiv.style.height = "80px";
+            taskDiv.style.padding = "15px";
+            taskDiv.style.borderRadius = "12px";
+            taskDiv.style.backgroundColor = "#dedede";
+            taskDiv.style.display = "flex";
+            taskDiv.style.justifyContent = "space-evenly";
+            taskDiv.style.marginBottom = "15px";
 
 
             taskDiv.innerHTML = `
-                <h3>${task.title}</h3>
-                <p>${task.data}</p>
-                <p><strong>Created on:</strong> ${task.created_at}</p>
-                <img src="${task.imgUrl}" alt="${task.title}" />
-                <p>Status: ${task.status}</p>
+                <div class="icon">
+                    <img src="${task.imgUrl}" alt="${task.title}" class="skills"/>
+                </div>
+                <div class="written-part">
+                    <h3 class="title">${task.title}</h3>
+                    <p class="data">${task.data}</p>
+                    <p class="created-on"><strong>Created on:</strong> ${task.created_at}</p>
+                </div>
+                <div class="status-options">
+                    <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
+                    <div class="options">
+                            <img src="/img/editing.png" class="footer-icon" alt="edit" />
+                            <img src="/img/bin.png" class="footer-icon" alt="delete" />
+                            <img src="/img/sync.png" class="footer-icon" alt="refresh" />
+                        </div>
+                </div>
             `;
-              const container=document.getElementsByClassName("flex-container")[0]
-              container.appendChild(taskDiv)
-            }
+          
+            const container = document.getElementsByClassName("flex-container")[0];
+            container.appendChild(taskDiv);
+        }
             document.getElementById('overlay').classList.remove('show');
 
         }else {
