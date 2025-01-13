@@ -812,20 +812,8 @@ document.getElementById("addit").addEventListener("click", (e) => {
             if (!document.getElementsByClassName("flex-container")[0]) {
                 const flexContainer = document.createElement("div");
                 flexContainer.classList.add("flex-container");
-                flexContainer.style.display = "flex";
-                flexContainer.style.flexWrap = "wrap";
-                flexContainer.style.gap = "1rem";
-
                 const taskDiv = document.createElement("div");
-                taskDiv.classList.add("task-tile", `${data.taskid}`);
-                taskDiv.style.width = "800px";
-                taskDiv.style.height = "80px";
-                taskDiv.style.padding = "15px";
-                taskDiv.style.borderRadius = "12px";
-                taskDiv.style.backgroundColor = "#dedede";
-                taskDiv.style.display = "flex";
-                taskDiv.style.justifyContent = "space-evenly";
-                taskDiv.style.marginBottom = "15px";
+
                 // taskDiv.style.border = "1px solid #ccc";
                 // taskDiv.style.borderRadius = "8px";
                 // taskDiv.style.padding = "10px";
@@ -854,16 +842,6 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 lists.appendChild(flexContainer);
             }else{
             const taskDiv = document.createElement("div");
-            taskDiv.classList.add("task-tile", `${data.taskid}`);
-            taskDiv.style.width = "800px";
-            taskDiv.style.height = "80px";
-            taskDiv.style.padding = "15px";
-            taskDiv.style.borderRadius = "12px";
-            taskDiv.style.backgroundColor = "#dedede";
-            taskDiv.style.display = "flex";
-            taskDiv.style.justifyContent = "space-evenly";
-            taskDiv.style.marginBottom = "15px";
-
 
             taskDiv.innerHTML = `
                 <div class="icon">
