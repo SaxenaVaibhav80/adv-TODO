@@ -115,28 +115,57 @@ fetch("/usersname",{
 })
 
 
-function themestate(){
+// function themestate(){
+//     fetch("/themeState", {
+//         method: "POST"
+//     }).then(res=>res.text())
+//     .then(async(modes)=>{
+        
+//         if(modes=="Dark mode")
+//             {
+                
+//                 document.getElementById("lightouter").classList.remove("shift-left")
+//                 document.getElementById("lightouter").classList.add("shift-right") 
+//                 document.getElementById("light").setAttribute("src","/img/dark-mode.png")
+//                 document.getElementById("lmode").innerHTML='Dark mode'    
+//             }
+//         else{
+//             document.getElementById("lightouter").classList.remove("shift-right")
+//             document.getElementById("lightouter").classList.add("shift-left")  
+//             document.getElementById("light").setAttribute("src","/img/lightmode.png")
+//             document.getElementById("lmode").innerHTML='Light mode'   
+//         }
+//     })
+// }
+
+function themestate() {
     fetch("/themeState", {
         method: "POST"
-    }).then(res=>res.text())
-    .then(async(modes)=>{
-        
-        if(modes=="Dark mode")
-            {
-                
-                document.getElementById("lightouter").classList.remove("shift-left")
-                document.getElementById("lightouter").classList.add("shift-right") 
-                document.getElementById("light").setAttribute("src","/img/dark-mode.png")
-                document.getElementById("lmode").innerHTML='Dark mode'    
-            }
-        else{
-            document.getElementById("lightouter").classList.remove("shift-right")
-            document.getElementById("lightouter").classList.add("shift-left")  
-            document.getElementById("light").setAttribute("src","/img/lightmode.png")
-            document.getElementById("lmode").innerHTML='Light mode'   
+    }).then(res => res.text())
+    .then((modes) => {
+        const body = document.body;
+        const lightOuter = document.getElementById("lightouter");
+        const light = document.getElementById("light");
+        const lmode = document.getElementById("lmode");
+
+        if (modes === "Dark mode") {
+            body.classList.add("dark-mode");
+
+            lightOuter.classList.remove("shift-left");
+            lightOuter.classList.add("shift-right");
+            light.setAttribute("src", "/img/dark-mode.png");
+            lmode.innerHTML = "Dark mode";
+        } else {
+            body.classList.remove("dark-mode");
+
+            lightOuter.classList.remove("shift-right");
+            lightOuter.classList.add("shift-left");
+            light.setAttribute("src", "/img/lightmode.png");
+            lmode.innerHTML = "Light mode";
         }
-    })
+    });
 }
+
 
 
 outer.addEventListener("click",async(event)=>
