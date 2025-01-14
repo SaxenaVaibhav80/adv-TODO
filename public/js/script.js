@@ -263,12 +263,10 @@ function displaySoloMode(user) {
     const progress = user.tasks.progress; 
     const tasks = user.tasks.tasks;
 
-    console.log("Tasks:", tasks); // Debugging
-
     const lists = document.getElementById("lists"); 
     lists.innerHTML = ""; 
 
-    // Add "My Day" and the date dynamically
+
     const myDayDiv = document.createElement("div");
     myDayDiv.classList.add("my-day");
 
@@ -311,7 +309,6 @@ function displaySoloMode(user) {
         flexContainer.classList.add("flex-container");
 
         tasks.forEach((task) => {
-            console.log("Task:", task); // Debugging
 
             const main = document.createElement("div");
             main.classList.add("main");
@@ -355,7 +352,7 @@ function displaySoloMode(user) {
             // Status Button
             const statusButton = document.createElement("button");
             statusButton.classList.add("status-button", "pending"); // Set the initial class to 'pending'
-            statusButton.textContent = "Pending..."; // Default text
+            statusButton.textContent = "Pending"; // Default text
 
             // Add click event to toggle status
             statusButton.addEventListener("click", () => {
@@ -364,7 +361,7 @@ function displaySoloMode(user) {
                     statusButton.classList.remove("pending");
                     statusButton.classList.add("complete");
                 } else {
-                    statusButton.textContent = "Pending...";
+                    statusButton.textContent = "Pending";
                     statusButton.classList.remove("complete");
                     statusButton.classList.add("pending");
                 }
@@ -378,14 +375,23 @@ function displaySoloMode(user) {
             const edit = document.createElement("img");
             edit.setAttribute("src", "/img/editing.png");
             edit.classList.add("footer-icon");
+            edit.classList.add("edit");
+    
 
             const del = document.createElement("img");
             del.setAttribute("src", "/img/bin.png");
             del.classList.add("footer-icon");
-
+            del.classList.add("delete");
+            del.addEventListener("click",()=>
+            {
+               console.log(task._id)
+            })
+    
             const refresh = document.createElement("img");
             refresh.setAttribute("src", "/img/sync.png");
             refresh.classList.add("footer-icon");
+            refresh.classList.add("refresh");
+    
 
             options.appendChild(edit);
             options.appendChild(del);
@@ -395,6 +401,8 @@ function displaySoloMode(user) {
             main.appendChild(statusOptions);
 
             flexContainer.appendChild(main);
+
+           
         });
 
         lists.appendChild(flexContainer);
@@ -814,6 +822,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 flexContainer.classList.add("flex-container");
                 const taskDiv = document.createElement("div");
                 taskDiv.classList.add("main")
+                taskDiv.id=`${data.taskid}` 
                 // taskDiv.style.border = "1px solid #ccc";
                 // taskDiv.style.borderRadius = "8px";
                 // taskDiv.style.padding = "10px";
@@ -831,18 +840,24 @@ document.getElementById("addit").addEventListener("click", (e) => {
                     <div class="status-options">
                         <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                         <div class="options">
-                            <img src="/img/editing.png" class="footer-icon" alt="edit" />
-                            <img src="/img/bin.png" class="footer-icon" alt="delete" />
-                            <img src="/img/sync.png" class="footer-icon" alt="refresh" />
+                            <img src="/img/editing.png" class="footer-icon edit ${data.taskid}" alt="edit" />
+                            <img src="/img/bin.png" class="footer-icon delete ${data.taskid}" alt="delete" />
+                            <img src="/img/sync.png" class="footer-icon refresh ${data.taskid}" alt="refresh" />
                         </div>
                     </div>
                 `;
           
                 flexContainer.appendChild(taskDiv);
                 lists.appendChild(flexContainer);
+
+                document.getElementsByClassName("delete")[0].addEventListener("click",()=>
+                {
+                    console.log(data.taskid)
+                })
             }else{
             const taskDiv = document.createElement("div");
             taskDiv.classList.add("main")
+            taskDiv.id=`${data.taskid}`
             taskDiv.innerHTML = `
                 <div class="icon">
                     <img src="${task.imgUrl}" alt="${task.title}" class="skills"/>
@@ -855,15 +870,20 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 <div class="status-options">
                     <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                     <div class="options">
-                            <img src="/img/editing.png" class="footer-icon" alt="edit" />
-                            <img src="/img/bin.png" class="footer-icon" alt="delete" />
-                            <img src="/img/sync.png" class="footer-icon" alt="refresh" />
-                        </div>
+                            <img src="/img/editing.png" class="footer-icon edit" alt="edit" />
+                            <img src="/img/bin.png" class="footer-icon delete" alt="delete" />
+                            <img src="/img/sync.png" class="footer-icon refresh" alt="refresh" />
+                    </div>
                 </div>
             `;
           
+            taskDiv.querySelector(".delete").addEventListener("click",()=>
+            {
+                console.log(data.taskid)
+            })
             const container = document.getElementsByClassName("flex-container")[0];
             container.appendChild(taskDiv);
+            
         }
             document.getElementById('overlay').classList.remove('show');
 
