@@ -235,7 +235,7 @@ app.post('/TODO', authenticated,async(req, res) => {
         },
         { new: true } 
     )
-
+ 
     const taskId = newTask._id;
 
     if(user.mode=="Solo Mode" || user.mode=="Dual Mode" && roomId==null && joinId==null)
