@@ -109,7 +109,7 @@ const authenticated = async(req,res,next)=>
             res.redirect("/logout")
         }
     }else{
-        res.redirect("/")
+        res.redirect("/logout")
     }
 }
 
@@ -213,9 +213,8 @@ app.post("/accessUid",authenticated,async(req,res)=>
 
 app.post('/TODO', authenticated,async(req, res) => {
    
-    const { imgUrl,title, priority, data,created_at} = req.body;
+    const {imgUrl,title, priority, data,created_at} = req.body;
     const user = await userby_id(req,res)
-    console.log(created_at)
     const id = user._id
 
     const newTask = {
@@ -224,6 +223,7 @@ app.post('/TODO', authenticated,async(req, res) => {
         data:data,
         imgUrl: imgUrl,
         created_at: created_at,
+        status: "Complete", 
         priority:priority,
     };
 
@@ -1092,5 +1092,85 @@ app.get("/logout",(req,res)=>
     res.redirect("/")  
 })
 
+app.post("/deleteTask",authenticated,async(req,res)=>
+{
+   const token = req.cookies.token
+   const taskid= req.body.taskid
+   if(token)
+   {
+    try{
+       const verification= jwt.verify(token,secret_key)
+       const id = verification.id
+       const userTask = await taskModel.findOneAndUpdate(
+        { userid: id }, 
+        { $pull: { "current.tasks": { _id: taskid } } },
+        { new: true }
+      );
+    //    console.log(userTask)
+       res.status(200).json({message:"deleted",id:taskid})
+
+    }catch(err)
+    {
+        res.status(200).send("error")
+    }
+   }
+})
+
+
+app.post("/setstatus",authenticated,async(req,res)=>
+{
+    const token = req.cookies.token
+    const taskid= req.body.taskid
+    const status= req.body.status
+ 
+   if(token)
+   {
+    try{
+       const verification= jwt.verify(token,secret_key)
+       const id = verification.id
+       const updatedStatus = await taskModel.findOneAndUpdate(
+        { userid: id, "current.tasks._id": taskid }, 
+        { $set: { "current.tasks.$.status": status } },
+        { new: true } 
+    );
+        res.status(200).json({ update:"done" }); 
+
+    }catch(err)
+    {
+        res.send("error")
+    }
+   }
+})
+
+app.get("/getProgress", authenticated, async (req, res) => {
+    const token = req.cookies.token;
+
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+
+            const tasks = await taskModel.findOne({ userid: id });
+            if (tasks && tasks.current.tasks.length > 0) {
+                const completedTasksCount = tasks.current.tasks.filter(
+                    (task) => task.status === "Completed"
+                ).length;
+
+                const totaltask = tasks.current.tasks.length;
+                const percent = (completedTasksCount / totaltask) * 100;
+
+                console.log(percent);
+                res.status(200).json({ progress: percent.toFixed(0) }); 
+            } else {
+                res.status(200).json({ progress: 0 }); 
+            }
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Error calculating progress");
+        }
+    } else {
+        res.status(401).send("Unauthorized");
+    }
+});
 
 server.listen(1000)

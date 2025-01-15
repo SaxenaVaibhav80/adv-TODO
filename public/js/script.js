@@ -1,3 +1,6 @@
+
+
+
 const socket = io()
 // window.onload = startCountdown;
 
@@ -15,6 +18,7 @@ fetch('/api/login', {
 
 checkAdduserState();
 themestate()
+getProgress()
 
 window.addEventListener("pageshow", (event) => {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
@@ -46,6 +50,96 @@ function joinroom()
     nav.insertBefore(joinroombtn, fifthChild.nextSibling);
     console.log(nav)
 }
+
+
+function updateProgress(value) {
+
+    const progressCircle = document.querySelector('.progress-circle');
+    const progressValue = document.getElementById('progressValue');
+
+    const radius = 70; 
+    const circumference = 2 * Math.PI * radius; 
+    const offset = circumference - (value / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;  
+    progressValue.textContent = `${value}%`;
+}
+
+function deletetask(id)
+{
+    fetch("/deleteTask",{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json",
+        },
+        body:JSON.stringify({taskid:id})
+    }).then(res=>res.json())
+    .then(response=>
+    {  
+        getProgress()
+        if(response.message=="deleted")
+        {
+           
+            const taskElement = document.getElementById(response.id);
+            const flexContainer = document.querySelector(".flex-container");
+            // console.log(taskElement)
+            if (taskElement) {
+                console.log(taskElement)
+                taskElement.remove()
+            }
+            console.log(flexContainer.children.length)
+            if (flexContainer.children.length==0 || !flexContainer) {
+                const emptyMessage = document.querySelector(".emptymsg");
+                if (emptyMessage) {
+                    emptyMessage.style.display = "block";
+                }else{
+                    const lists= document.getElementById("lists")
+                    const div = document.createElement("div");
+                    div.classList.add("emptymsg");
+        
+                    const img = document.createElement("img");
+                    const theme = checktheme()
+                    if(theme =="Dark mode")
+                    {
+                        img.setAttribute("src", "/img/empty (1).png");
+                    }else{
+                        img.setAttribute("src", "/img/empty (1).png");
+                    }
+                    
+                    img.classList.add("emptytwo");
+        
+                    const btn = document.createElement("div");
+                    btn.textContent = "Add items to lists";
+                    btn.id = "addTODO";
+                    btn.addEventListener('click', () => {
+                        document.getElementById('overlay').classList.add('show');
+                    });
+                    document.getElementById("progressValue").innerHTML = 0;
+                    div.appendChild(img);
+                    div.appendChild(btn);
+                    
+                    lists.appendChild(div);
+                }
+            }
+    
+        }
+    }
+    )
+}
+
+async function setstatus(id,status)
+{
+    fetch("/setStatus",{
+    method:"POST",
+    headers:{
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify({taskid:id,status:status})
+   }).then(() => {
+      getProgress()
+   }) 
+}
+
+
 
 
 function checkLoginState(){
@@ -138,6 +232,18 @@ fetch("/usersname",{
 //     })
 // }
 
+function checktheme()
+{
+    fetch("/themeState", {
+        method: "POST"
+    }).then(res => res.text())
+    .then((modes) => {
+        return modes
+    })   
+}
+
+
+
 function themestate() {
     fetch("/themeState", {
         method: "POST"
@@ -163,7 +269,7 @@ function themestate() {
             light.setAttribute("src", "/img/lightmode.png");
             lmode.innerHTML = "Light mode";
         }
-    });
+    }); 
 }
 
 
@@ -318,7 +424,14 @@ function displaySoloMode(user) {
             div.classList.add("emptymsg");
 
             const img = document.createElement("img");
-            img.setAttribute("src", "/img/notasks.png");
+            const theme = checktheme()
+            if(theme =="Dark mode")
+            {
+                img.setAttribute("src", "/img/empty (1).png");
+            }else{
+                img.setAttribute("src", "/img/empty (1).png");
+            }
+            
             img.classList.add("empty");
 
             const btn = document.createElement("div");
@@ -341,19 +454,18 @@ function displaySoloMode(user) {
 
             const main = document.createElement("div");
             main.classList.add("main");
+            main.id=`${task._id}` 
 
-            // First part: Image (icon section)
             const icon = document.createElement("div");
             icon.classList.add("icon");
 
             const skills = document.createElement("img");
             skills.classList.add("skills");
-            skills.setAttribute("src", task.imgUrl || "/img/default.png"); // Fallback image
+            skills.setAttribute("src", task.imgUrl || "/img/default.png");
 
             icon.appendChild(skills);
             main.appendChild(icon);
 
-            // Second part: Written content
             const writtenPart = document.createElement("div");
             writtenPart.classList.add("written-part");
 
@@ -374,26 +486,21 @@ function displaySoloMode(user) {
             writtenPart.appendChild(createdOn);
             main.appendChild(writtenPart);
 
-            // Third part: Status and options
+           
             const statusOptions = document.createElement("div");
             statusOptions.classList.add("status-options");
 
-            // Status Button
             const statusButton = document.createElement("button");
-            statusButton.classList.add("status-button", "pending"); // Set the initial class to 'pending'
-            statusButton.textContent = "Pending"; // Default text
+            statusButton.classList.add("status-button", "pending");
+            statusButton.textContent = task.status;
 
-            // Add click event to toggle status
-            statusButton.addEventListener("click", () => {
+            statusButton.addEventListener("click", async() => {
                 if (statusButton.classList.contains("pending")) {
-                    statusButton.textContent = "Complete";
+                    await setstatus(task._id,"Completed")
+                    statusButton.textContent = "Completed";
                     statusButton.classList.remove("pending");
                     statusButton.classList.add("complete");
-                } else {
-                    statusButton.textContent = "Pending";
-                    statusButton.classList.remove("complete");
-                    statusButton.classList.add("pending");
-                }
+                } 
             });
 
             statusOptions.appendChild(statusButton);
@@ -413,13 +520,23 @@ function displaySoloMode(user) {
             del.classList.add("delete");
             del.addEventListener("click",()=>
             {
-               console.log(task._id)
+               deletetask(task._id)
+
             })
     
             const refresh = document.createElement("img");
             refresh.setAttribute("src", "/img/sync.png");
             refresh.classList.add("footer-icon");
             refresh.classList.add("refresh");
+
+            refresh.addEventListener("click",async()=>{
+            
+               await setstatus(task._id,"Complete")
+               statusButton.textContent = "Complete";
+               statusButton.classList.add("pending");
+               statusButton.classList.remove("complete");
+               
+            })
     
 
             options.appendChild(edit);
@@ -435,85 +552,7 @@ function displaySoloMode(user) {
         lists.appendChild(flexContainer);
     }
 }
-        
-//                 const moreElement = document.createElement("div");
-//                 moreElement.classList.add("moreinfo")
-//                 const created = document.createElement("div");
-//                 const priority = document.createElement("div");
-//                 const status = document.createElement("div");
-        
-//                 created.classList.add("more-element");
-//                 status.classList.add("more-element");
-//                 priority.classList.add("more-element");
 
-        
-//                 status.textContent = `Status: ${task.status}`;
-//                 priority.textContent = `Priority: ${task.priority}`;
-//                 created.textContent = `Created at: ${task.created_at}`;
-        
-//                 moreElement.appendChild(priority);
-//                 moreElement.appendChild(created);
-//                 moreElement.appendChild(status);
-        
-//                 icon.appendChild(more);
-//                 icon.appendChild(moreElement);
-//                 icon.appendChild(skills);
-//                 main.appendChild(icon);
-        
-//                 // Title
-//                 const title = document.createElement("h3");
-//                 title.classList.add("title");
-//                 title.textContent = task.title;
-//                 main.appendChild(title);
-        
-//                 // Data
-//                 const data = document.createElement("div");
-//                 data.classList.add("data");
-//                 data.textContent = task.data;
-//                 main.appendChild(data);
-        
-//                 // Footer
-//                 const footer = document.createElement("div");
-//                 footer.classList.add("footer");
-        
-//                 const updationDiv = document.createElement("div");
-//                 updationDiv.classList.add("updation-div");
-        
-//                 const del = document.createElement("img");
-//                 const edit = document.createElement("img");
-//                 const recycle = document.createElement("img");
-        
-//                 del.setAttribute("src", "/img/bin.png");
-//                 del.classList.add("bin", "footer-icon");
-        
-//                 edit.setAttribute("src", "/img/editing.png");
-//                 edit.classList.add("edit", "footer-icon");
-        
-//                 recycle.setAttribute("src", "/img/sync.png");
-//                 recycle.classList.add("recycle", "footer-icon");
-        
-//                 updationDiv.appendChild(del);
-//                 updationDiv.appendChild(edit);
-//                 updationDiv.appendChild(recycle);
-        
-//                 footer.appendChild(updationDiv);
-        
-//                 const statusFooter = document.createElement("div");
-//                 statusFooter.classList.add("status");
-//                 statusFooter.textContent = "Complete";
-        
-//                 footer.appendChild(statusFooter);
-        
-//                 main.appendChild(footer);
-        
-//                 flexContainer.appendChild(main); // Corrected this line
-//             });
-        
-//             lists.appendChild(flexContainer);
-//         }
-        
-//     }
-// }
 
 // Function to display Dual Mode data
 function displayDualMode(users) {
@@ -747,22 +786,29 @@ const timer=setInterval(updateTimer, 1000);
 // }
 
 
-
-function updateProgress(value) {
-    const progressCircle = document.querySelector('.progress-circle');
-    const progressValue = document.getElementById('progressValue');
-
-    const radius = 70; 
-    const circumference = 2 * Math.PI * radius; 
-    const offset = circumference - (value / 100) * circumference;
-    progressCircle.style.strokeDashoffset = offset;  
-    progressValue.textContent = `${value}%`;
+function getProgress() {
+    console.log("Fetching progress...");
+    fetch("/getProgress", {
+        method: "GET",
+    })
+        .then((res) => res.json()) 
+        .then((data) => {
+            if (data.progress !== undefined) {
+                setTimeout(() => {
+                    updateProgress(data.progress); 
+                }, 1000);
+            } else {
+                console.error("Progress value not found in response");
+            }
+        })
+        .catch((err) => {
+            console.error("Error fetching progress:", err);
+        });
 }
-
 
 // make event listner when click on (task done) then fetch req krenge whn pr calculate hoke progress db me save ho jyegi or response me whi progress mil jyegi jo ki hum js se dom manipulate krk set krlenge  !!!!! 
 
-setTimeout(() => updateProgress(0), 1000); 
+
 
 
 const suggestedbtn=document.getElementById("suggestedbtn")
@@ -816,7 +862,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
         data: data,
         imgUrl: imgUrl,
         created_at: created_at,
-        status: "pending", 
+        status: "Complete", 
         priority: priority
     };
 
@@ -836,6 +882,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
     })
     .then(response => response.json())
     .then(data => {
+        getProgress()
         const lists = document.getElementById("lists")
         document.getElementById('title').value=""
         document.getElementById('data').value="";
@@ -877,41 +924,93 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 flexContainer.appendChild(taskDiv);
                 lists.appendChild(flexContainer);
 
-                document.getElementsByClassName("delete")[0].addEventListener("click",()=>
-                {
-                    console.log(data.taskid)
+                taskDiv.querySelector(".delete").addEventListener("click",()=>
+                    {
+                        deletetask(data.taskid)
+                    })
+    
+
+                taskDiv.querySelector(".status-button").addEventListener("click",async()=>
+                {   
+                    const statusButton=taskDiv.querySelector(".status-button")
+                    if (statusButton.innerHTML=="Complete") {
+                        await setstatus(data.taskid,"Completed")
+                        statusButton.textContent = "Completed";
+                        statusButton.classList.remove("pending");
+                        statusButton.classList.add("complete");
+                    } 
                 })
+
+                taskDiv.querySelector(".refresh").addEventListener("click",async()=>
+                {   const statusButton=taskDiv.querySelector(".status-button")
+                    if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
+                        await setstatus(data.taskid,"Complete")
+                        statusButton.textContent = "Complete";
+                        statusButton.classList.add("pending");
+                        statusButton.classList.remove("complete");
+    
+                    } 
+                })
+
+
             }else{
-            const taskDiv = document.createElement("div");
-            taskDiv.classList.add("main")
-            taskDiv.id=`${data.taskid}`
-            taskDiv.innerHTML = `
-                <div class="icon">
-                    <img src="${task.imgUrl}" alt="${task.title}" class="skills"/>
-                </div>
-                <div class="written-part">
-                    <h3 class="title">${task.title}</h3>
-                    <p class="data">${task.data}</p>
-                    <p class="created-on"><strong>Created on:</strong> ${task.created_at}</p>
-                </div>
-                <div class="status-options">
-                    <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
-                    <div class="options">
-                            <img src="/img/editing.png" class="footer-icon edit" alt="edit" />
-                            <img src="/img/bin.png" class="footer-icon delete" alt="delete" />
-                            <img src="/img/sync.png" class="footer-icon refresh" alt="refresh" />
+
+                getProgress()
+                const taskDiv = document.createElement("div");
+                taskDiv.classList.add("main")
+                taskDiv.id=`${data.taskid}`
+                taskDiv.innerHTML = `
+                    <div class="icon">
+                        <img src="${task.imgUrl}" alt="${task.title}" class="skills"/>
                     </div>
-                </div>
-            `;
-          
-            taskDiv.querySelector(".delete").addEventListener("click",()=>
-            {
-                console.log(data.taskid)
-            })
-            const container = document.getElementsByClassName("flex-container")[0];
-            container.appendChild(taskDiv);
+                    <div class="written-part">
+                        <h3 class="title">${task.title}</h3>
+                        <p class="data">${task.data}</p>
+                        <p class="created-on"><strong>Created on:</strong> ${task.created_at}</p>
+                    </div>
+                    <div class="status-options">
+                        <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
+                        <div class="options">
+                                <img src="/img/editing.png" class="footer-icon edit" alt="edit" />
+                                <img src="/img/bin.png" class="footer-icon delete" alt="delete" />
+                                <img src="/img/sync.png" class="footer-icon refresh" alt="refresh" />
+                        </div>
+                    </div>
+                `;
+                taskDiv.querySelector(".status-button").addEventListener("click",async()=>
+                {   const statusButton=taskDiv.querySelector(".status-button")
+                    if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
+                        await setstatus(data.taskid,"Completed")
+                        statusButton.textContent = "Completed";
+                        statusButton.classList.remove("pending");
+                        statusButton.classList.add("complete");
+    
+                    } 
+                })
+    
+                taskDiv.querySelector(".refresh").addEventListener("click",async()=>
+                {   const statusButton=taskDiv.querySelector(".status-button")
+                    if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
+                        await setstatus(data.taskid,"Complete")
+                    statusButton.textContent = "Complete";
+                    statusButton.classList.add("pending");
+                    statusButton.classList.remove("complete");
+
+                } 
+                })
+                const container = document.getElementsByClassName("flex-container")[0];
+                container.appendChild(taskDiv);
+
+
             
-        }
+                taskDiv.querySelector(".delete").addEventListener("click",()=>
+                    {
+                        deletetask(data.taskid)
+                    })
+    
+            
+            }
+
             document.getElementById('overlay').classList.remove('show');
 
         }else {

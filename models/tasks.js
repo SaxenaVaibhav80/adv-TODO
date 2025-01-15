@@ -33,7 +33,7 @@ const taskModel = new mongoose.Schema({
                 },
                 status:{
                     type:String,
-                    default:"pending"
+                    default:"Complete"
                 },
                 priority:{
                     type:String,
