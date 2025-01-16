@@ -38,6 +38,19 @@ function appendAddUser()
     nav.insertBefore(adduserbtn, thirdChild.nextSibling);
 
 }
+async function checktheme() {
+    try {
+        const response = await fetch("/themeState", {
+            method: "POST"
+        });
+        const modes = await response.text();
+        console.log("modes : ", modes);
+        return modes; // Now it properly returns the value
+    } catch (error) {
+        console.error("Error fetching theme state:", error);
+    }
+}
+
 function joinroom()
 {
 
@@ -64,7 +77,7 @@ function updateProgress(value) {
     progressValue.textContent = `${value}%`;
 }
 
-function deletetask(id)
+async function deletetask(id)
 {
     fetch("/deleteTask",{
         method:"POST",
@@ -73,7 +86,7 @@ function deletetask(id)
         },
         body:JSON.stringify({taskid:id})
     }).then(res=>res.json())
-    .then(response=>
+    .then(async(response)=>
     {  
         getProgress()
         if(response.message=="deleted")
@@ -97,12 +110,12 @@ function deletetask(id)
                     div.classList.add("emptymsg");
         
                     const img = document.createElement("img");
-                    const theme = checktheme()
+                    const theme = await checktheme()
                     if(theme =="Dark mode")
                     {
                         img.setAttribute("src", "/img/empty (1).png");
                     }else{
-                        img.setAttribute("src", "/img/empty (1).png");
+                        img.setAttribute("src", "/img/empty (2).png");
                     }
                     
                     img.classList.add("emptytwo");
@@ -232,15 +245,6 @@ fetch("/usersname",{
 //     })
 // }
 
-function checktheme()
-{
-    fetch("/themeState", {
-        method: "POST"
-    }).then(res => res.text())
-    .then((modes) => {
-        return modes
-    })   
-}
 
 
 
@@ -393,7 +397,7 @@ fetch("/getCurrent", { method: "GET" })
     })
 .catch((error) => console.error("Error fetching current tasks:", error));
 
-function displaySoloMode(user) {
+async function displaySoloMode(user) {
     const name = user.tasks.name; 
     const progress = user.tasks.progress; 
     const tasks = user.tasks.tasks;
@@ -424,19 +428,26 @@ function displaySoloMode(user) {
             div.classList.add("emptymsg");
 
             const img = document.createElement("img");
-            const theme = checktheme()
+            const theme = await checktheme()
+            // console.log(theme)
             if(theme =="Dark mode")
             {
                 img.setAttribute("src", "/img/empty (1).png");
             }else{
-                img.setAttribute("src", "/img/empty (1).png");
+                img.setAttribute("src", "/img/empty (2).png");
             }
             
             img.classList.add("empty");
 
             const btn = document.createElement("div");
             btn.textContent = "Add items to lists";
-            btn.id = "addTODO";
+            if(theme=="Dark mode")
+            {
+                btn.id = "addTODO";
+            }else{
+                btn.id="addTODOLight"
+            }
+            
             btn.addEventListener('click', () => {
                 document.getElementById('overlay').classList.add('show');
             });
@@ -765,7 +776,7 @@ function updateTimer() {
     const seconds = secondsLeft % 60;
     timerElement.textContent = `Time left: ${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
    
-    if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:56:55") {
+    if ( `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`=== "23:57:55") {
 
      location.reload()
 

@@ -3,8 +3,7 @@
     font-family: "Open Sans", sans-serif;
 }
 body{
-    
-    background: rgb(233 233 233);
+    background: rgb(206 206 219);
 }
 .body{
     display: flex;
@@ -70,7 +69,7 @@ body{
     height: 28px;
     width: 28px;
     padding-left: 13px;
-    background-color: #b3b3b3;
+    background-color: rgb(208 208 219);
 }
 .iconlink {
     display: block;
@@ -104,7 +103,7 @@ a::after{
     height: 28px;
     width: 28px;
     padding-left: 13px;
-    background-color: #b3b3b3;
+    background-color: rgb(208 208 219);
 }
 
 
@@ -114,7 +113,7 @@ a::after{
     height: 29px;
     width: 29px;
     padding-left: 13px;
-    background-color: #b3b3b3;
+    background-color: rgb(208 208 219);
 }
 
 
@@ -137,11 +136,12 @@ a::after{
     padding: 2px;
     margin-left: 10px;
     cursor: pointer;
+    padding: 2px 2px 2px 3px;
 }
 
 #ball {
     user-select: none;
-    background-color: rgb(192 192 192);
+    background-color: rgb(255, 255, 255);
     border-radius: 30px;
     width: 46%;
     height: 16.5px;
@@ -166,7 +166,7 @@ a::after{
 #lightball {
  
     user-select: none;
-    background-color: rgb(192 192 192);
+    background-color: rgb(255, 253, 253);
     border: 1px solid rgb(50 50 50);
     border-radius: 30px;
     width: 46%;
@@ -226,7 +226,7 @@ a::after{
 }
 
 #profile {
-    background-color: #a4a4a4;
+    background-color: rgb(169 169 188);
     width: 40px;
     height: 40px;
     border-radius: 70px;
@@ -319,7 +319,7 @@ a::after{
     border-radius: 10px; 
 }
 #suggestdiv {
-    background-color: #d9d9d9;
+    background-color: #e5e4e9;
     margin-top: 25px;
     width: 190px;
     /* border: 1px solid black; */
@@ -340,7 +340,7 @@ a::after{
 #suggestedbtn{
     user-select: none;
     text-align: center;
-    background-color: #a6a6a6;
+    background-color: rgb(189 189 200);
     margin-top: 15px;
     border-radius: 10px;
     color: white;
@@ -375,8 +375,21 @@ a::after{
     position: absolute;
     border-radius: 15px;
     color: white;
-    /* background-color:#4c495d; */
     background-color:#5f5c71;
+    /* background-color: #b1afbb; */
+}
+
+#addTODOLight{
+    cursor: pointer;
+    text-align: center;
+    width: 27%;
+    margin-left: 48px;
+    padding: 10px 0 10px 0;
+    top: 75%;
+    position: absolute;
+    border-radius: 15px;
+    color: white;
+    background-color: #b1afbb;
 }
 
 #overlay {
@@ -497,7 +510,7 @@ a::after{
 }
 
 .dashboard-link{
-    background-color: #d9d9d9;
+    background-color: #e5e4e9;
     padding: 11px;
     margin-left: 15px;
     border-radius: 12px;
@@ -509,7 +522,7 @@ a::after{
     text-decoration: none;
 }
 .history-link{
-    background-color: #d9d9d9;
+    background-color: #e5e4e9;
     padding: 11px;
     margin-left: 15px;
     border-radius: 12px;
@@ -532,7 +545,7 @@ a::after{
 .home,.contact,.setting,.logout{
     display: flex;
     align-items: center;
-    background-color: #d9d9d9;
+    background-color: #e5e4e9;
     padding: 7px;
     border-radius: 12px;
     color: #3e3e3e;
