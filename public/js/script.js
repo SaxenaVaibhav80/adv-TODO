@@ -122,7 +122,14 @@ async function deletetask(id)
         
                     const btn = document.createElement("div");
                     btn.textContent = "Add items to lists";
-                    btn.id = "addTODO";
+                    if(theme =="Dark mode")
+                    {
+                        btn.id = "addTODO";
+                    }else{
+                        btn.id = "addTODOLight";
+                    }
+                    
+                    btn.classList.add("emptybtn")
                     btn.addEventListener('click', () => {
                         document.getElementById('overlay').classList.add('show');
                     });
@@ -429,7 +436,7 @@ async function displaySoloMode(user) {
 
             const img = document.createElement("img");
             const theme = await checktheme()
-            // console.log(theme)
+            console.log(theme)
             if(theme =="Dark mode")
             {
                 img.setAttribute("src", "/img/empty (1).png");
@@ -441,6 +448,7 @@ async function displaySoloMode(user) {
 
             const btn = document.createElement("div");
             btn.textContent = "Add items to lists";
+            btn.classList.add("emptybtn")
             if(theme=="Dark mode")
             {
                 btn.id = "addTODO";
@@ -570,9 +578,9 @@ function displayDualMode(users) {
     console.log("Users:", users);
 }
 
-louter.addEventListener("click",async(event)=>
+louter.addEventListener("click",async()=>
     {   const lmode= document.getElementById("lmode").innerHTML
-        
+
         if(lmode==='Light mode')
         {
             await fetch("/handlelightMode", {
@@ -586,7 +594,18 @@ louter.addEventListener("click",async(event)=>
             
                 if(modes.mode =="Dark mode")
                     {  
-
+                        const addtaskbtn= document.getElementsByClassName("emptybtn")[0]
+                        if(addtaskbtn || addtaskbtn!=undefined)
+                        {
+                            addtaskbtn.id="addTODO"
+                        }   
+                        const body = document.body;
+                        const emptybox = document.getElementsByClassName("empty")[0]
+                        if(emptybox)
+                        {
+                            emptybox.setAttribute("src", "/img/empty (1).png");
+                        }
+                        body.classList.add("dark-mode");
                         louter.classList.remove("shift-left")
                         louter.classList.add("shift-right")
                         document.getElementById("light").setAttribute("src","/img/dark-mode.png")
@@ -607,6 +626,18 @@ louter.addEventListener("click",async(event)=>
             
                 if(modes.mode=="Light mode")
                     {   
+                        const body = document.body;
+                        const addtaskbtn= document.getElementsByClassName("emptybtn")[0]
+                        if(addtaskbtn || addtaskbtn!=undefined)
+                        {
+                            addtaskbtn.id="addTODOLight"
+                        }     
+                        body.classList.remove("dark-mode");
+                        const emptybox = document.getElementsByClassName("empty")[0]
+                        if(emptybox)
+                        {
+                            emptybox.setAttribute("src", "/img/empty (2).png");
+                        }
                         louter.classList.remove("shift-right")
                         louter.classList.add("shift-left")
                         document.getElementById("light").setAttribute("src","/img/lightmode.png")
@@ -615,9 +646,6 @@ louter.addEventListener("click",async(event)=>
             }
             )
         }
-
-        event.stopPropagation();
-
     })
     
 

@@ -205,7 +205,7 @@ a::after{
     height: 2px;
     background-color: #fffcfc;
     border-radius: 10px;
-    border: 1px solid black;
+    border: 1px solid #c8bfbf;
     overflow: hidden;
     position: relative;
     top: 245px;
@@ -852,6 +852,18 @@ body.dark-mode #mode{
     margin-left: 65px;
     color: #d1d7e0;
     text-decoration: none;
+}
+
+body.dark-mode #progress-bar {
+    width: 80%;
+    height: 2px;
+    background-color: #fffcfc;
+    border-radius: 10px;
+    border: 1px solid #141414;
+    overflow: hidden;
+    position: relative;
+    top: 245px;
+    left: 30px;
 }
 body.dark-mode #lmode{
     margin-left: 10px;
