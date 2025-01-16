@@ -328,7 +328,12 @@ a::after{
     border-radius: 15px;
     margin-left: 37px;
 }
-
+.my-day{
+    color: #a8a7bb;
+}
+.my-day p{
+    color: #a8a7bb;
+}
 #suggestedPara{
     white-space: normal;
     font-size: 15px;
@@ -736,7 +741,7 @@ a::after{
 
 .my-day p {
     font-size: 18px;
-    color: gray;
+    color: #9f9898;
 }
 
 /* .my-day {
