@@ -205,7 +205,7 @@ a::after{
     height: 2px;
     background-color: #fffcfc;
     border-radius: 10px;
-    border: 1px solid #c8bfbf;
+    /* border: 1px solid #c8bfbf; */
     overflow: hidden;
     position: relative;
     top: 245px;
@@ -213,7 +213,7 @@ a::after{
 }
 #progress-fill {
     height: 100%;
-    background-color: #5c5c5c;
+    background-color:rgb(164 164 185);
     width: 0%; 
     transition: width 1s linear;
 }
@@ -281,7 +281,7 @@ a::after{
 }
 
 .progress-circle {
-    stroke: #a9a9a9;
+    stroke:rgb(189 189 200);
     stroke-width: 7;
     stroke-dasharray: 440; 
     stroke-dashoffset: 440; 
@@ -560,10 +560,6 @@ a::after{
     margin-top: 420px;
 }
 
-.dashboard-link:hover,.history-link:hover{
-    background-color:#b5b5b5;
-    color: white;
-}
 
 .profilediv{
     display: flex;
@@ -1074,4 +1070,16 @@ body.dark-mode #plus{
     margin-right: 70px;
     cursor: pointer;
     background-color: #d1d7e0;
+}
+#users{
+    /* width: 111px; */
+    display:flex;
+    margin-right: 500px;
+}
+#user1{
+    padding-right: 10px;
+    cursor: pointer;
+}
+#user2{
+    cursor: pointer;
 }

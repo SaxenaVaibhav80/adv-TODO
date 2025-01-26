@@ -19,7 +19,7 @@ const socketio=require('socket.io');
 const io=socketio(server)
 const { v4: uuidv4 } = require('uuid');
 const cookiParser= require("cookie-parser")
-const { Socket } = require("dgram")
+// const { Socket } = require("dgram")
 dotenv.config()
 const secret_key=process.env.SECRET_KEY
 app.use(bodyParser.urlencoded({extended:true}))
@@ -238,7 +238,7 @@ app.post('/TODO', authenticated,async(req, res) => {
  
     const taskId = newTask._id;
 
-    if(user.mode=="Solo Mode" || user.mode=="Dual Mode" && roomId==null && joinId==null)
+    if(user.mode=="Solo Mode" || user.mode=="Dual Mode" && user.roomId==null && user.joinId==null)
     {
         res.json({ status: 'added', mode:"solo",taskid:taskId});
     }
@@ -248,7 +248,7 @@ app.post('/TODO', authenticated,async(req, res) => {
     }
     if(user.mode =="Dual Mode" && (user.joinId)!=null)
     {
-        res.json({ status:'added',mode:"dual",id:user.roomId,taskid:taskId});
+        res.json({ status:'added',mode:"dual",id:user.joinId,taskid:taskId});
     }
     
 });
@@ -343,39 +343,39 @@ app.post("/joined",authenticated,async(req,res)=>
 })
 // ----------------------------- sending users-------------------------------->
 
-app.get("/usersname",authenticated,async(req,res)=>
-{
-    const users= await userby_id(req,res)
-    console.log("user",users)
-    const roomid= users.roomId
-    const joinid= users.joinId
+// app.get("/usersname",authenticated,async(req,res)=>
+// {
+//     const users= await userby_id(req,res)
+//     console.log("user",users)
+//     const roomid= users.roomId
+//     const joinid= users.joinId
 
-    console.log(roomid,joinid)
+//     console.log(roomid,joinid)
 
-    if(roomid)
-    {
-       const other = await userModel.findOne({joinId:roomid})
-       console.log(other)
-       if(other!=null || other!=undefined)
-       {
-        res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
-       }else{
-        res.status(200).json({selfname:users.firstname,selfid:users._id,othername:null,otherid:null,mode:"dual"})
-       }
+//     if(roomid)
+//     {
+//        const other = await userModel.findOne({joinId:roomid})
+//        console.log(other)
+//        if(other!=null || other!=undefined)
+//        {
+//         res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
+//        }else{
+//         res.status(200).json({selfname:users.firstname,selfid:users._id,othername:null,otherid:null,mode:"dual"})
+//        }
        
-    }
-    else if(joinid)
-    {
-       console.log(roomid)
-       const other = await userModel.findOne({roomId:joinid})
-       console.log("other",other)
-       res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
-    }
-    else{
+//     }
+//     else if(joinid)
+//     {
+//        console.log(roomid)
+//        const other = await userModel.findOne({roomId:joinid})
+//        console.log("other",other)
+//        res.status(200).json({selfname:users.firstname,selfid:users._id,othername:other.firstname,otherid:other._id,mode:"dual"})
+//     }
+//     else{
 
-        res.status(200).json({name:users.firstname,id:users._id,mode:"solo"})
-    }
-})
+//         res.status(200).json({name:users.firstname,id:users._id,mode:"solo"})
+//     }
+// })
 
 // about page handler ------------------------------------->
 
@@ -383,6 +383,8 @@ app.get("/about",(req,res)=>
 {
     res.render("aboutus")
 })
+
+
 
 // socket connection--------------------------------------------->
 io.on("connection", async(socket) => {
@@ -392,6 +394,38 @@ io.on("connection", async(socket) => {
     // socketsInRoom.forEach((s) => {
     //     console.log(`Socket ID: ${s.id}`);
     // });
+
+    socket.on("connect", () => {
+        console.log("Socket reconnected!");
+    })
+
+    socket.on("token",async(token)=>
+    {
+      if(token)
+      {
+        try{
+            const verify=jwt.verify(token,secret_key)
+            const id = verify.id
+            const user = await userModel.findOne({_id:id})
+      
+            if(user.roomId!=null)
+            {
+              await join(user.roomId) 
+            }
+            if(user.joinId!=null)
+            {
+              await join(user.joinId) 
+            }
+        }catch(err)
+        {
+          console.log("error")
+        }
+        
+      }
+      
+    })
+
+
     socket.on("roomid",async(id)=>
     {
       await join(id) 
@@ -404,11 +438,11 @@ io.on("connection", async(socket) => {
         // console.log(socket)
         // console.log("joined",id)
         
-        // const socketsInRoom = await io.in(id).fetchSockets();
-        // console.log(`Active Sockets: ${socketsInRoom.length}`);
-        // socketsInRoom.forEach((s) => {
-        //     console.log(`Socket ID: ${s.id}`);
-        // });
+        const socketsInRoom = await io.in(id).fetchSockets();
+        console.log(`Active Sockets: ${socketsInRoom.length}`);
+        socketsInRoom.forEach((s) => {
+            console.log(`Socket ID: ${s.id}`);
+        });
     }
     socket.on("ijoined",(data)=>
     {
@@ -432,6 +466,12 @@ io.on("connection", async(socket) => {
     socket.on("leaveme",(id)=>
     {
         socket.leave(id);
+    })
+
+    socket.on("message",(data)=>
+    {
+        // console.log(data[0],data[1])
+        io.to(data[1]).emit("dualtask",[data[0],data[2]])
     })
    
     // -------- checks how many sockets are active----------->
@@ -925,7 +965,6 @@ app.get("/TODO", authenticated, async (req, res) => {
 
 app.get("/getCurrent", authenticated, async (req, res) => {
     const token = req.cookies.token;
-
     if (!token) {
         return res.status(401).json({ error: "User not authenticated" });
     }
@@ -955,10 +994,13 @@ app.get("/getCurrent", authenticated, async (req, res) => {
 
       
         const filter = roomId ? { roomId } : { joinId };
-        const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.joinId }] });
+        console.log("filtterrrrrrrrrrrrrrrrrrrr",filter)
 
-      
-        const relatedTasks = await Promise.all(
+        if(filter.roomId!=null)
+        {
+            const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.roomId }] });
+            console.log("userssssssss", relatedUsers)
+            const relatedTasks = await Promise.all(
             relatedUsers.map(async (relatedUser) => {
                 const tasksData = await taskModel.findOne({ userid: relatedUser._id });
                 return {
@@ -968,68 +1010,38 @@ app.get("/getCurrent", authenticated, async (req, res) => {
                 };
             })
         );
-
+        console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
         return res.json({ mode: "dual", users: relatedTasks });
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Server error" });
-    }
-});
+        }else if(filter.joinId!=null)
+        {
 
-
-app.get("/getCurrent", authenticated, async (req, res) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        return res.status(401).json({ error: "User not authenticated" });
-    }
-
-    try {
-      
-        const user = await userby_id(req, res);
-        const { mode, roomId, joinId, _id: userId } = user;
-
-      
-        const currentData = await taskModel.findOne({ userid: userId });
-
-        if (!currentData) {
-            return res.status(404).json({ error: "No data found for this user." });
-        }
-
-       
-        if (mode === "Solo Mode" || (mode==="Dual Mode" && roomId==null && joinId==null)) {
-            return res.json({
-                mode: "solo",
-                user: {
-                    name: user.firstname,
-                    tasks: currentData.current,
-                    progress: currentData.current.progress
-                }
-            });
-        }
-
-      s
-        const filter = roomId ? { roomId } : { joinId };
-        const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.joinId }] });
-
-        
-        const relatedTasks = await Promise.all(
+            const relatedUsers = await userModel.find({ $or: [{ roomId: filter.joinId }, { joinId: filter.joinId }] });
+            console.log("userssssssss", relatedUsers)
+            const relatedTasks = await Promise.all(
             relatedUsers.map(async (relatedUser) => {
                 const tasksData = await taskModel.findOne({ userid: relatedUser._id });
                 return {
-                    name: relatedUser.firstname,
+                    name: relatedUser.name,
                     tasks: tasksData ? tasksData.current : [],
-                    progress: tasksData.current.progress ? tasksData.current.progress : 0
+                    progress: tasksData ? tasksData.progress : null
                 };
             })
         );
-
+        console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
         return res.json({ mode: "dual", users: relatedTasks });
+        }
+        
+        
+        
+
+        
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "Server error" });
     }
 });
+
+
 
 
 
