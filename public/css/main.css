@@ -3,7 +3,7 @@
     font-family: "Open Sans", sans-serif;
 }
 body{
-    background: #d6e4f0;
+    background: rgb(206, 206, 219);
 }
 .body{
     display: flex;
@@ -227,7 +227,7 @@ a::after{
 }
 
 #profile {
-    background-color: #93a3ca;
+    background-color: rgb(169, 169, 188);
     width: 40px;
     height: 40px;
     border-radius: 70px;
@@ -346,7 +346,7 @@ a::after{
 #suggestedbtn{
     user-select: none;
     text-align: center;
-    background-color: #adbada;
+    background-color: rgb(189, 189, 200);
     margin-top: 15px;
     border-radius: 10px;
     color: white;
@@ -381,7 +381,7 @@ a::after{
     position: absolute;
     border-radius: 15px;
     color: white;
-    background-color:#adbada;
+    background-color: rgb(95, 92, 113);
     /* background-color: #b1afbb; */
 }
 
@@ -395,7 +395,7 @@ a::after{
     position: absolute;
     border-radius: 15px;
     color: white;
-    background-color: #adbada;
+    background-color: rgb(177, 175, 187);
 }
 
 #overlay {
