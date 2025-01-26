@@ -3,7 +3,7 @@
     font-family: "Open Sans", sans-serif;
 }
 body{
-    background: rgb(206 206 219);
+    background: #d6e4f0;
 }
 .body{
     display: flex;
@@ -146,6 +146,7 @@ a::after{
     width: 46%;
     height: 16.5px;
     cursor: pointer;
+    border: 1px solid rgb(81 81 81);
 }
 
 #lightouter {
@@ -226,7 +227,7 @@ a::after{
 }
 
 #profile {
-    background-color: rgb(169 169 188);
+    background-color: #93a3ca;
     width: 40px;
     height: 40px;
     border-radius: 70px;
@@ -277,7 +278,7 @@ a::after{
 }
 
 .background-circle {
-    stroke: #e0e0e0;
+    stroke: #f6f6f6;
 }
 
 .progress-circle {
@@ -319,7 +320,7 @@ a::after{
     border-radius: 10px; 
 }
 #suggestdiv {
-    background-color: #e5e4e9;
+    background-color: #f6f6f6;
     margin-top: 25px;
     width: 190px;
     /* border: 1px solid black; */
@@ -329,7 +330,7 @@ a::after{
     margin-left: 37px;
 }
 .my-day{
-    color: #a8a7bb;
+    color: #1b2137;
 }
 .my-day p{
     color: #a8a7bb;
@@ -345,7 +346,7 @@ a::after{
 #suggestedbtn{
     user-select: none;
     text-align: center;
-    background-color: rgb(189 189 200);
+    background-color: #adbada;
     margin-top: 15px;
     border-radius: 10px;
     color: white;
@@ -380,7 +381,7 @@ a::after{
     position: absolute;
     border-radius: 15px;
     color: white;
-    background-color:#5f5c71;
+    background-color:#adbada;
     /* background-color: #b1afbb; */
 }
 
@@ -394,7 +395,7 @@ a::after{
     position: absolute;
     border-radius: 15px;
     color: white;
-    background-color: #b1afbb;
+    background-color: #adbada;
 }
 
 #overlay {
@@ -515,7 +516,7 @@ a::after{
 }
 
 .dashboard-link{
-    background-color: #e5e4e9;
+    background-color: #f6f6f6;
     padding: 11px;
     margin-left: 15px;
     border-radius: 12px;
@@ -527,7 +528,7 @@ a::after{
     text-decoration: none;
 }
 .history-link{
-    background-color: #e5e4e9;
+    background-color: #f6f6f6;
     padding: 11px;
     margin-left: 15px;
     border-radius: 12px;
@@ -550,7 +551,7 @@ a::after{
 .home,.contact,.setting,.logout{
     display: flex;
     align-items: center;
-    background-color: #e5e4e9;
+    background-color: #f6f6f6;
     padding: 7px;
     border-radius: 12px;
     color: #3e3e3e;
@@ -592,7 +593,7 @@ a::after{
     /* height: 80px; */
     padding: 15px;
     border-radius: 12px;
-    background-color: #dedede;
+    background-color: #eaf4fc;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -700,7 +701,7 @@ a::after{
 
 
 .status-button.pending {
-    background-color: #b3b3b3;
+    background-color: #adbada;
     color: #333;
     margin-bottom: 10px;
 }
@@ -848,18 +849,6 @@ body.dark-mode #mode{
     margin-left: 65px;
     color: #d1d7e0;
     text-decoration: none;
-}
-
-body.dark-mode #progress-bar {
-    width: 80%;
-    height: 2px;
-    background-color: #fffcfc;
-    border-radius: 10px;
-    border: 1px solid #141414;
-    overflow: hidden;
-    position: relative;
-    top: 245px;
-    left: 30px;
 }
 body.dark-mode #lmode{
     margin-left: 10px;
