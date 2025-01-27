@@ -447,7 +447,7 @@ io.on("connection", async(socket) => {
     socket.on("ijoined",(data)=>
     {
         console.log("joinid",data.id)
-        io.to(data.id).emit("joineduser")
+        io.to(data.id).emit("joineduser",data.name)
     })
     socket.on("add",(id,data)=>
     {
@@ -471,7 +471,7 @@ io.on("connection", async(socket) => {
     socket.on("message",(data)=>
     {
         // console.log(data[0],data[1])
-        io.to(data[1]).emit("dualtask",[data[0],data[2]])
+        io.to(data[1]).emit("dualtask",[data[0],data[2],data[3]])
     })
    
     // -------- checks how many sockets are active----------->
@@ -920,12 +920,16 @@ app.get("/TODO", authenticated, async (req, res) => {
     console.log("called")
     if (token) {
         try {
-            const user = await userby_id(req, res);
+            const verification= jwt.verify(token,secret_key)
+            const userid= verification.id
+            const user = await userModel.findOne({_id:userid})
+            // console.log(user)
             const name = user.firstname;
             const id = user._id;
             const currentDate = new Date();
             const date = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}-${String(currentDate.getDate()).padStart(2, "0")}`;
             const mode = user.mode;
+            // console.log(mode)
             const currentData = await taskModel.findOne({ userid: id });
 
             if (!currentData) {
