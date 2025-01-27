@@ -307,6 +307,27 @@ app.get("/join-room",authenticated,async(req,res)=>
     }
 })
 
+// serving history page ------------------------------------>
+
+app.get("/history",authenticated,async(req,res)=>
+    {
+        const token = req.cookies.token
+        if(token)
+        {
+            try{
+                const verification = jwt.verify(token,secret_key)
+                const id = verification.id
+                const user = await userModel.findOne({_id:id})
+                const name = user.firstname
+                const mode=user.mode
+                res.render("history",{firstname:name})
+            }catch(err){
+                res.redirect("/logout")
+            }
+        }else{
+            res.render("history")
+        }
+    })
 
 // handling join room handler----------------------------------->
 
