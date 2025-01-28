@@ -1012,7 +1012,7 @@ app.get("/getCurrent", authenticated, async (req, res) => {
 
  
         const currentData = await taskModel.findOne({ userid: userId });
-
+        const filter = roomId ? { roomId } : { joinId };
         if (!currentData) {
             return res.status(404).json({ error: "No data found for this user." });
         }
@@ -1026,48 +1026,43 @@ app.get("/getCurrent", authenticated, async (req, res) => {
                 }
             });
         }
-
-      
-        const filter = roomId ? { roomId } : { joinId };
-        console.log("filtterrrrrrrrrrrrrrrrrrrr",filter)
-
-        if(filter.roomId!=null)
-        {
-            const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.roomId }] });
-            console.log("userssssssss", relatedUsers)
-            const relatedTasks = await Promise.all(
-            relatedUsers.map(async (relatedUser) => {
-                const tasksData = await taskModel.findOne({ userid: relatedUser._id });
-                return {
-                    tasks: tasksData ? tasksData.current : [],
-                    progress: tasksData ? tasksData.progress : null
-                };
-            })
-        );
-        console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
-        return res.json({ mode: "dual", users: relatedTasks });
-        }else if(filter.joinId!=null)
-        {
-
-            const relatedUsers = await userModel.find({ $or: [{ roomId: filter.joinId }, { joinId: filter.joinId }] });
-            console.log("userssssssss", relatedUsers)
-            const relatedTasks = await Promise.all(
-            relatedUsers.map(async (relatedUser) => {
-                const tasksData = await taskModel.findOne({ userid: relatedUser._id });
-                return {
-                    tasks: tasksData ? tasksData.current : [],
-                    progress: tasksData ? tasksData.progress : null
-                };
-            })
-        );
-        console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
-        return res.json({ mode: "dual", users: relatedTasks });
+        else if(mode==="Dual Mode" && filter!=null){
+            console.log("filtterrrrrrrrrrrrrrrrrrrr",filter)
+    
+            if(filter.roomId!=null)
+            {
+                const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.roomId }] });
+                console.log("userssssssss", relatedUsers)
+                const relatedTasks = await Promise.all(
+                relatedUsers.map(async (relatedUser) => {
+                    const tasksData = await taskModel.findOne({ userid: relatedUser._id });
+                    return {
+                        tasks: tasksData ? tasksData.current : [],
+                        progress: tasksData ? tasksData.progress : null
+                    };
+                })
+            );
+            console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
+            return res.json({ mode: "dual", users: relatedTasks });
+            }else if(filter.joinId!=null)
+            {
+    
+                const relatedUsers = await userModel.find({ $or: [{ roomId: filter.joinId }, { joinId: filter.joinId }] });
+                console.log("userssssssss", relatedUsers)
+                const relatedTasks = await Promise.all(
+                relatedUsers.map(async (relatedUser) => {
+                    const tasksData = await taskModel.findOne({ userid: relatedUser._id });
+                    return {
+                        tasks: tasksData ? tasksData.current : [],
+                        progress: tasksData ? tasksData.progress : null
+                    };
+                })
+            );
+            console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
+            return res.json({ mode: "dual", users: relatedTasks });
+            }
         }
-        
-        
-        
-
-        
+        return res.json({ mode: "dual", users: null });
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "Server error" });

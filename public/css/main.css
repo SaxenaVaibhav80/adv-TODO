@@ -1175,11 +1175,15 @@ body.dark-mode #plus{
     cursor: pointer;
     background-color: #d1d7e0;
 }
-#users{
+
+#users {
+    position: absolute;
+    left: 20px;
     /* width: 111px; */
-    display:flex;
+    display: flex;
     margin-right: 500px;
 }
+
 body.dark-mode #user1{
     color: #2d283e;
     background-color: #92969d;

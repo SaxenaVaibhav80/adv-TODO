@@ -29,8 +29,9 @@ joinbtn.addEventListener("click", async () => {
             if(data.countuser==true)
             {
                 alert("room full")
+                window.location.href = "/TODO";
             }
-            if (data.redirectTo) {
+            if (data.redirectTo && data.countuser!=true) {
                 const name = localStorage.getItem("name")
                 const userid = localStorage.getItem("id")
                 await socket.emit("ijoined",{id,name,userid})  // message pehle phuchega or joining baad me hogi room ki  

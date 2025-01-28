@@ -432,7 +432,7 @@ outer.addEventListener("click",async(event)=>
                             },
                             body: JSON.stringify({ roomid:modes.joinid,mode:"Solo Mode"}),
                         })
-                       }else{
+                       }else if(modes.roomid!=null){
                         socket.emit("todisconnect",modes.roomid)
                         fetch("/makeMyRoomidEmpty",{
                             method:"POST",
@@ -727,154 +727,158 @@ function clickUser1()
         myDayDiv.appendChild(date);
     
         lists.appendChild(myDayDiv);
-        users.forEach(async(user) => {
-            if (user.tasks.name === storedName) {
-                localStorage.setItem("selected",user.tasks.name)
-                if(user.tasks.tasks.length===0)
-                {
-                    if (!document.querySelector(".emptymsg")) {
-                        const div = document.createElement("div");
-                        div.classList.add("emptymsg");
-            
-                        const img = document.createElement("img");
-                        const theme = await checktheme()
-                        // console.log(theme)
-                        if(theme =="Dark mode")
-                        {
-                            img.setAttribute("src", "/img/empty (1).png");
-                        }else{
-                            img.setAttribute("src", "/img/empty (2).png");
+        if(users!=null)
+        {
+            users.forEach(async(user) => {
+                if (user.tasks.name === storedName) {
+                    localStorage.setItem("selected",user.tasks.name)
+                    if(user.tasks.tasks.length===0)
+                    {
+                        if (!document.querySelector(".emptymsg")) {
+                            const div = document.createElement("div");
+                            div.classList.add("emptymsg");
+                
+                            const img = document.createElement("img");
+                            const theme = await checktheme()
+                            // console.log(theme)
+                            if(theme =="Dark mode")
+                            {
+                                img.setAttribute("src", "/img/empty (1).png");
+                            }else{
+                                img.setAttribute("src", "/img/empty (2).png");
+                            }
+                            
+                            img.classList.add("empty");
+                
+                            const btn = document.createElement("div");
+                            btn.textContent = "Add items to lists";
+                            btn.classList.add("emptybtn")
+                            if(theme=="Dark mode")
+                            {
+                                btn.id = "addTODO";
+                            }else{
+                                btn.id="addTODOLight"
+                            }
+                            
+                            btn.addEventListener('click', () => {
+                                document.getElementById('overlay').classList.add('show');
+                            });
+                            document.getElementById("progressValue").innerHTML =  `${0}%`;
+                            div.appendChild(img);
+                            div.appendChild(btn);
+                            
+                            lists.appendChild(div);
                         }
-                        
-                        img.classList.add("empty");
+                    }
+                    else{
+                        localStorage.setItem("selected",user.tasks.name)
+                        const flexContainer = document.createElement("div");
+                    flexContainer.classList.add("flex-container");
+                    user.tasks.tasks.forEach(task=>
+                    {
+                        const main = document.createElement("div");
+                        main.classList.add("main");
+                        main.id=`${task._id}` 
             
-                        const btn = document.createElement("div");
-                        btn.textContent = "Add items to lists";
-                        btn.classList.add("emptybtn")
-                        if(theme=="Dark mode")
-                        {
-                            btn.id = "addTODO";
-                        }else{
-                            btn.id="addTODOLight"
-                        }
-                        
-                        btn.addEventListener('click', () => {
-                            document.getElementById('overlay').classList.add('show');
+                        const icon = document.createElement("div");
+                        icon.classList.add("icon");
+            
+                        const skills = document.createElement("img");
+                        skills.classList.add("skills");
+                        skills.setAttribute("src", task.imgUrl || "/img/default.png");
+            
+                        icon.appendChild(skills);
+                        main.appendChild(icon);
+            
+                        const writtenPart = document.createElement("div");
+                        writtenPart.classList.add("written-part");
+            
+                        const title = document.createElement("h3");
+                        title.classList.add("title");
+                        title.textContent = task.title || "Untitled Task";
+            
+                        const data = document.createElement("div");
+                        data.classList.add("data");
+                        data.textContent = task.data || "No details provided";
+            
+                        const createdOn = document.createElement("div");
+                        createdOn.classList.add("created-on");
+                        createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
+                        createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
+    
+                        writtenPart.appendChild(title);
+                        writtenPart.appendChild(data);
+                        writtenPart.appendChild(createdOn);
+                        main.appendChild(writtenPart);
+            
+                       
+                        const statusOptions = document.createElement("div");
+                        statusOptions.classList.add("status-options");
+            
+                        const statusButton = document.createElement("button");
+                        statusButton.classList.add("status-button", "pending");
+                        statusButton.textContent = task.status;
+            
+                        statusButton.addEventListener("click", async() => {
+                            if (statusButton.classList.contains("pending")) {
+                                await setstatus(task._id,"Completed")
+                                statusButton.textContent = "Completed";
+                                statusButton.classList.remove("pending");
+                                statusButton.classList.add("complete");
+                            } 
                         });
-                        document.getElementById("progressValue").innerHTML =  `${0}%`;
-                        div.appendChild(img);
-                        div.appendChild(btn);
+            
+                        statusOptions.appendChild(statusButton);
+            
+                        const options = document.createElement("div");
+                        options.classList.add("options");
+            
+                        const edit = document.createElement("img");
+                        edit.setAttribute("src", "/img/editing.png");
+                        edit.classList.add("footer-icon");
+                        edit.classList.add("edit");
+                
+            
+                        const del = document.createElement("img");
+                        del.setAttribute("src", "/img/bin.png");
+                        del.classList.add("footer-icon");
+                        del.classList.add("delete");
+                        del.addEventListener("click",()=>
+                        {
+                           deletetask(task._id)
+            
+                        })
+                
+                        const refresh = document.createElement("img");
+                        refresh.setAttribute("src", "/img/sync.png");
+                        refresh.classList.add("footer-icon");
+                        refresh.classList.add("refresh");
+            
+                        refresh.addEventListener("click",async()=>{
                         
-                        lists.appendChild(div);
+                           await setstatus(task._id,"Complete")
+                           statusButton.textContent = "Complete";
+                           statusButton.classList.add("pending");
+                           statusButton.classList.remove("complete");
+                           
+                        })
+                
+            
+                        options.appendChild(edit);
+                        options.appendChild(del);
+                        options.appendChild(refresh);
+            
+                        statusOptions.appendChild(options);
+                        main.appendChild(statusOptions);
+            
+                        flexContainer.appendChild(main);
+                    })
+                    lists.appendChild(flexContainer);
                     }
                 }
-                else{
-                    localStorage.setItem("selected",user.tasks.name)
-                    const flexContainer = document.createElement("div");
-                flexContainer.classList.add("flex-container");
-                user.tasks.tasks.forEach(task=>
-                {
-                    const main = document.createElement("div");
-                    main.classList.add("main");
-                    main.id=`${task._id}` 
+            });
+        }
         
-                    const icon = document.createElement("div");
-                    icon.classList.add("icon");
-        
-                    const skills = document.createElement("img");
-                    skills.classList.add("skills");
-                    skills.setAttribute("src", task.imgUrl || "/img/default.png");
-        
-                    icon.appendChild(skills);
-                    main.appendChild(icon);
-        
-                    const writtenPart = document.createElement("div");
-                    writtenPart.classList.add("written-part");
-        
-                    const title = document.createElement("h3");
-                    title.classList.add("title");
-                    title.textContent = task.title || "Untitled Task";
-        
-                    const data = document.createElement("div");
-                    data.classList.add("data");
-                    data.textContent = task.data || "No details provided";
-        
-                    const createdOn = document.createElement("div");
-                    createdOn.classList.add("created-on");
-                    createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
-                    createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
-
-                    writtenPart.appendChild(title);
-                    writtenPart.appendChild(data);
-                    writtenPart.appendChild(createdOn);
-                    main.appendChild(writtenPart);
-        
-                   
-                    const statusOptions = document.createElement("div");
-                    statusOptions.classList.add("status-options");
-        
-                    const statusButton = document.createElement("button");
-                    statusButton.classList.add("status-button", "pending");
-                    statusButton.textContent = task.status;
-        
-                    statusButton.addEventListener("click", async() => {
-                        if (statusButton.classList.contains("pending")) {
-                            await setstatus(task._id,"Completed")
-                            statusButton.textContent = "Completed";
-                            statusButton.classList.remove("pending");
-                            statusButton.classList.add("complete");
-                        } 
-                    });
-        
-                    statusOptions.appendChild(statusButton);
-        
-                    const options = document.createElement("div");
-                    options.classList.add("options");
-        
-                    const edit = document.createElement("img");
-                    edit.setAttribute("src", "/img/editing.png");
-                    edit.classList.add("footer-icon");
-                    edit.classList.add("edit");
-            
-        
-                    const del = document.createElement("img");
-                    del.setAttribute("src", "/img/bin.png");
-                    del.classList.add("footer-icon");
-                    del.classList.add("delete");
-                    del.addEventListener("click",()=>
-                    {
-                       deletetask(task._id)
-        
-                    })
-            
-                    const refresh = document.createElement("img");
-                    refresh.setAttribute("src", "/img/sync.png");
-                    refresh.classList.add("footer-icon");
-                    refresh.classList.add("refresh");
-        
-                    refresh.addEventListener("click",async()=>{
-                    
-                       await setstatus(task._id,"Complete")
-                       statusButton.textContent = "Complete";
-                       statusButton.classList.add("pending");
-                       statusButton.classList.remove("complete");
-                       
-                    })
-            
-        
-                    options.appendChild(edit);
-                    options.appendChild(del);
-                    options.appendChild(refresh);
-        
-                    statusOptions.appendChild(options);
-                    main.appendChild(statusOptions);
-        
-                    flexContainer.appendChild(main);
-                })
-                lists.appendChild(flexContainer);
-                }
-            }
-        });
         })
         .catch((error) => console.error("Error fetching current tasks:", error));
 }
@@ -916,6 +920,7 @@ function clickUser2()
     .then((data) => {
 
     const users = data.users
+    console.log(users)
     const lists = document.getElementById("lists"); 
     lists.innerHTML = ""; 
     const myDayDiv = document.createElement("div");
@@ -933,150 +938,152 @@ function clickUser2()
     myDayDiv.appendChild(date);
 
     lists.appendChild(myDayDiv);
-    users.forEach(async(user) => {
-        if (user.tasks.name != storedName) {
-            localStorage.setItem("selected",user.tasks.name)
-            if(user.tasks.tasks.length===0)
-                {
-                    if (!document.querySelector(".emptymsg")) {
-                        const div = document.createElement("div");
-                        div.classList.add("emptymsg");
-            
-                        const img = document.createElement("img");
-                        const theme = await checktheme()
-                        console.log(theme)
-                        if(theme =="Dark mode")
-                        {
-                            img.setAttribute("src", "/img/empty (1).png");
-                        }else{
-                            img.setAttribute("src", "/img/empty (2).png");
-                        }
-                        
-                        img.classList.add("empty");
-            
-                        const btn = document.createElement("div");
-                        btn.textContent = "Add items to lists";
-                        btn.classList.add("emptybtn")
-                        if(theme=="Dark mode")
-                        {
-                            btn.id = "addTODO";
-                        }else{
-                            btn.id="addTODOLight"
-                        }
-                        
-                        btn.addEventListener('click', () => {
-                            document.getElementById('overlay').classList.add('show');
-                        });
-                        // -------------------------------------------------------------------------->
-                        
-                        div.appendChild(img);
-                        div.appendChild(btn);
-                        
-                        lists.appendChild(div);
-                    } 
-                }
-                else{
-                    localStorage.setItem("selected",user.tasks.name)
-                    const flexContainer = document.createElement("div");
-                    flexContainer.classList.add("flex-container");
-            user.tasks.tasks.forEach(task=>
-            {
-                const main = document.createElement("div");
-                main.classList.add("main");
-                main.id=`${task._id}` 
-    
-                const icon = document.createElement("div");
-                icon.classList.add("icon");
-    
-                const skills = document.createElement("img");
-                skills.classList.add("skills");
-                skills.setAttribute("src", task.imgUrl || "/img/default.png");
-    
-                icon.appendChild(skills);
-                main.appendChild(icon);
-    
-                const writtenPart = document.createElement("div");
-                writtenPart.classList.add("written-part");
-    
-                const title = document.createElement("h3");
-                title.classList.add("title");
-                title.textContent = task.title || "Untitled Task";
-    
-                const data = document.createElement("div");
-                data.classList.add("data");
-                data.textContent = task.data || "No details provided";
-    
-                const createdOn = document.createElement("div");
-                createdOn.classList.add("created-on");
-                createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
-                const strong = document.createElement("strong")
-                strong.appendChild(createdOn)
-
-                writtenPart.appendChild(title);
-                writtenPart.appendChild(data);
-                writtenPart.appendChild(createdOn);
-                main.appendChild(writtenPart);
-    
-               
-                const statusOptions = document.createElement("div");
-                statusOptions.classList.add("status-options");
-    
-                const statusButton = document.createElement("button");
-                statusButton.classList.add("status-button", "pending");
-                statusButton.textContent = task.status;
-
-                statusOptions.appendChild(statusButton);
-    
-                // const options = document.createElement("div");
-                // options.classList.add("options");
-    
-                // const edit = document.createElement("img");
-                // edit.setAttribute("src", "/img/editing.png");
-                // edit.classList.add("footer-icon");
-                // edit.classList.add("edit");
-        
-    
-                // const del = document.createElement("img");
-                // del.setAttribute("src", "/img/bin.png");
-                // del.classList.add("footer-icon");
-                // del.classList.add("delete");
-                // del.addEventListener("click",()=>
-                // {
-                //     console.log(task._id)
-                //    deletetask(task._id)
-    
-                // })
-        
-                // const refresh = document.createElement("img");
-                // refresh.setAttribute("src", "/img/sync.png");
-                // refresh.classList.add("footer-icon");
-                // refresh.classList.add("refresh");
-    
-                // refresh.addEventListener("click",async()=>{
+    if(users!=null)
+    {
+        users.forEach(async(user) => {
+            if (user.tasks.name != storedName) {
+                localStorage.setItem("selected",user.tasks.name)
+                if(user.tasks.tasks.length===0)
+                    {
+                        if (!document.getElementsByClassName("emptymsg")[0]) {
+                            const div = document.createElement("div");
+                            div.classList.add("emptymsg");
                 
-                //    await setstatus(task._id,"Complete")
-                //    statusButton.textContent = "Complete";
-                //    statusButton.classList.add("pending");
-                //    statusButton.classList.remove("complete");
-                   
-                // })
+                            const img = document.createElement("img");
+                            const theme = await checktheme()
+                            console.log(theme)
+                            if(theme =="Dark mode")
+                            {
+                                img.setAttribute("src", "/img/empty (1).png");
+                            }else{
+                                img.setAttribute("src", "/img/empty (2).png");
+                            }
+                            
+                            img.classList.add("empty");
+                
+                            const btn = document.createElement("div");
+                            btn.textContent = "Add items to lists";
+                            btn.classList.add("emptybtn")
+                            if(theme=="Dark mode")
+                            {
+                                btn.id = "addTODO";
+                            }else{
+                                btn.id="addTODOLight"
+                            }
+                            
+                            btn.addEventListener('click', () => {
+                                document.getElementById('overlay').classList.add('show');
+                            });
+                            // -------------------------------------------------------------------------->
+                            
+                            div.appendChild(img);
+                            div.appendChild(btn);
+                            
+                            lists.appendChild(div);
+                        } 
+                    }
+                    else{
+                        localStorage.setItem("selected",user.tasks.name)
+                        const flexContainer = document.createElement("div");
+                        flexContainer.classList.add("flex-container");
+                user.tasks.tasks.forEach(task=>
+                {
+                    const main = document.createElement("div");
+                    main.classList.add("main");
+                    main.id=`${task._id}` 
         
+                    const icon = document.createElement("div");
+                    icon.classList.add("icon");
+        
+                    const skills = document.createElement("img");
+                    skills.classList.add("skills");
+                    skills.setAttribute("src", task.imgUrl || "/img/default.png");
+        
+                    icon.appendChild(skills);
+                    main.appendChild(icon);
+        
+                    const writtenPart = document.createElement("div");
+                    writtenPart.classList.add("written-part");
+        
+                    const title = document.createElement("h3");
+                    title.classList.add("title");
+                    title.textContent = task.title || "Untitled Task";
+        
+                    const data = document.createElement("div");
+                    data.classList.add("data");
+                    data.textContent = task.data || "No details provided";
+        
+                    const createdOn = document.createElement("div");
+                    createdOn.classList.add("created-on");
+                    createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
+                    const strong = document.createElement("strong")
+                    strong.appendChild(createdOn)
     
-                // options.appendChild(edit);
-                // options.appendChild(del);
-                // options.appendChild(refresh);
+                    writtenPart.appendChild(title);
+                    writtenPart.appendChild(data);
+                    writtenPart.appendChild(createdOn);
+                    main.appendChild(writtenPart);
+        
+                   
+                    const statusOptions = document.createElement("div");
+                    statusOptions.classList.add("status-options");
+        
+                    const statusButton = document.createElement("button");
+                    statusButton.classList.add("status-button", "pending");
+                    statusButton.textContent = task.status;
     
-                // statusOptions.appendChild(options);
-                // main.appendChild(statusOptions);
-    
-                flexContainer.appendChild(main);
-            })
-            lists.appendChild(flexContainer);
+                    statusOptions.appendChild(statusButton);
+        
+                    // const options = document.createElement("div");
+                    // options.classList.add("options");
+        
+                    // const edit = document.createElement("img");
+                    // edit.setAttribute("src", "/img/editing.png");
+                    // edit.classList.add("footer-icon");
+                    // edit.classList.add("edit");
+            
+        
+                    // const del = document.createElement("img");
+                    // del.setAttribute("src", "/img/bin.png");
+                    // del.classList.add("footer-icon");
+                    // del.classList.add("delete");
+                    // del.addEventListener("click",()=>
+                    // {
+                    //     console.log(task._id)
+                    //    deletetask(task._id)
+        
+                    // })
+            
+                    // const refresh = document.createElement("img");
+                    // refresh.setAttribute("src", "/img/sync.png");
+                    // refresh.classList.add("footer-icon");
+                    // refresh.classList.add("refresh");
+        
+                    // refresh.addEventListener("click",async()=>{
+                    
+                    //    await setstatus(task._id,"Complete")
+                    //    statusButton.textContent = "Complete";
+                    //    statusButton.classList.add("pending");
+                    //    statusButton.classList.remove("complete");
+                       
+                    // })
+            
+        
+                    // options.appendChild(edit);
+                    // options.appendChild(del);
+                    // options.appendChild(refresh);
+        
+                    // statusOptions.appendChild(options);
+                    // main.appendChild(statusOptions);
+        
+                    flexContainer.appendChild(main);
+                })
+                lists.appendChild(flexContainer);
+                }
             }
-        }
-    });
-    })
-    .catch((error) => console.error("Error fetching current tasks:", error)); 
+        });
+    }
+    }).catch((error) => console.error("Error fetching current tasks:", error)); 
 }
 
 
@@ -1165,12 +1172,8 @@ function displayDualMode(users) {
     
  if(user2Element || user2Element!=null)
     {
-       
-       user2Element.addEventListener("click",()=>
-        {
-           clickUser2() 
-        })
-        
+        user2Element.removeEventListener("click", clickUser2); // Works only if `clickUser2` was previously added
+        user2Element.addEventListener("click", clickUser2);
     }
 
     users.forEach(user => {
@@ -1332,7 +1335,7 @@ async function sendroomID()
 // })
 
 socket.on("joineduser", (data) => {
-    // console.log("I joined");
+    console.log("I joined");
     const name = data.name
     const userid = data.userid
     if (localStorage.getItem("name") !== name) {
@@ -1368,7 +1371,7 @@ socket.on("joineduser", (data) => {
                     clickUser2()
                 })
         }
-        }
+    }
 
 
         if (!document.getElementById("progress-ring2")) {
