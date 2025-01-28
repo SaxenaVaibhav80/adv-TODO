@@ -8,7 +8,141 @@
     <link href="/css/history.css" rel="stylesheet">
 </head>
 <body>
-    <h1>History</h1>
+    <div class="body">
+        <div id="left-slider">
+          <div class="profilediv">
+            <div id="profile">
+                <svg height="40" width="40" style="font-family: 'Josefin Sans'">
+                    <text x="11" y="31" fill="white" font-size="27"><%= firstname.charAt(0).toUpperCase()%></text>
+                </svg>
+            </div>
+            <a id="name"> Hello <%= firstname %></a>
+          </div>
+    
+          <a href="/" class="iconlink">
+            <div class="home">
+                  <div id="style" class="homestyle">
+                      <img src="/img/newhome.png" id="homeicon">
+                  </div>  
+                  <div class="home-description">Home</div>
+            </div>
+          </a>
+    
+          <a href="/contactus" class="iconlink">
+            <div class="contact">
+                    <div id="style" class="contactstyle" >
+                        <img src="/img/phone3.png" id="contacticon">
+                    </div>
+                <div class="contact-description">Contact us </div>
+            </div>
+          </a>
+          
+          <a href="/setting" class="iconlink">
+            <div class="setting">
+                <div id="style" class="settingstyle">
+                    <img src="/img/settings.png" id="settingicon">
+                </div>
+                <div class="setting-description">Settings</div>
+            </div>
+          </a>
+    
+          <a href="/logout" class="iconlink">
+            <div class="logout">
+                <div id="style" class="logoutstyle">
+                    <img src="/img/logout2.png" id="logouticon">
+                </div>
+                <div class="logout-description">Logout</div>
+            </div>
+          </a>
+          
+        </div>
+        <div id="mid">
+            <nav class="navbar">
+                
+                <div id="lightouter">
+                    <div id="lightball"><img src="/img/lightmode.png" id="light"></div>
+                </div>
+                <a id="lmode">Light mode</a>
+                <a class="navaddtask">Previous 30 Tasks</a> 
+                <!-- <img src="/img/more.png" id="plus"> -->
+            </nav>
+        
+            
+            <div id="lists">
+               
+            
+            </div>
+            
+        </div>
+        <!-- -------------------changes -->
+        <div id="right-slider">
+            <a href="/dashboard" class="dashboard-link">
+                <div class="dashboard">
+                    <img src="/img/user3.png" id="dashboardprofileicon">
+                    <div class="dash-description">Dashboard</div>
+                </div>
+            </a>
+            <!-- <a href="/history" class="history-link" >
+                <div class="history">
+                    <img src="/img/history.png" id="historyicon">
+                    <div class="history-description">Previous 30 Tasks</div>
+                </div>
+            </a> -->
+        
+            <!-- <div id="suggestdiv">
+                <p id="suggestedPara"> 
+                    Get task recommendations that help you add tasks to your task list, which will improve your life.
+                </p>
+                <div id="suggestedbtn">Task recommendation</div>
+            </div> -->
+    
+            <!-- <div class="progress-ring">
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <circle
+                        class="progress-ring-circle background-circle"
+                        cx="75" cy="75" r="65" stroke-width="6">
+                    </circle>
+                    <circle
+                        class="progress-ring-circle progress-circle"
+                        cx="75" cy="75" r="65" stroke-width="6">
+                    </circle>
+                </svg>
+                <div class="progress-value" id="progressValue">0%</div>
+            </div>
+    
+            <div id="progress-bar">
+                <div id="progress-fill"></div>
+            </div>
+            
+            <p id="timer"></p> -->
+        </div>
+    </div>
+    <div id="overlay">
+        <div id="taskform">
+            <img id="close" src="/img/close.png">
+              <div id="formcontent">
+                <input placeholder=" Add title" id="title" name="title" required>
+                <select name="category" id="category">
+                    <option value="" selected>Select task catagory</option>
+                    <option value="help">help</option>
+                    <option value="food">food</option>
+                    <option value="skills">skills</option>
+                    <option value="learn">learn</option>
+                  </select>
+            
+                  <select name="priority" id="priority">
+                    <option value="" selected>Select task priority</option>
+                    <option value="high">high</option>
+                    <option value="moderate">moderate</option>
+                    <option value="low">low</option>
+                  </select>
+        
+                  <textarea id="data" name="data" placeholder="Enter description" required></textarea>
+        
+                  <button type="submit" id="addit"> Add Task</button>
+              </div>
+        </div>  
+    </div>
 
 <script src="/js/history.js"></script>
 </body>
