@@ -8,6 +8,10 @@ const taskModel = new mongoose.Schema({
     },
     current:
     {
+        id: {
+            type: String,
+            required: true 
+        },
         date:{
          type:String,
          default:null

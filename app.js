@@ -19,6 +19,7 @@ const socketio=require('socket.io');
 const io=socketio(server)
 const { v4: uuidv4 } = require('uuid');
 const cookiParser= require("cookie-parser")
+const { info } = require("console")
 // const { Socket } = require("dgram")
 dotenv.config()
 const secret_key=process.env.SECRET_KEY
@@ -158,6 +159,7 @@ app.post("/signup",async(req,res)=>
     const task = await taskModel.create({
        userid:user._id,
        current:{
+        id:user._id,
         name:user.firstname,
         date:formattedDate
        },
@@ -468,7 +470,9 @@ io.on("connection", async(socket) => {
     socket.on("ijoined",(data)=>
     {
         console.log("joinid",data.id)
-        io.to(data.id).emit("joineduser",data.name)
+        const name = data.name
+        const userid=data.userid
+        io.to(data.id).emit("joineduser",{name,userid})
     })
     socket.on("add",(id,data)=>
     {
@@ -493,6 +497,13 @@ io.on("connection", async(socket) => {
     {
         // console.log(data[0],data[1])
         io.to(data[1]).emit("dualtask",[data[0],data[2],data[3]])
+    })
+
+    socket.on("otherProgress",(information)=>
+    { 
+        const name = information.name
+        const progress=information.progress
+        io.to(information.room).emit("setOtherProgress",{name,progress})
     })
    
     // -------- checks how many sockets are active----------->
@@ -1010,7 +1021,6 @@ app.get("/getCurrent", authenticated, async (req, res) => {
             return res.json({
                 mode: "solo",
                 user: {
-                    name: user.name,
                     tasks: currentData.current,
                     progress: currentData.progress
                 }
@@ -1029,7 +1039,6 @@ app.get("/getCurrent", authenticated, async (req, res) => {
             relatedUsers.map(async (relatedUser) => {
                 const tasksData = await taskModel.findOne({ userid: relatedUser._id });
                 return {
-                    name: relatedUser.name,
                     tasks: tasksData ? tasksData.current : [],
                     progress: tasksData ? tasksData.progress : null
                 };
@@ -1046,7 +1055,6 @@ app.get("/getCurrent", authenticated, async (req, res) => {
             relatedUsers.map(async (relatedUser) => {
                 const tasksData = await taskModel.findOne({ userid: relatedUser._id });
                 return {
-                    name: relatedUser.name,
                     tasks: tasksData ? tasksData.current : [],
                     progress: tasksData ? tasksData.progress : null
                 };
@@ -1209,5 +1217,28 @@ app.get("/getProgress", authenticated, async (req, res) => {
         res.status(401).send("Unauthorized");
     }
 });
+
+
+app.post("/otherProgress",authenticated,async(req,res)=>
+{
+    console.log("otherprogress")
+    const id = req.body.id
+
+    const tasks = await taskModel.findOne({ userid: id });
+    if (tasks && tasks.current.tasks.length > 0) {
+
+        const completedTasksCount = tasks.current.tasks.filter(
+            (task) => task.status === "Completed"
+        ).length;
+
+        const totaltask = tasks.current.tasks.length;
+        const percent = (completedTasksCount / totaltask) * 100;
+        console.log(percent);
+        res.status(200).json({ progress: percent.toFixed(0) }); 
+    } else {
+        res.status(200).json({ progress: 0 }); 
+    }
+    
+})
 
 server.listen(1000)

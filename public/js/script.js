@@ -23,6 +23,9 @@ checkAdduserState();
 themestate()
 getProgress()
 
+
+
+
 window.addEventListener("pageshow", (event) => {
     if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
         checkLoginState();
@@ -73,6 +76,18 @@ function updateProgress(value) {
 
     const progressCircle = document.querySelector('.progress-circle');
     const progressValue = document.getElementById('progressValue');
+
+    const radius = 70; 
+    const circumference = 2 * Math.PI * radius; 
+    const offset = circumference - (value / 100) * circumference;
+    progressCircle.style.strokeDashoffset = offset;  
+    progressValue.textContent = `${value}%`;
+}
+
+function updateProgress2(value) {
+    console.log(value)
+    const progressCircle = document.querySelector('.progress-circle2');
+    const progressValue = document.getElementById('progressValue2');
 
     const radius = 70; 
     const circumference = 2 * Math.PI * radius; 
@@ -163,8 +178,62 @@ async function setstatus(id,status)
    }) 
 }
 
+function addingRing2 ()
+{
+    const rightDiv = document.getElementById("right-slider");
+                        
+                          
+    const progressRingWrapper = document.createElement("div");
+    progressRingWrapper.id = "progress-ring2"; 
 
 
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "150");
+    svg.setAttribute("height", "150");
+    svg.setAttribute("viewBox", "0 0 150 150");
+
+    
+    const backgroundCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    backgroundCircle.classList.add("progress-ring-circle2", "background-circle2");
+    backgroundCircle.setAttribute("cx", "75");
+    backgroundCircle.setAttribute("cy", "75");
+    backgroundCircle.setAttribute("r", "65");
+    backgroundCircle.setAttribute("stroke-width", "6");
+
+    
+    const progressCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    progressCircle.classList.add("progress-ring-circle2", "progress-circle2");
+    progressCircle.setAttribute("cx", "75");
+    progressCircle.setAttribute("cy", "75");
+    progressCircle.setAttribute("r", "65");
+    progressCircle.setAttribute("stroke-width", "6");
+
+    
+    svg.appendChild(backgroundCircle);
+    svg.appendChild(progressCircle);
+
+   
+    const progressValue = document.createElement("div");
+    progressValue.classList.add("progress-value");
+    progressValue.id = "progressValue2"; 
+    progressValue.textContent = "0%";
+
+    const other = document.createElement("p")
+    other.classList.add("other")
+    other.textContent="other"
+  
+    progressRingWrapper.appendChild(svg);
+    progressRingWrapper.appendChild(progressValue);
+    progressRingWrapper.appendChild(other);
+
+   
+    const children = rightDiv.children; 
+    if (children.length >= 3) {
+        rightDiv.insertBefore(progressRingWrapper, children[3]); 
+    } else {
+        rightDiv.appendChild(progressRingWrapper); 
+    }
+}
 
 function checkLoginState(){
     
@@ -218,6 +287,8 @@ function  checkAdduserState(){
                 
             }
         else{
+                localStorage.setItem("room","")
+                localStorage.setItem("otheruserid","")
                 document.getElementById("outer").classList.remove("shift-right")
                 document.getElementById("outer").classList.add("shift-left")  
                 document.getElementById("mode").innerHTML='Solo Mode'   
@@ -339,7 +410,12 @@ outer.addEventListener("click",async(event)=>
             
                 if(modes.mode=="Solo Mode")
                     {   
-    
+                       if(document.getElementById("progress-ring2"))
+                       {
+                        
+                       }
+                       localStorage.setItem("otheruserid","")
+                       localStorage.setItem("room","")
                        if(document.getElementById("users"))
                        {
                         const nav = document.getElementsByClassName("navbar")[0]
@@ -423,6 +499,7 @@ fetch("/getCurrent", { method: "GET" })
             displaySoloMode(data.user);
         } else if (data.mode === "dual") {
             console.log("Mode: Dual");
+            console.log(data)
             displayDualMode(data.users);
         }
     })
@@ -485,7 +562,7 @@ async function displaySoloMode(user) {
             btn.addEventListener('click', () => {
                 document.getElementById('overlay').classList.add('show');
             });
-            document.getElementById("progressValue").innerHTML = 0;
+            document.getElementById("progressValue").innerHTML = `${0}%`;
             div.appendChild(img);
             div.appendChild(btn);
             
@@ -525,7 +602,7 @@ async function displaySoloMode(user) {
             const createdOn = document.createElement("div");
             createdOn.classList.add("created-on");
             createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
-
+            createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
             writtenPart.appendChild(title);
             writtenPart.appendChild(data);
             writtenPart.appendChild(createdOn);
@@ -601,6 +678,27 @@ async function displaySoloMode(user) {
 function clickUser1()
 {
         console.log("1")
+        const user1=document.getElementById("user1")
+        const user2 = document.getElementById("user2")
+        if(user2)
+        {
+          user2.style.backgroundColor=" #a7a7b4"
+          user2.style.padding = "2px 10px";
+          user2.style.cursor = "pointer";
+          user2.style.borderRadius = "5px";
+          user2.style.color="white"
+          user2.style.marginLeft = "20px";
+        }
+        
+        if(user1)
+        {
+            user1.style.backgroundColor=" #80808b"
+            user1.style.padding = "2px 10px";
+            user1.style.color="white"
+            user1.style.cursor = "pointer";
+            user1.style.borderRadius = "5px";
+            user1.style.marginLeft = "20px";
+        }
         const storedName = localStorage.getItem("name")
         fetch("/getCurrent", { method: "GET" })
         .then((res) => {
@@ -663,7 +761,7 @@ function clickUser1()
                         btn.addEventListener('click', () => {
                             document.getElementById('overlay').classList.add('show');
                         });
-                        document.getElementById("progressValue").innerHTML = 0;
+                        document.getElementById("progressValue").innerHTML =  `${0}%`;
                         div.appendChild(img);
                         div.appendChild(btn);
                         
@@ -704,7 +802,8 @@ function clickUser1()
                     const createdOn = document.createElement("div");
                     createdOn.classList.add("created-on");
                     createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
-        
+                    createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
+
                     writtenPart.appendChild(title);
                     writtenPart.appendChild(data);
                     writtenPart.appendChild(createdOn);
@@ -784,6 +883,28 @@ function clickUser1()
 function clickUser2()
 {
     console.log("user22222")
+    const user1=document.getElementById("user1")
+    const user2 = document.getElementById("user2")
+    if(user1)
+    {
+      user1.style.backgroundColor=" #a7a7b4"
+      user1.style.padding = "2px 10px";
+      user1.style.cursor = "pointer";
+      user1.style.color="white"
+      user1.style.borderRadius = "5px";
+      user1.style.marginLeft = "20px";
+    }
+    
+    if(user2)
+    {
+        user2.style.backgroundColor=" #80808b"
+        user2.style.padding = "2px 10px";
+        user2.style.cursor = "pointer";
+        user2.style.color="white"
+        user2.style.borderRadius = "5px";
+        user2.style.marginLeft = "20px";
+    }
+  
     const storedName = localStorage.getItem("name")
     fetch("/getCurrent", { method: "GET" })
     .then((res) => {
@@ -846,7 +967,8 @@ function clickUser2()
                         btn.addEventListener('click', () => {
                             document.getElementById('overlay').classList.add('show');
                         });
-                        document.getElementById("progressValue").innerHTML = 0;
+                        // -------------------------------------------------------------------------->
+                        
                         div.appendChild(img);
                         div.appendChild(btn);
                         
@@ -886,8 +1008,10 @@ function clickUser2()
     
                 const createdOn = document.createElement("div");
                 createdOn.classList.add("created-on");
-                createdOn.textContent = `Created on: ${task.created_at || "Unknown date"}`;
-    
+                createdOn.innerHTML = `<strong>Created on:</strong> ${task.created_at || "Unknown date"}`;
+                const strong = document.createElement("strong")
+                strong.appendChild(createdOn)
+
                 writtenPart.appendChild(title);
                 writtenPart.appendChild(data);
                 writtenPart.appendChild(createdOn);
@@ -900,16 +1024,7 @@ function clickUser2()
                 const statusButton = document.createElement("button");
                 statusButton.classList.add("status-button", "pending");
                 statusButton.textContent = task.status;
-    
-                statusButton.addEventListener("click", async() => {
-                    if (statusButton.classList.contains("pending")) {
-                        await setstatus(task._id,"Completed")
-                        statusButton.textContent = "Completed";
-                        statusButton.classList.remove("pending");
-                        statusButton.classList.add("complete");
-                    } 
-                });
-    
+
                 statusOptions.appendChild(statusButton);
     
                 // const options = document.createElement("div");
@@ -957,7 +1072,7 @@ function clickUser2()
                 flexContainer.appendChild(main);
             })
             lists.appendChild(flexContainer);
-                }
+            }
         }
     });
     })
@@ -991,6 +1106,14 @@ function displayDualMode(users) {
         console.log("users.length", users.length)
         if(users.length==2)
         {
+            if (!document.getElementById("progress-ring2")) {
+                addingRing2()
+                document.getElementsByClassName("progress-ring")[0].classList.add("progress-ring-shift")
+                document.getElementsByClassName("progress-ring")[0].classList.remove("progress-ring")
+
+                document.getElementById("timer").id="timer-shift"
+                document.getElementById("progress-bar").id="progress-bar-shift"
+             }
             const div = document.createElement("div");
             div.id = "users";
             const user1 = document.createElement("p");
@@ -999,16 +1122,26 @@ function displayDualMode(users) {
             user2.id = "user2";
             div.appendChild(user1);
             div.appendChild(user2);
-    
+            user1.style.backgroundColor=" #80808b"
+            user1.style.padding = "2px 10px";
+            user1.style.cursor = "pointer";
+            user1.style.borderRadius = "5px";
+            user1.style.marginLeft = "20px";
             const nav = document.getElementsByClassName("navbar")[0]
             nav.prepend(div);
         }
         if(users.length===1)
         {
+
             const div = document.createElement("div");
             div.id = "users";
             const user1 = document.createElement("p");
-            user1.id = "user1";
+            user1.id="user1"
+            user1.style.backgroundColor=" #80808b"
+            user1.style.padding = "2px 10px";
+            user1.style.cursor = "pointer";
+            user1.style.borderRadius = "5px";
+            user1.style.marginLeft = "20px";
             div.appendChild(user1);
             const nav = document.getElementsByClassName("navbar")[0]
             nav.prepend(div);
@@ -1022,10 +1155,14 @@ function displayDualMode(users) {
 
     clickUser1()
 
-    user1Element.addEventListener("click",()=>
-    {
-        clickUser1()
-    })
+    if(user1Element || user1Element!=null){
+
+        user1Element.addEventListener("click",()=>
+            {
+                clickUser1()
+            })
+    }
+    
  if(user2Element || user2Element!=null)
     {
        
@@ -1041,8 +1178,15 @@ function displayDualMode(users) {
             user1Element.textContent = user.tasks.name
         } else {
             user2Element.textContent = user.tasks.name
+            localStorage.setItem("otheruserid",user.tasks.id)
+            const otherid = localStorage.getItem("otheruserid")
+            // console.log("oyherid :" , otherid)
+            getProgress2(otherid)
+
         }
     });
+
+    
 }
 
 louter.addEventListener("click",async()=>
@@ -1140,7 +1284,7 @@ async function sendroomID()
         if(data.length!=0 && data!="false")
         {
             await socket.emit("roomid",data)
-    
+            localStorage.setItem("room",data)
             if(addbtn!=undefined && joinbtn!= undefined)
             {
                 joinbtn.classList.add("hide")
@@ -1187,11 +1331,15 @@ async function sendroomID()
     
 // })
 
-socket.on("joineduser", (name) => {
-    console.log("I joined");
+socket.on("joineduser", (data) => {
+    // console.log("I joined");
+    const name = data.name
+    const userid = data.userid
     if (localStorage.getItem("name") !== name) {
-        console.log("@@@@@@@@@@@@@@@@@@-----@@@@@@@@@@@@@@@");
+        // console.log("@@@@@@@@@@@@@@@@@@-----@@@@@@@@@@@@@@@");
         const user2 = document.getElementById("user2")
+        localStorage.setItem("otheruserid",userid)
+
         if (!user2 || user2.innerHTML.length === 0) {
             const user= document.createElement("p")
             user.id="user2"
@@ -1214,33 +1362,111 @@ socket.on("joineduser", (name) => {
         const other = document.getElementById("user2")
         if(other)
         {    
-            console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+            // console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
             other.addEventListener("click",()=>
                 {
                     clickUser2()
                 })
         }
         }
+
+
+        if (!document.getElementById("progress-ring2")) {
+            addingRing2()
+            const otherid = localStorage.getItem("otheruserid")
+            const selfid = localStorage.getItem("id")
+
+            // console.log("otherid",otherid)
+            // console.log("selfid",selfid)
+            if(otherid)
+            {
+                getProgress2(otherid)
+            }
+            if(selfid)
+            {
+                getProgress(selfid)
+            }
+            
+           
+            document.getElementsByClassName("progress-ring")[0].classList.add("progress-ring-shift")
+            document.getElementsByClassName("progress-ring")[0].classList.remove("progress-ring")
+            document.getElementById("timer").id="timer-shift"
+            document.getElementById("progress-bar").id="progress-bar-shift"
+        }
+        
 });
 
 
-socket.on("data",(info)=>
-{
-    console.log(info)
-})
+// socket.on("data",(info)=>
+// {
+//     console.log(info)
+// })
 
 socket.on("force_leave",(id)=>
 {  
-    console.log("i got leave message ")
+    // console.log("i got leave message ")
     // fech krk db me roomid ki value null karwao 
+    const usersList = document.getElementById("users")
+    if (usersList) {
+        // console.log("userList", usersList);
+    
+       
+        const userNames = usersList.querySelectorAll("p"); 
+    
+        userNames.forEach((name) => {
+            const self = localStorage.getItem("name")
+            if(name.textContent!==self)
+            {
+                localStorage.setItem("otheruserid","")
 
+        fetch("/getCurrent", { method: "GET" })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error("Failed to fetch data");
+            }
+            return res.json();
+        })
+        .then((data) => {
+    
+            // console.log("data",data)
+            if (data.mode === "solo") {
+                // console.log("Mode: Solo");
+                displaySoloMode(data.user);
+            } else if (data.mode === "dual") {
+                // console.log("Mode: Dual");
+                displayDualMode(data.users);
+            }
+        })
+        .catch((error) => console.error("Error fetching current tasks:", error));
+
+       
+
+            }
+        });
+    }
+
+    if(document.getElementById("progress-ring2"))
+        {
+
+           
+            const rightDiv = document.getElementById("right-slider");
+            const ring = document.getElementById("progress-ring2")
+            const mainRing=document.getElementsByClassName("progress-ring-shift")[0]
+            mainRing.classList.add("progress-ring")
+            mainRing.classList.remove("progress-ring-shift")
+            document.getElementById("timer-shift").id="timer"
+            document.getElementById("progress-bar-shift").id="progress-bar"
+            rightDiv.removeChild(ring)
+
+        }
+   
     if(document.getElementById("users"))
         {
          const nav = document.getElementsByClassName("navbar")[0]
          const users= document.getElementById("users")
          nav.removeChild(users)
         }
-
+   
     fetch("/makeMyRoomidEmpty",{
         method:"POST",
         headers:{
@@ -1264,29 +1490,10 @@ socket.on("force_leave",(id)=>
     document.getElementById("mode").innerHTML='Solo Mode'      
     socket.emit("leaveme",(id))
 
-
-    fetch("/getCurrent", { method: "GET" })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            return res.json();
-        })
-        .then((data) => {
-    
-            console.log("data",data)
-            if (data.mode === "solo") {
-                console.log("Mode: Solo");
-                displaySoloMode(data.user);
-            } else if (data.mode === "dual") {
-                console.log("Mode: Dual");
-                displayDualMode(data.users);
-            }
-        })
-        .catch((error) => console.error("Error fetching current tasks:", error));
-
 })
 
+
+  
 
 // fetch("/accessUid",{
 //     method:"POST"
@@ -1343,6 +1550,16 @@ const timer=setInterval(updateTimer, 1000);
 // }
 
 
+
+socket.on("setOtherProgress",(data)=>
+{
+    console.log("data :",data)
+    if(localStorage.getItem("name")!=data.name)
+    {   console.log("two")
+        updateProgress2(data.progress);
+    }
+})
+
 function getProgress() {
     console.log("Fetching progress...");
     fetch("/getProgress", {
@@ -1350,7 +1567,13 @@ function getProgress() {
     })
         .then((res) => res.json()) 
         .then((data) => {
+
+
             if (data.progress !== undefined) {
+                const progress= data.progress
+                const room = localStorage.getItem("room")
+                const name = localStorage.getItem("name")
+                socket.emit("otherProgress",{room,progress,name})
                 setTimeout(() => {
                     updateProgress(data.progress); 
                 }, 1000);
@@ -1363,7 +1586,38 @@ function getProgress() {
         });
 }
 
-// make event listner when click on (task done) then fetch req krenge whn pr calculate hoke progress db me save ho jyegi or response me whi progress mil jyegi jo ki hum js se dom manipulate krk set krlenge  !!!!! 
+
+function getProgress2(id) {
+
+    // console.log("getProgress2 chala")
+    fetch("/otherProgress", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }), // Sending data in the body
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.progress !== undefined) {
+                setTimeout(() => {
+                    updateProgress2(data.progress); 
+                }, 1000);
+            } else {
+                console.error("Progress value not found in response");
+            }
+        })
+        .catch((error) => console.error("Error:", error));
+}
+
+
+const selfid= localStorage.getItem("id")
+console.log(selfid)
+if(selfid)
+{
+    getProgress(selfid)
+}
+
 
 
 
@@ -1619,9 +1873,9 @@ socket.on("dualtask",(data)=>
     const taskid = data[2]
     // console.log(taskid)
 
-    console.log("name",localStorage.getItem("name"))
-    console.log("selected",localStorage.getItem("selected"))
-    console.log("sender",data[1])
+    // console.log("name",localStorage.getItem("name"))
+    // console.log("selected",localStorage.getItem("selected"))
+    // console.log("sender",data[1])
 
     if(localStorage.getItem("selected")===data[1] && localStorage.getItem("name")==data[1])
     {
@@ -1629,7 +1883,6 @@ socket.on("dualtask",(data)=>
             document.getElementsByClassName("emptymsg")[0].style.display="none"
         } 
 
-        // isme jo tag bnaogi , usme delete , reload or edit ke feature honge 
         const lists = document.getElementById("lists"); 
 
      // ------------------------------------------------------------------------------------------------------------------------------------------------->>
@@ -1726,7 +1979,7 @@ socket.on("dualtask",(data)=>
             taskDiv.querySelector(".status-button").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
-                    await setstatus(data.taskid,"Completed")
+                    await setstatus(taskid,"Completed")
                     statusButton.textContent = "Completed";
                     statusButton.classList.remove("pending");
                     statusButton.classList.add("complete");
@@ -1737,7 +1990,7 @@ socket.on("dualtask",(data)=>
             taskDiv.querySelector(".refresh").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                    await setstatus(data.taskid,"Complete")
+                    await setstatus(taskid,"Complete")
                 statusButton.textContent = "Complete";
                 statusButton.classList.add("pending");
                 statusButton.classList.remove("complete");
@@ -1761,7 +2014,7 @@ socket.on("dualtask",(data)=>
     else if(localStorage.getItem("selected")===data[1] && localStorage.getItem("name")!=data[1])
     {
 
-        console.log("del ni rhega")
+        // console.log("del ni rhega")
          // isme jo tag bnaogi , usme delete , reload or edit ke feature  nahi honge 
          if(document.getElementsByClassName("emptymsg")[0]){
             document.getElementsByClassName("emptymsg")[0].style.display="none"

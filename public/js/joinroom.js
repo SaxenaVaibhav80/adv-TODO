@@ -32,7 +32,8 @@ joinbtn.addEventListener("click", async () => {
             }
             if (data.redirectTo) {
                 const name = localStorage.getItem("name")
-                await socket.emit("ijoined",{id,name})  // message pehle phuchega or joining baad me hogi room ki  
+                const userid = localStorage.getItem("id")
+                await socket.emit("ijoined",{id,name,userid})  // message pehle phuchega or joining baad me hogi room ki  
                 window.location.href = data.redirectTo;
 
             }
