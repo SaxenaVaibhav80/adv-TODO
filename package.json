@@ -4,8 +4,8 @@
   "description": "this is adv todo for couple",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js"
-  
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -17,20 +17,18 @@
     "url": "https://github.com/SaxenaVaibhav80/adv-TODO/issues"
   },
   "homepage": "https://github.com/SaxenaVaibhav80/adv-TODO#readme",
-  "dependencies": {
+  "devDependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.2",
+    "mongoose": "^8.9.5",
+    "nodemon": "^3.1.9",
     "socket.io": "^4.8.1",
-    "uuid": "^11.0.3",
+    "uuid": "^11.0.5",
     "web-push": "^3.6.7"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
   }
 }
