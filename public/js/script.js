@@ -192,6 +192,10 @@ async function setstatus(id,status)
     },
     body:JSON.stringify({taskid:id,status:status})
    }).then(() => {
+    const statusButton = taskDiv.querySelector(".status-button")
+    statusButton.textContent = "Complete";
+    statusButton.classList.add("pending");
+    statusButton.classList.remove("complete");
       getProgress()
    }) 
 }
@@ -637,9 +641,9 @@ async function displaySoloMode(user) {
             statusButton.addEventListener("click", async() => {
                 if (statusButton.classList.contains("pending")) {
                     await setstatus(task._id,"Completed")
-                    statusButton.textContent = "Completed";
-                    statusButton.classList.remove("pending");
-                    statusButton.classList.add("complete");
+                    // statusButton.textContent = "Completed";
+                    // statusButton.classList.remove("pending");
+                    // statusButton.classList.add("complete");
                 } 
             });
 
@@ -671,11 +675,7 @@ async function displaySoloMode(user) {
 
             refresh.addEventListener("click",async()=>{
             
-               await setstatus(task._id,"Complete")
-               statusButton.textContent = "Complete";
-               statusButton.classList.add("pending");
-               statusButton.classList.remove("complete");
-               
+               await setstatus(task._id,"Complete") 
             })
     
 
@@ -840,9 +840,9 @@ function clickUser1()
                         statusButton.addEventListener("click", async() => {
                             if (statusButton.classList.contains("pending")) {
                                 await setstatus(task._id,"Completed")
-                                statusButton.textContent = "Completed";
-                                statusButton.classList.remove("pending");
-                                statusButton.classList.add("complete");
+                                // statusButton.textContent = "Completed";
+                                // statusButton.classList.remove("pending");
+                                // statusButton.classList.add("complete");
                             } 
                         });
             
@@ -875,9 +875,9 @@ function clickUser1()
                         refresh.addEventListener("click",async()=>{
                         
                            await setstatus(task._id,"Complete")
-                           statusButton.textContent = "Complete";
-                           statusButton.classList.add("pending");
-                           statusButton.classList.remove("complete");
+                        //    statusButton.textContent = "Complete";
+                        //    statusButton.classList.add("pending");
+                        //    statusButton.classList.remove("complete");
                            
                         })
                 
@@ -1773,9 +1773,9 @@ document.getElementById("addit").addEventListener("click", (e) => {
                     const statusButton=taskDiv.querySelector(".status-button")
                     if (statusButton.innerHTML=="Complete") {
                         await setstatus(data.taskid,"Completed")
-                        statusButton.textContent = "Completed";
-                        statusButton.classList.remove("pending");
-                        statusButton.classList.add("complete");
+                        // statusButton.textContent = "Completed";
+                        // statusButton.classList.remove("pending");
+                        // statusButton.classList.add("complete");
                     } 
                 })
 
@@ -1783,9 +1783,9 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 {   const statusButton=taskDiv.querySelector(".status-button")
                     if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
                         await setstatus(data.taskid,"Complete")
-                        statusButton.textContent = "Complete";
-                        statusButton.classList.add("pending");
-                        statusButton.classList.remove("complete");
+                        // statusButton.textContent = "Complete";
+                        // statusButton.classList.add("pending");
+                        // statusButton.classList.remove("complete");
     
                     } 
                 })
@@ -1819,9 +1819,9 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 {   const statusButton=taskDiv.querySelector(".status-button")
                     if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
                         await setstatus(data.taskid,"Completed")
-                        statusButton.textContent = "Completed";
-                        statusButton.classList.remove("pending");
-                        statusButton.classList.add("complete");
+                        // statusButton.textContent = "Completed";
+                        // statusButton.classList.remove("pending");
+                        // statusButton.classList.add("complete");
     
                     } 
                 })
@@ -1830,9 +1830,9 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 {   const statusButton=taskDiv.querySelector(".status-button")
                     if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
                         await setstatus(data.taskid,"Complete")
-                    statusButton.textContent = "Complete";
-                    statusButton.classList.add("pending");
-                    statusButton.classList.remove("complete");
+                    // statusButton.textContent = "Complete";
+                    // statusButton.classList.add("pending");
+                    // statusButton.classList.remove("complete");
 
                 } 
                 })
@@ -1955,9 +1955,9 @@ socket.on("dualtask",async(data)=>
                 if (statusButton.innerHTML=="Complete") {
                     console.log("completed")
                     await setstatus(taskid,"Completed")
-                    statusButton.textContent = "Completed";
-                    statusButton.classList.remove("pending");
-                    statusButton.classList.add("complete");
+                    // statusButton.textContent = "Completed";
+                    // statusButton.classList.remove("pending");
+                    // statusButton.classList.add("complete");
                 } 
             })
         
@@ -1966,9 +1966,9 @@ socket.on("dualtask",async(data)=>
                 console.log("refresssss")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
                     await setstatus(taskid,"Complete")
-                    statusButton.textContent = "Complete";
-                    statusButton.classList.add("pending");
-                    statusButton.classList.remove("complete");
+                    // statusButton.textContent = "Complete";
+                    // statusButton.classList.add("pending");
+                    // statusButton.classList.remove("complete");
         
                 } 
             })
@@ -2002,9 +2002,9 @@ socket.on("dualtask",async(data)=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
                     await setstatus(taskid,"Completed")
-                    statusButton.textContent = "Completed";
-                    statusButton.classList.remove("pending");
-                    statusButton.classList.add("complete");
+                    // statusButton.textContent = "Completed";
+                    // statusButton.classList.remove("pending");
+                    // statusButton.classList.add("complete");
         
                 } 
             })
@@ -2013,9 +2013,9 @@ socket.on("dualtask",async(data)=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
                     await setstatus(taskid,"Complete")
-                statusButton.textContent = "Complete";
-                statusButton.classList.add("pending");
-                statusButton.classList.remove("complete");
+                // statusButton.textContent = "Complete";
+                // statusButton.classList.add("pending");
+                // statusButton.classList.remove("complete");
         
             } 
             })
