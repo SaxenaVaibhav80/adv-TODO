@@ -211,7 +211,8 @@ async function setstatus(id, status) {
         return "done";
 
     } catch (err) {
-        alert("Error: " + err.message);
+        console.log("Error: " + err.message);
+        alert("No interner")
         return "error";  
     }
 }
