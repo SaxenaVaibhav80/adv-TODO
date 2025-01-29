@@ -25,7 +25,7 @@ dotenv.config()
 const secret_key=process.env.SECRET_KEY
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookiParser())
-
+const PORT = process.env.PORT
 
 
 // function for user get user by _id------>
@@ -1245,4 +1245,4 @@ app.post("/otherProgress",authenticated,async(req,res)=>
     
 })
 
-server.listen(1000)
+server.listen(PORT)
