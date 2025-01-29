@@ -430,9 +430,9 @@ io.on("connection", async(socket) => {
     //     console.log(`Socket ID: ${s.id}`);
     // });
 
-    socket.on("connect", () => {
-        console.log("Socket reconnected!");
-    })
+    // socket.on("connect", () => {
+    //     console.log("Socket reconnected!");
+    // })
 
     socket.on("token",async(token)=>
     {

@@ -19,6 +19,12 @@ socket.on("connect", () => {
 });
 
 
+window.addEventListener('offline', () => {
+    console.log('Network disconnected');
+    window.location.href="/TODO"
+});
+
+
 fetch('/api/login', {
     method: 'POST',
 })
