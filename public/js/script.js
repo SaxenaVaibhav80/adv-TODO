@@ -206,7 +206,7 @@ async function setstatus(id,status)
       return "done"
    }).catch()
    {
-    alert("No internet")
+    alert("No Hekko")
    }
 }
 
