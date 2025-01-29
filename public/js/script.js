@@ -662,7 +662,7 @@ async function displaySoloMode(user) {
 
             statusButton.addEventListener("click", async() => {
                 if (statusButton.classList.contains("pending")) {
-                    const result = await setstatus(data.taskid, "Completed");
+                    const result = await setstatus(task._id, "Completed");
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Completed";
                         statusButton.classList.add("complete");
@@ -672,6 +672,7 @@ async function displaySoloMode(user) {
                    
                 } 
             });
+
 
             statusOptions.appendChild(statusButton);
 
@@ -701,7 +702,7 @@ async function displaySoloMode(user) {
 
             refresh.addEventListener("click",async()=>{
             
-                const result = await setstatus(data.taskid, "Complete");
+                const result = await setstatus(task._id, "Complete");
 
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Complete";
@@ -871,7 +872,7 @@ function clickUser1()
             
                         statusButton.addEventListener("click", async() => {
                             if (statusButton.classList.contains("pending")) {
-                                const result = await setstatus(data.taskid, "Completed");
+                                const result = await setstatus(task._id, "Completed");
                                 if (result === "done") {  // Ensure it's completed
                                     statusButton.textContent = "Completed";
                                     statusButton.classList.add("complete");
@@ -908,7 +909,7 @@ function clickUser1()
             
                         refresh.addEventListener("click",async()=>{
                         
-                            const result = await setstatus(data.taskid, "Complete");
+                            const result = await setstatus(task._id, "Complete");
 
                             if (result === "done") {  // Ensure it's completed
                                 statusButton.textContent = "Complete";
@@ -2001,7 +2002,7 @@ socket.on("dualtask",async(data)=>
                 console.log(statusButton)
                 if (statusButton.innerHTML=="Complete") {
                     console.log("completed")
-                    const result = await setstatus(data.taskid, "Completed");
+                    const result = await setstatus(taskid, "Completed");
 
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Completed";
@@ -2015,7 +2016,7 @@ socket.on("dualtask",async(data)=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 console.log("refresssss")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                    const result = await setstatus(data.taskid, "Complete");
+                    const result = await setstatus(taskid, "Complete");
 
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Complete";
@@ -2053,7 +2054,7 @@ socket.on("dualtask",async(data)=>
             taskDiv.querySelector(".status-button").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
-                    const result = await setstatus(data.taskid, "Completed");
+                    const result = await setstatus(taskid, "Completed");
 
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Completed";
@@ -2067,7 +2068,7 @@ socket.on("dualtask",async(data)=>
             taskDiv.querySelector(".refresh").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                    const result = await setstatus(data.taskid, "Complete");
+                    const result = await setstatus(taskid, "Complete");
 
                     if (result === "done") {  // Ensure it's completed
                         statusButton.textContent = "Complete";
