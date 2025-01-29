@@ -95,11 +95,21 @@ function updateProgress(value) {
     const progressCircle = document.querySelector('.progress-circle');
     const progressValue = document.getElementById('progressValue');
 
+
+
     const radius = 70; 
     const circumference = 2 * Math.PI * radius; 
     const offset = circumference - (value / 100) * circumference;
     progressCircle.style.strokeDashoffset = offset;  
     progressValue.textContent = `${value}%`;
+
+    const room = localStorage.getItem("room")
+    const name = localStorage.getItem("name")
+    if(localStorage.getItem("otheruserid")!=""){
+        const progress=value
+        // console.log("ab if ke ander ghussaaaa proress ke")
+        socket.emit("otherProgress",{room,progress,name})
+    }
 }
 
 function updateProgress2(value) {
@@ -1594,13 +1604,13 @@ function getProgress() {
 
             if (data.progress !== undefined) {
                 // console.log("getprogresschalaaaa")
-                const progress= data.progress
-                const room = localStorage.getItem("room")
-                const name = localStorage.getItem("name")
-                if(localStorage.getItem("otheruserid")!=""){
-                    // console.log("ab if ke ander ghussaaaa proress ke")
-                    socket.emit("otherProgress",{room,progress,name})
-                }
+                // const progress= data.progress
+                // const room = localStorage.getItem("room")
+                // const name = localStorage.getItem("name")
+                // if(localStorage.getItem("otheruserid")!=""){
+                //     // console.log("ab if ke ander ghussaaaa proress ke")
+                //     socket.emit("otherProgress",{room,progress,name})
+                // }
                 setTimeout(() => {
                     updateProgress(data.progress); 
                 }, 1000);
