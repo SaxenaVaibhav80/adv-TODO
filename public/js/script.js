@@ -195,7 +195,7 @@ async function deletetask(id)
 
 async function setstatus(id, status) {
     try {
-        console.log("status",status)
+        console.log("status",{status,id})
         const response = await fetch("/setStatus", {
             method: "POST",
             headers: {
