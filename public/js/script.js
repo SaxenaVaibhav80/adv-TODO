@@ -19,9 +19,9 @@ socket.on("connect", () => {
 });
 
 
-window.addEventListener('online', () => {
-    window.location.href="/TODO"
-});
+// window.addEventListener('online', () => {
+//     window.location.href="/TODO"
+// });
 
 
 fetch('/api/login', {
