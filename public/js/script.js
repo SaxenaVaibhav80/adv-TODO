@@ -203,7 +203,7 @@ async function setstatus(id, status) {
     }).then(() => {
         // Task ka parent div dhoondo
         const taskDiv = document.getElementById(id);
-
+        console.log("taskdiv",taskDiv)
         if (taskDiv) {
             if(status === "Completed"){
                 const statusButton = taskDiv.querySelector(".status-options .status-button");
