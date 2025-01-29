@@ -18,10 +18,9 @@ socket.on("connect", () => {
     }
 });
 
-
-// window.addEventListener('online', () => {
-//     window.location.href="/TODO"
-// });
+window.addEventListener('offline', () => {
+    alert("Internet connection is weak or lost!");
+});
 
 
 fetch('/api/login', {
