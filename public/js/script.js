@@ -204,9 +204,9 @@ async function setstatus(id,status)
    }).then(() => {
       getProgress()
       return "done"
-   }).catch()
+   }).catch(err)
    {
-    alert("No Hekko")
+    alert(err)
    }
 }
 
