@@ -69,8 +69,14 @@
         
             
             <div id="lists">
-               
-            
+                          
+            </div>
+
+            <!-- Add Slider and Search -->
+            <div id="date-slider-container">
+                <input type="range" id="date-slider" min="0" max="29" value="0" step="1">
+                <span id="selected-date"></span>
+                <button id="search-btn">Search</button>
             </div>
             
         </div>
@@ -82,67 +88,11 @@
                     <div class="dash-description">Dashboard</div>
                 </div>
             </a>
-            <!-- <a href="/history" class="history-link" >
-                <div class="history">
-                    <img src="/img/history.png" id="historyicon">
-                    <div class="history-description">Previous 30 Tasks</div>
-                </div>
-            </a> -->
-        
-            <!-- <div id="suggestdiv">
-                <p id="suggestedPara"> 
-                    Get task recommendations that help you add tasks to your task list, which will improve your life.
-                </p>
-                <div id="suggestedbtn">Task recommendation</div>
-            </div> -->
-    
-            <!-- <div class="progress-ring">
-                <svg width="150" height="150" viewBox="0 0 150 150">
-                    <circle
-                        class="progress-ring-circle background-circle"
-                        cx="75" cy="75" r="65" stroke-width="6">
-                    </circle>
-                    <circle
-                        class="progress-ring-circle progress-circle"
-                        cx="75" cy="75" r="65" stroke-width="6">
-                    </circle>
-                </svg>
-                <div class="progress-value" id="progressValue">0%</div>
-            </div>
-    
-            <div id="progress-bar">
-                <div id="progress-fill"></div>
-            </div>
             
-            <p id="timer"></p> -->
         </div>
     </div>
-    <div id="overlay">
-        <div id="taskform">
-            <img id="close" src="/img/close.png">
-              <div id="formcontent">
-                <input placeholder=" Add title" id="title" name="title" required>
-                <select name="category" id="category">
-                    <option value="" selected>Select task catagory</option>
-                    <option value="help">help</option>
-                    <option value="food">food</option>
-                    <option value="skills">skills</option>
-                    <option value="learn">learn</option>
-                  </select>
-            
-                  <select name="priority" id="priority">
-                    <option value="" selected>Select task priority</option>
-                    <option value="high">high</option>
-                    <option value="moderate">moderate</option>
-                    <option value="low">low</option>
-                  </select>
-        
-                  <textarea id="data" name="data" placeholder="Enter description" required></textarea>
-        
-                  <button type="submit" id="addit"> Add Task</button>
-              </div>
-        </div>  
-    </div>
+  
+    
 
 <script src="/js/history.js"></script>
 </body>
