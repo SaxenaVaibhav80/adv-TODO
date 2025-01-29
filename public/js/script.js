@@ -193,45 +193,21 @@ async function deletetask(id)
     )
 }
 
-async function setstatus(id, status) {
-    fetch("/setStatus", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ taskid: id, status: status })
-    }).then(() => {
-        // Task ka parent div dhoondo
-        const taskDiv = document.getElementById(id);
-        console.log("taskdiv",taskDiv)
-        if (taskDiv) {
-            if(status === "Completed"){
-                const statusButton = taskDiv.querySelector(".status-options .status-button");
-                console.log("button",statusButton)
-                if (statusButton) {
-                    console.log("completebutton",statusButton)
-                    statusButton.textContent = "Completed";
-                    statusButton.classList.remove("pending");
-                    statusButton.classList.add("complete");
-                }
-            }
-            if(status==="Complete")
-            {
-                const statusButton = taskDiv.querySelector(".status-option button");
-
-                if (statusButton) {
-                    console.log("pendingbutton",statusButton)
-                    statusButton.textContent = "Complete";
-                    statusButton.classList.add("pending");
-                    statusButton.classList.remove("complete");
-                }
-            }
-        }
-
-        // Progress update karna
-        getProgress();
-    });
+async function setstatus(id,status)
+{
+    fetch("/setStatus",{
+    method:"POST",
+    headers:{
+        "Content-Type": "application/json",
+    },
+    body:JSON.stringify({taskid:id,status:status})
+   }).then(() => {
+      getProgress()
+      return "done"
+   }) 
 }
+
+
 
 
 function addingRing2 ()
@@ -674,10 +650,14 @@ async function displaySoloMode(user) {
 
             statusButton.addEventListener("click", async() => {
                 if (statusButton.classList.contains("pending")) {
-                    await setstatus(task._id,"Completed")
-                    // statusButton.textContent = "Completed";
-                    // statusButton.classList.remove("pending");
-                    // statusButton.classList.add("complete");
+                    const result = await setstatus(data.taskid, "Completed");
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Completed";
+                        statusButton.classList.add("complete");
+                        statusButton.classList.remove("pending");
+                    }
+
+                   
                 } 
             });
 
@@ -709,7 +689,13 @@ async function displaySoloMode(user) {
 
             refresh.addEventListener("click",async()=>{
             
-               await setstatus(task._id,"Complete") 
+                const result = await setstatus(data.taskid, "Complete");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Complete";
+                        statusButton.classList.add("pending");
+                        statusButton.classList.remove("complete");
+                    }
             })
     
 
@@ -873,10 +859,12 @@ function clickUser1()
             
                         statusButton.addEventListener("click", async() => {
                             if (statusButton.classList.contains("pending")) {
-                                await setstatus(task._id,"Completed")
-                                // statusButton.textContent = "Completed";
-                                // statusButton.classList.remove("pending");
-                                // statusButton.classList.add("complete");
+                                const result = await setstatus(data.taskid, "Completed");
+                                if (result === "done") {  // Ensure it's completed
+                                    statusButton.textContent = "Completed";
+                                    statusButton.classList.add("complete");
+                                    statusButton.classList.remove("pending");
+                                }
                             } 
                         });
             
@@ -908,10 +896,13 @@ function clickUser1()
             
                         refresh.addEventListener("click",async()=>{
                         
-                           await setstatus(task._id,"Complete")
-                        //    statusButton.textContent = "Complete";
-                        //    statusButton.classList.add("pending");
-                        //    statusButton.classList.remove("complete");
+                            const result = await setstatus(data.taskid, "Complete");
+
+                            if (result === "done") {  // Ensure it's completed
+                                statusButton.textContent = "Complete";
+                                statusButton.classList.add("pending");
+                                statusButton.classList.remove("complete");
+                            }
                            
                         })
                 
@@ -1805,21 +1796,26 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 taskDiv.querySelector(".status-button").addEventListener("click",async()=>
                 {   
                     const statusButton=taskDiv.querySelector(".status-button")
-                    if (statusButton.innerHTML=="Complete") {
-                        await setstatus(data.taskid,"Completed")
-                        // statusButton.textContent = "Completed";
-                        // statusButton.classList.remove("pending");
-                        // statusButton.classList.add("complete");
+                    if (statusButton.innerHTML=="Complete" ||statusButton.textContent=="Complete" ) {
+                        const result = await setstatus(data.taskid, "Completed");
+                        if (result === "done") {  // Ensure it's completed
+                            statusButton.textContent = "Completed";
+                            statusButton.classList.add("complete");
+                            statusButton.classList.remove("pending");
+                        }
                     } 
                 })
 
                 taskDiv.querySelector(".refresh").addEventListener("click",async()=>
                 {   const statusButton=taskDiv.querySelector(".status-button")
-                    if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                        await setstatus(data.taskid,"Complete")
-                        // statusButton.textContent = "Complete";
-                        // statusButton.classList.add("pending");
-                        // statusButton.classList.remove("complete");
+                    if (taskDiv.querySelector(".status-button").innerHTML=="Completed" || taskDiv.querySelector(".status-button").textContent=="Completed") {
+                        const result = await setstatus(data.taskid, "Complete");
+
+                        if (result === "done") {  // Ensure it's completed
+                            statusButton.textContent = "Complete";
+                            statusButton.classList.add("pending");
+                            statusButton.classList.remove("complete");
+                        }
     
                     } 
                 })
@@ -1852,21 +1848,26 @@ document.getElementById("addit").addEventListener("click", (e) => {
                 taskDiv.querySelector(".status-button").addEventListener("click",async()=>
                 {   const statusButton=taskDiv.querySelector(".status-button")
                     if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
-                        await setstatus(data.taskid,"Completed")
-                        // statusButton.textContent = "Completed";
-                        // statusButton.classList.remove("pending");
-                        // statusButton.classList.add("complete");
-    
+                        const result = await setstatus(data.taskid, "Completed");
+
+                        if (result === "done") {  // Ensure it's completed
+                            statusButton.textContent = "Completed";
+                            statusButton.classList.add("complete");
+                            statusButton.classList.remove("pending");
+                        }
                     } 
                 })
     
                 taskDiv.querySelector(".refresh").addEventListener("click",async()=>
                 {   const statusButton=taskDiv.querySelector(".status-button")
                     if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                        await setstatus(data.taskid,"Complete")
-                    // statusButton.textContent = "Complete";
-                    // statusButton.classList.add("pending");
-                    // statusButton.classList.remove("complete");
+                        const result = await setstatus(data.taskid, "Complete");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Complete";
+                        statusButton.classList.add("pending");
+                        statusButton.classList.remove("complete");
+                    }
 
                 } 
                 })
@@ -1988,10 +1989,13 @@ socket.on("dualtask",async(data)=>
                 console.log(statusButton)
                 if (statusButton.innerHTML=="Complete") {
                     console.log("completed")
-                    await setstatus(taskid,"Completed")
-                    // statusButton.textContent = "Completed";
-                    // statusButton.classList.remove("pending");
-                    // statusButton.classList.add("complete");
+                    const result = await setstatus(data.taskid, "Completed");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Completed";
+                        statusButton.classList.add("complete");
+                        statusButton.classList.remove("pending");
+                    }
                 } 
             })
         
@@ -1999,11 +2003,13 @@ socket.on("dualtask",async(data)=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 console.log("refresssss")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                    await setstatus(taskid,"Complete")
-                    // statusButton.textContent = "Complete";
-                    // statusButton.classList.add("pending");
-                    // statusButton.classList.remove("complete");
-        
+                    const result = await setstatus(data.taskid, "Complete");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Complete";
+                        statusButton.classList.add("pending");
+                        statusButton.classList.remove("complete");
+                    }
                 } 
             })
         
@@ -2035,10 +2041,13 @@ socket.on("dualtask",async(data)=>
             taskDiv.querySelector(".status-button").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Complete") {
-                    await setstatus(taskid,"Completed")
-                    // statusButton.textContent = "Completed";
-                    // statusButton.classList.remove("pending");
-                    // statusButton.classList.add("complete");
+                    const result = await setstatus(data.taskid, "Completed");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Completed";
+                        statusButton.classList.add("complete");
+                        statusButton.classList.remove("pending");
+                    }
         
                 } 
             })
@@ -2046,11 +2055,13 @@ socket.on("dualtask",async(data)=>
             taskDiv.querySelector(".refresh").addEventListener("click",async()=>
             {   const statusButton=taskDiv.querySelector(".status-button")
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
-                    await setstatus(taskid,"Complete")
-                // statusButton.textContent = "Complete";
-                // statusButton.classList.add("pending");
-                // statusButton.classList.remove("complete");
-        
+                    const result = await setstatus(data.taskid, "Complete");
+
+                    if (result === "done") {  // Ensure it's completed
+                        statusButton.textContent = "Complete";
+                        statusButton.classList.add("pending");
+                        statusButton.classList.remove("complete");
+                    }
             } 
             })
             const container = document.getElementsByClassName("flex-container")[0];
