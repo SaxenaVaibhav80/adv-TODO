@@ -188,8 +188,11 @@ async function deletetask(id)
             }
     
         }
-    }
-    )
+    })
+    .catch(err => {
+        alert("No internet connection! Please check your network.");
+        console.error("Error:", err);
+    });
 }
 
 async function setstatus(id, status) {
