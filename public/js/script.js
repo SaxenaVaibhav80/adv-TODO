@@ -1,6 +1,24 @@
 const socket = io();
 
 console.log("hiiii")
+
+// const token = localStorage.getItem("token")
+
+localStorage.setItem("reload","0")
+
+socket.on("connect", () => {
+    console.log("Connected to server. My socket ID:", socket.id);
+
+
+    if (localStorage.getItem("reload") === "0") {
+        localStorage.setItem("reload", "1");
+    } else {
+        localStorage.setItem("reload", "0");
+        location.reload();  // Refresh page
+    }
+});
+
+
 fetch('/api/login', {
     method: 'POST',
 })
@@ -9,16 +27,11 @@ fetch('/api/login', {
     localStorage.setItem("token", data.token); 
     localStorage.setItem("id",data.id);
     localStorage.setItem("name",data.name);
+    socket.emit("token",data.token)
     // const extracted_token = localStorage.getItem('token');
     // socket.emit("token",extracted_token)
 })
-const token = localStorage.getItem("token")
 
-socket.on("connect", () => {
-    console.log("Connected to server. My socket ID:", socket.id);
-
-    socket.emit("token",token)
-});
 checkAdduserState();
 themestate()
 getProgress()
@@ -73,7 +86,7 @@ function joinroom()
 
 
 function updateProgress(value) {
-
+    console.log("progress1 value",value)
     const progressCircle = document.querySelector('.progress-circle');
     const progressValue = document.getElementById('progressValue');
 
@@ -85,7 +98,7 @@ function updateProgress(value) {
 }
 
 function updateProgress2(value) {
-    console.log(value)
+    console.log("progress2 value",value)
     const progressCircle = document.querySelector('.progress-circle2');
     const progressValue = document.getElementById('progressValue2');
 
@@ -152,7 +165,7 @@ async function deletetask(id)
                     btn.addEventListener('click', () => {
                         document.getElementById('overlay').classList.add('show');
                     });
-                    document.getElementById("progressValue").innerHTML = 0;
+                    document.getElementById("progressValue").innerHTML = "0%";
                     div.appendChild(img);
                     div.appendChild(btn);
                     
@@ -1337,6 +1350,7 @@ async function sendroomID()
 socket.on("joineduser", (data) => {
     console.log("I joined");
     const name = data.name
+    console.log(name,"outer")
     const userid = data.userid
     if (localStorage.getItem("name") !== name) {
         // console.log("@@@@@@@@@@@@@@@@@@-----@@@@@@@@@@@@@@@");
@@ -1346,6 +1360,7 @@ socket.on("joineduser", (data) => {
         if (!user2 || user2.innerHTML.length === 0) {
             const user= document.createElement("p")
             user.id="user2"
+            console.log(name,"inner")
             user.textContent = name;
             const users= document.getElementById("users")
             users.append(user)
@@ -1387,7 +1402,7 @@ socket.on("joineduser", (data) => {
             }
             if(selfid)
             {
-                getProgress(selfid)
+                getProgress()
             }
             
            
@@ -1573,10 +1588,14 @@ function getProgress() {
 
 
             if (data.progress !== undefined) {
+                console.log("getprogresschalaaaa")
                 const progress= data.progress
                 const room = localStorage.getItem("room")
                 const name = localStorage.getItem("name")
-                socket.emit("otherProgress",{room,progress,name})
+                if(localStorage.getItem("otheruserid")!=""){
+                    console.log("ab if ke ander ghussaaaa proress ke")
+                    socket.emit("otherProgress",{room,progress,name})
+                }
                 setTimeout(() => {
                     updateProgress(data.progress); 
                 }, 1000);
@@ -1614,12 +1633,12 @@ function getProgress2(id) {
 }
 
 
-const selfid= localStorage.getItem("id")
-console.log(selfid)
-if(selfid)
-{
-    getProgress(selfid)
-}
+// const selfid= localStorage.getItem("id")
+// console.log(selfid)
+// if(selfid)
+// {
+//     getProgress(selfid)
+// }
 
 
 

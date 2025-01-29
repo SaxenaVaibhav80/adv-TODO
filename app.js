@@ -501,6 +501,8 @@ io.on("connection", async(socket) => {
 
     socket.on("otherProgress",(information)=>
     { 
+
+        console.log("ghusssaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         const name = information.name
         const progress=information.progress
         io.to(information.room).emit("setOtherProgress",{name,progress})
