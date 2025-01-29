@@ -205,13 +205,24 @@ async function setstatus(id, status) {
         const taskDiv = document.getElementById(id);
 
         if (taskDiv) {
-            // 'status-option' class ke andar button dhundo
-            const statusButton = taskDiv.querySelector(".status-option button");
+            if(status === "Completed"){
+                const statusButton = taskDiv.querySelector(".status-option button");
 
-            if (statusButton) {
-                statusButton.textContent = "Completed";
-                statusButton.classList.add("pending");
-                statusButton.classList.remove("complete");
+                if (statusButton) {
+                    statusButton.textContent = "Completed";
+                    statusButton.classList.remove("pending");
+                    statusButton.classList.add("complete");
+                }
+            }
+            if(status==="Complete")
+            {
+                const statusButton = taskDiv.querySelector(".status-option button");
+
+                if (statusButton) {
+                    statusButton.textContent = "Complete";
+                    statusButton.classList.add("pending");
+                    statusButton.classList.remove("complete");
+                }
             }
         }
 
