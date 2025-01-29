@@ -26,3 +26,41 @@ function themestate() {
         }
     }); 
 }
+
+function generateLast30Dates() {
+    const today = new Date();
+    const dates = [];
+    
+    for (let i = 0; i < 30; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        dates.push(date.toLocaleDateString("en-US"));
+    }
+    
+    return dates;
+}
+
+// Function to handle slider change and update selected date
+function updateSelectedDate(dates) {
+    const slider = document.getElementById("date-slider");
+    const selectedDateSpan = document.getElementById("selected-date");
+    
+    const selectedDate = dates[slider.value];
+    selectedDateSpan.textContent = `Selected Date: ${selectedDate}`;
+}
+
+// Initialize slider with last 30 dates
+const dates = generateLast30Dates();
+updateSelectedDate(dates); // Set initial date display
+
+// Event listener for slider change
+const slider = document.getElementById("date-slider");
+slider.addEventListener("input", () => updateSelectedDate(dates));
+
+// Event listener for search button
+const searchBtn = document.getElementById("search-btn");
+searchBtn.addEventListener("click", () => {
+    const selectedDate = dates[slider.value];
+    alert(`Search for tasks on: ${selectedDate}`);
+    // Implement your search logic here
+});
