@@ -207,7 +207,7 @@ async function setstatus(id, status) {
             throw new Error(`Failed to update status: ${response.status}`);
         }
 
-        await getProgress(); 
+        getProgress(); 
         return "done";
 
     } catch (err) {
