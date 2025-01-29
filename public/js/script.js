@@ -1627,10 +1627,10 @@ function getProgress() {
         .then((res) => res.json()) 
         .then((data) => {
 
-
+            console.log(data.progress)
             if (data.progress !== undefined) {
-                // console.log("getprogresschalaaaa")
-                // const progress= data.progress
+                console.log("getprogresschalaaaa")
+                const progress= data.progress
                 // const room = localStorage.getItem("room")
                 // const name = localStorage.getItem("name")
                 // if(localStorage.getItem("otheruserid")!=""){
