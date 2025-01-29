@@ -100,6 +100,7 @@ const checkLoginState = (req, res, next) => {
 const authenticated = async(req,res,next)=>
 {
     const token = req.cookies.token
+    console.log("tokennnnnnn :", token)
     if(token)
     {
         try{
@@ -213,7 +214,7 @@ app.post("/accessUid",authenticated,async(req,res)=>
 //--------------------------- adding data to the db ----------------------------------------->
 
 
-app.post('/TODO', authenticated,async(req, res) => {
+app.post('/TODO',authenticated,async(req, res) => {
    
     const {imgUrl,title, priority, data,created_at} = req.body;
     const user = await userby_id(req,res)
@@ -407,6 +408,17 @@ app.get("/about",(req,res)=>
     res.render("aboutus")
 })
 
+// app.get("/getVerify", (req, res) => {
+//     const token = req.cookies.token;
+//     if (!token) return res.status(401).json({ status: "logout", message: "No token found" });
+
+//     try {
+//         const verification = jwt.verify(token, secret_key);
+//         return res.status(200).json({ status: "ok", message: "Token is valid" });
+//     } catch (err) {
+//         return res.status(401).json({ status: "logout", message: "Invalid token" });
+//     }
+// });
 
 
 // socket connection--------------------------------------------->
@@ -552,12 +564,9 @@ app.post("/login",async(req,res)=>
             const token = jwt.sign(
                 {id:user._id,name:user.firstname},
                 secret_key,
-                {
-                 expiresIn:'24h'
-                }
             )
             const options={
-                expires:new Date(Date.now()+24*60*60*1000),
+                // expires:new Date(Date.now()+24*60*60*1000),
                 httpOnly:true
             };
             res.status(200).cookie("token",token,options)
@@ -697,7 +706,7 @@ app.post("/modeState",authenticated, async (req, res) => {
 // ----------------------------------handle theme state-------------------------------------->
 
 
-app.post("/themeState",authenticated, async (req, res) => {
+app.get("/api/themeState",authenticated, async (req, res) => {
     const token = req.cookies.token;
 
     if (token) {

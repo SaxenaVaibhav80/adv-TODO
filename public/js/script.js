@@ -60,8 +60,8 @@ function appendAddUser()
 }
 async function checktheme() {
     try {
-        const response = await fetch("/themeState", {
-            method: "POST"
+        const response = await fetch("/api/themeState", {
+            method: "GET"
         });
         const modes = await response.text();
         // console.log("modes : ", modes);
@@ -345,8 +345,8 @@ function  checkAdduserState(){
 
 
 function themestate() {
-    fetch("/themeState", {
-        method: "POST"
+    fetch("/api/themeState", {
+        method: "GET"
     }).then(res => res.text())
     .then((modes) => {
         const body = document.body;
@@ -1870,25 +1870,20 @@ document.getElementById("addit").addEventListener("click", (e) => {
 
 
 
-socket.on("dualtask",(data)=>
+
+socket.on("dualtask",async(data)=>
 {
-    // console.log("sabko ayaa")
-    // const user1=document.getElementById("user1")
-    // const user2=document.getElementById("user2")
-    // // if(user1)
-    // // {   
-    // //     user1.addEventListener("click",()=>
-    // //     {
-    // //         clickUser1()
-    // //     })
-        
-    // // }
-    // if(user2)
-    // {
-    //     user2.addEventListener("click",()=>
-    //         {
-    //             clickUser2()
-    //         })
+
+
+
+
+    // const verifyResponse = await fetch("/getVerify");
+    // const verifyData = await verifyResponse.json();
+
+    // if (verifyData.status !== "ok") {
+    //     alert("Session expired, please log in again.");
+    //     window.location.href="/logout"
+    //     return;
     // }
 
     const task = data[0]
