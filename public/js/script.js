@@ -1087,7 +1087,7 @@ function clickUser2()
                     // options.appendChild(refresh);
         
                     // statusOptions.appendChild(options);
-                    // main.appendChild(statusOptions);
+                    main.appendChild(statusOptions);
         
                     flexContainer.appendChild(main);
                 })
