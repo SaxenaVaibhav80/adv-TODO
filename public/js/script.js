@@ -19,10 +19,10 @@ socket.on("connect", () => {
 });
 
 
-window.addEventListener('offline', () => {
-    console.log('Network disconnected');
-    window.location.href="/TODO"
-});
+// window.addEventListener('offline', () => {
+//     console.log('Network disconnected');
+//     window.location.href="/TODO"
+// });
 
 
 fetch('/api/login', {
@@ -1869,7 +1869,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while adding the task!');
+        alert('No internet');
     });
 });
 
