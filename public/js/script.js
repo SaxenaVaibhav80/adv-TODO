@@ -209,7 +209,7 @@ async function setstatus(id, status) {
             const statusButton = taskDiv.querySelector(".status-option button");
 
             if (statusButton) {
-                statusButton.textContent = "Complete";
+                statusButton.textContent = "Completed";
                 statusButton.classList.add("pending");
                 statusButton.classList.remove("complete");
             }
