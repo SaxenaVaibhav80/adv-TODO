@@ -204,7 +204,10 @@ async function setstatus(id,status)
    }).then(() => {
       getProgress()
       return "done"
-   }) 
+   }).catch()
+   {
+    alert("No internet")
+   }
 }
 
 
