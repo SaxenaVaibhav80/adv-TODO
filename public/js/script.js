@@ -19,10 +19,9 @@ socket.on("connect", () => {
 });
 
 
-// window.addEventListener('offline', () => {
-//     console.log('Network disconnected');
-//     window.location.href="/TODO"
-// });
+window.addEventListener('online', () => {
+    window.location.href="/TODO"
+});
 
 
 fetch('/api/login', {
@@ -1610,7 +1609,7 @@ function getProgress() {
             }
         })
         .catch((err) => {
-            console.error("Error fetching progress:", err);
+            alert("No internet")
         });
 }
 
@@ -1635,7 +1634,7 @@ function getProgress2(id) {
                 console.error("Progress value not found in response");
             }
         })
-        .catch((error) => console.error("Error:", error));
+        .catch((error) =>  alert("No internet"));
 }
 
 
