@@ -193,22 +193,29 @@ async function deletetask(id)
     )
 }
 
-async function setstatus(id,status)
-{
-    fetch("/setStatus",{
-    method:"POST",
-    headers:{
-        "Content-Type": "application/json",
-    },
-    body:JSON.stringify({taskid:id,status:status})
-   }).then(() => {
-      getProgress()
-      return "done"
-   }).catch(err)
-   {
-    alert(err)
-   }
+async function setstatus(id, status) {
+    try {
+        const response = await fetch("/setStatus", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ taskid: id, status: status })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update status: ${response.status}`);
+        }
+
+        await getProgress(); 
+        return "done";
+
+    } catch (err) {
+        alert("Error: " + err.message);
+        return "error";  
+    }
 }
+
 
 
 
