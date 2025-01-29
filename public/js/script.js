@@ -1588,12 +1588,12 @@ function getProgress() {
 
 
             if (data.progress !== undefined) {
-                console.log("getprogresschalaaaa")
+                // console.log("getprogresschalaaaa")
                 const progress= data.progress
                 const room = localStorage.getItem("room")
                 const name = localStorage.getItem("name")
                 if(localStorage.getItem("otheruserid")!=""){
-                    console.log("ab if ke ander ghussaaaa proress ke")
+                    // console.log("ab if ke ander ghussaaaa proress ke")
                     socket.emit("otherProgress",{room,progress,name})
                 }
                 setTimeout(() => {
