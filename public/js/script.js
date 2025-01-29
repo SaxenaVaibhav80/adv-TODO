@@ -193,22 +193,33 @@ async function deletetask(id)
     )
 }
 
-async function setstatus(id,status)
-{
-    fetch("/setStatus",{
-    method:"POST",
-    headers:{
-        "Content-Type": "application/json",
-    },
-    body:JSON.stringify({taskid:id,status:status})
-   }).then(() => {
-    const statusButton = taskDiv.querySelector(".status-button")
-    statusButton.textContent = "Complete";
-    statusButton.classList.add("pending");
-    statusButton.classList.remove("complete");
-      getProgress()
-   }) 
+async function setstatus(id, status) {
+    fetch("/setStatus", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ taskid: id, status: status })
+    }).then(() => {
+        // Task ka parent div dhoondo
+        const taskDiv = document.getElementById(id);
+
+        if (taskDiv) {
+            // 'status-option' class ke andar button dhundo
+            const statusButton = taskDiv.querySelector(".status-option button");
+
+            if (statusButton) {
+                statusButton.textContent = "Complete";
+                statusButton.classList.add("pending");
+                statusButton.classList.remove("complete");
+            }
+        }
+
+        // Progress update karna
+        getProgress();
+    });
 }
+
 
 function addingRing2 ()
 {
