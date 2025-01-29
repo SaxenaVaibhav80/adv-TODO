@@ -206,7 +206,7 @@ async function setstatus(id, status) {
 
         if (taskDiv) {
             if(status === "Completed"){
-                const statusButton = taskDiv.querySelector(".status-option button");
+                const statusButton = taskDiv.querySelector(".status-options .status-button");
                 console.log("button",statusButton)
                 if (statusButton) {
                     console.log("completebutton",statusButton)
