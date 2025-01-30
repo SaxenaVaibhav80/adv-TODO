@@ -125,6 +125,58 @@ function updateProgress2(value) {
 
 async function deletetask(id)
 {
+    const taskElement = document.getElementById(id);
+    const flexContainer = document.querySelector(".flex-container");
+    if (taskElement) {
+        console.log(taskElement)
+        taskElement.remove()
+    }
+    console.log(flexContainer.children.length)
+    if (flexContainer.children.length==0 || !flexContainer) {
+        const emptyMessage = document.querySelector(".emptymsg");
+        if (emptyMessage) {
+            emptyMessage.style.display = "block";
+        }else{
+            const lists= document.getElementById("lists")
+            const div = document.createElement("div");
+            div.classList.add("emptymsg");
+
+            const img = document.createElement("img");
+            const theme = await checktheme()
+            if(theme =="Dark mode")
+            {
+                img.setAttribute("src", "/img/empty (1).png");
+            }else{
+                img.setAttribute("src", "/img/empty (2).png");
+            }
+            
+            img.classList.add("emptytwo");
+
+            const btn = document.createElement("div");
+            btn.textContent = "Add items to lists";
+            if(theme =="Dark mode")
+            {
+                btn.id = "addTODO";
+            }else{
+                btn.id = "addTODOLight";
+            }
+            
+            btn.classList.add("emptybtn")
+            btn.addEventListener('click', () => {
+                document.getElementById('overlay').classList.add('show');
+            });
+            document.getElementById("progressValue").innerHTML = "0%";
+            div.appendChild(img);
+            div.appendChild(btn);
+            
+            lists.appendChild(div);
+        }
+    }
+}
+
+
+async function deletetask(id)
+{
     fetch("/deleteTask",{
         method:"POST",
         headers:{
@@ -138,55 +190,65 @@ async function deletetask(id)
         if(response.message=="deleted")
         {
            
-            const taskElement = document.getElementById(response.id);
-            const flexContainer = document.querySelector(".flex-container");
-            // console.log(taskElement)
-            if (taskElement) {
-                console.log(taskElement)
-                taskElement.remove()
+            const taskid= response.id
+            const room = localStorage.getItem("room")
+            if(room!=""|| room.length!=0 || room.trim() !== "")
+            {
+                console.log("if wala chla")
+                socket.emit("deleteFromEveryone",{taskid,room})
             }
-            console.log(flexContainer.children.length)
-            if (flexContainer.children.length==0 || !flexContainer) {
-                const emptyMessage = document.querySelector(".emptymsg");
-                if (emptyMessage) {
-                    emptyMessage.style.display = "block";
-                }else{
-                    const lists= document.getElementById("lists")
-                    const div = document.createElement("div");
-                    div.classList.add("emptymsg");
-        
-                    const img = document.createElement("img");
-                    const theme = await checktheme()
-                    if(theme =="Dark mode")
-                    {
-                        img.setAttribute("src", "/img/empty (1).png");
+            else{
+                console.log("else wala chla")
+                const taskElement = document.getElementById(response.id);
+                const flexContainer = document.querySelector(".flex-container");
+                // console.log(taskElement)
+                if (taskElement) {
+                    console.log(taskElement)
+                    taskElement.remove()
+                }
+                console.log(flexContainer.children.length)
+                if (flexContainer.children.length==0 || !flexContainer) {
+                    const emptyMessage = document.querySelector(".emptymsg");
+                    if (emptyMessage) {
+                        emptyMessage.style.display = "block";
                     }else{
-                        img.setAttribute("src", "/img/empty (2).png");
+                        const lists= document.getElementById("lists")
+                        const div = document.createElement("div");
+                        div.classList.add("emptymsg");
+            
+                        const img = document.createElement("img");
+                        const theme = await checktheme()
+                        if(theme =="Dark mode")
+                        {
+                            img.setAttribute("src", "/img/empty (1).png");
+                        }else{
+                            img.setAttribute("src", "/img/empty (2).png");
+                        }
+                        
+                        img.classList.add("emptytwo");
+            
+                        const btn = document.createElement("div");
+                        btn.textContent = "Add items to lists";
+                        if(theme =="Dark mode")
+                        {
+                            btn.id = "addTODO";
+                        }else{
+                            btn.id = "addTODOLight";
+                        }
+                        
+                        btn.classList.add("emptybtn")
+                        btn.addEventListener('click', () => {
+                            document.getElementById('overlay').classList.add('show');
+                        });
+                        document.getElementById("progressValue").innerHTML = "0%";
+                        div.appendChild(img);
+                        div.appendChild(btn);
+                        
+                        lists.appendChild(div);
                     }
-                    
-                    img.classList.add("emptytwo");
-        
-                    const btn = document.createElement("div");
-                    btn.textContent = "Add items to lists";
-                    if(theme =="Dark mode")
-                    {
-                        btn.id = "addTODO";
-                    }else{
-                        btn.id = "addTODOLight";
-                    }
-                    
-                    btn.classList.add("emptybtn")
-                    btn.addEventListener('click', () => {
-                        document.getElementById('overlay').classList.add('show');
-                    });
-                    document.getElementById("progressValue").innerHTML = "0%";
-                    div.appendChild(img);
-                    div.appendChild(btn);
-                    
-                    lists.appendChild(div);
                 }
             }
-    
+
         }
     })
     .catch(err => {
@@ -194,6 +256,12 @@ async function deletetask(id)
         console.error("Error:", err);
     });
 }
+
+
+socket.on("deleteTask",async(data)=>
+{
+    await deletetask(data)
+})
 
 async function setstatus(id, status) {
     try {

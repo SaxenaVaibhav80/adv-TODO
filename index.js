@@ -524,7 +524,12 @@ io.on("connection", async(socket) => {
         const status= data.status
         io.to(data.room).emit("dataToSet",{taskid,status})
     })
-   
+    socket.on("deleteFromEveryone",(data)=>
+    {
+        const room= data.room
+        const taskid = data.taskid
+        io.to(room).emit("deleteTask",taskid)
+    })
     // -------- checks how many sockets are active----------->
     // const socketsInRoom = await io.in(id).fetchSockets(); checks for rooms available for particular id 
 
