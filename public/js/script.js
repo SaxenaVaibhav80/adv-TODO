@@ -211,15 +211,37 @@ async function setstatus(id, status) {
         }
 
         getProgress(); 
+        socket.emit("setStatus",{id,status,room})
         return "done";
 
     } catch (err) {
         console.log("Error: " + err.message);
-        alert("No interner")
+        alert("No internet")
         return "error";  
     }
 }
 
+socket.on("dataToSet", (data) => {
+    const taskid = data.id;
+    const status = data.status; 
+
+    console.log("taskid", taskid);
+    console.log("status", status);
+
+    const taskdiv = document.getElementById(taskid);
+    if (taskdiv) {
+        console.log("taskdiv ke andar ghusa", taskid, status);
+
+
+        // const btn = taskdiv.querySelector(".status-button");
+        const btn = taskdiv.querySelector(".status-options .status-button");
+        console.log(btn)
+
+        if (btn) {
+            btn.textContent = status;  
+        }
+    }
+});
 
 
 

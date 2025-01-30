@@ -517,6 +517,13 @@ io.on("connection", async(socket) => {
         const progress=information.progress
         io.to(information.room).emit("setOtherProgress",{name,progress})
     })
+
+    socket.on("setStatus",(data)=>
+    {
+        const taskid= data.id
+        const status= data.status
+        io.to(data.room).emit("dataToSet",{taskid,status})
+    })
    
     // -------- checks how many sockets are active----------->
     // const socketsInRoom = await io.in(id).fetchSockets(); checks for rooms available for particular id 
