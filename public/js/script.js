@@ -211,11 +211,11 @@ async function setstatus(id, status) {
         }
 
         const room = localStorage.getItem("room")
+        getProgress(); 
         if(room!=""|| room.length!=0 || room.trim() !== "")
         {
             socket.emit("setStatus",{id,status,room})
         }
-        getProgress(); 
         return "done";
     } catch (err) {
         console.log("Error: " + err.message);
