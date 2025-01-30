@@ -211,10 +211,12 @@ async function setstatus(id, status) {
         }
 
         const room = localStorage.getItem("room")
+        if(room!=""|| room.length!=0 || room.trim() !== "")
+        {
+            socket.emit("setStatus",{id,status,room})
+        }
         getProgress(); 
-        socket.emit("setStatus",{id,status,room})
         return "done";
-
     } catch (err) {
         console.log("Error: " + err.message);
         alert("No internet")
