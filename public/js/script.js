@@ -1529,28 +1529,27 @@ socket.on("force_leave",(id)=>
             if(name.textContent!==self)
             {
                 localStorage.setItem("otheruserid","")
+                localStorage.setItem("room","")
 
-        fetch("/getCurrent", { method: "GET" })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            return res.json();
-        })
-        .then((data) => {
-    
-            // console.log("data",data)
-            if (data.mode === "solo") {
-                // console.log("Mode: Solo");
-                displaySoloMode(data.user);
-            } else if (data.mode === "dual") {
-                // console.log("Mode: Dual");
-                displayDualMode(data.users);
-            }
-        })
-        .catch((error) => console.error("Error fetching current tasks:", error));
-
-       
+                fetch("/getCurrent", { method: "GET" })
+                .then((res) => {
+                    if (!res.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    return res.json();
+                })
+                .then((data) => {
+            
+                    // console.log("data",data)
+                    if (data.mode === "solo") {
+                        // console.log("Mode: Solo");
+                        displaySoloMode(data.user);
+                    } else if (data.mode === "dual") {
+                        // console.log("Mode: Dual");
+                        displayDualMode(data.users);
+                    }
+                })
+                .catch((error) => console.error("Error fetching current tasks:", error));
 
             }
         });
