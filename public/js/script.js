@@ -210,6 +210,7 @@ async function setstatus(id, status) {
             throw new Error(`Failed to update status: ${response.status}`);
         }
 
+        const room = localStorage.getItem("room")
         getProgress(); 
         socket.emit("setStatus",{id,status,room})
         return "done";
