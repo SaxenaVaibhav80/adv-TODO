@@ -4,8 +4,7 @@
   "description": "this is adv todo for couple",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
