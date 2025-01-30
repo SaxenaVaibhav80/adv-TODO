@@ -223,7 +223,7 @@ async function setstatus(id, status) {
 }
 
 socket.on("dataToSet", (data) => {
-    const taskid = data.id;
+    const taskid = data.taskid;
     const status = data.status; 
 
     console.log("taskid", taskid);
