@@ -28,6 +28,9 @@ app.use(cookiParser())
 const PORT = process.env.PORT
 
 
+
+
+
 // function for user get user by _id------>
 
 async function userby_id(req,res)
@@ -426,6 +429,7 @@ app.get("/about",(req,res)=>
 
 // socket connection--------------------------------------------->
 io.on("connection", async(socket) => {
+
     // console.log(socket)
     // const socketsInRoom = await io.fetchSockets();
     // console.log(`Active Sockets: ${socketsInRoom.length}`);
@@ -437,6 +441,12 @@ io.on("connection", async(socket) => {
     //     console.log("Socket reconnected!");
     // })
 
+    // console.log(socket.id)
+
+    
+    // const rooms = Array.from(io.sockets.adapter.rooms.keys());
+    // console.log("Active rooms:", rooms);
+    
     socket.on("token",async(token)=>
     {
       if(token)
@@ -1001,7 +1011,7 @@ app.get("/TODO", authenticated, async (req, res) => {
                 const relatedUsers = await userModel.find({ 
                     $or: [{ roomId: user.roomId }, { joinId: user.roomId }] 
                 });
-                console.log(relatedUsers)
+                // console.log(relatedUsers)
                 await handleDualModeWithRoomId(relatedUsers, user.roomId, date, res,name);
             }
             
@@ -1010,7 +1020,7 @@ app.get("/TODO", authenticated, async (req, res) => {
                     $or: [{ roomId: user.joinId }, { joinId: user.joinId }] 
                 });
                 
-                console.log(date)
+                // console.log(date)
                 await handleDualModeWithJoinId(relatedUsers, user.joinId, date, res,name);
             }
         } catch (err) {
@@ -1072,7 +1082,7 @@ app.get("/getCurrent", authenticated, async (req, res) => {
             {
     
                 const relatedUsers = await userModel.find({ $or: [{ roomId: filter.joinId }, { joinId: filter.joinId }] });
-                console.log("userssssssss", relatedUsers)
+                // console.log("userssssssss", relatedUsers)
                 const relatedTasks = await Promise.all(
                 relatedUsers.map(async (relatedUser) => {
                     const tasksData = await taskModel.findOne({ userid: relatedUser._id });
@@ -1261,3 +1271,82 @@ app.post("/otherProgress",authenticated,async(req,res)=>
 })
 
 server.listen(PORT)
+
+
+
+
+//  socket explaination---->
+
+
+// Acha, jab socket.join(uuid) call hota hai, toh kya hota hai step-by-step samajhte hain:
+
+// Step-by-Step Explanation
+
+// 1️⃣ Connection Establishment
+// Jab koi naya client connect hota hai, uske liye ek unique socket.id generate hota hai.
+
+
+// ✅ Example:
+
+// socket.id = "abcd1234"
+// By default, har socket apne khud ke ek room mein hota hai (jo socket.id hota hai).
+
+// 2️⃣ socket.join(uuid) Call
+// Agar tum socket.join(uuid) call karte ho, toh:
+
+// A new room (uuid) is created if it doesn’t exist.
+// Tumhara socket is room mein add ho jata hai.
+
+// ✅ Example:
+
+// socket.join("room1"); 
+
+// Ab tum "room1" ka part ho, lekin tumhara socket.id room bhi exist karega.
+// 💡 Ek socket ek se zyada rooms ka member ho sakta hai.
+// Agar dusra client bhi "room1" join karega, toh dono ek hi room mein honge.
+
+// 3️⃣ Room Mein Kitne Log Hain?
+// Agar check karna hai ki ek room mein kitne sockets hain, toh yeh kar sakte ho:
+
+
+// const socketsInRoom = await io.in("room1").fetchSockets();
+// console.log(`Sockets in room1: ${socketsInRoom.length}`);
+// 🔹 Yeh jitne sockets "room1" mein honge, unka count bata dega.
+
+// 4️⃣ Message Send to Room
+// Ab koi bhi user jo "room1" join kar chuka hai, agar kuch send karega, toh sirf "room1" ke users ko message milega.
+
+
+// socket.on("message", (msg) => {
+//     io.to("room1").emit("message", msg);
+// });
+
+// ✅ Sirf "room1" wale clients ko yeh message milega, baaki ko nahi.
+
+// 5️⃣ Room Leave Karna
+// Agar tum socket.leave(uuid) call karte ho, toh tum uss room se nikal jaoge:
+
+
+// socket.leave("room1");
+
+// Agar room empty ho jaye, toh wo automatically delete ho jayega.
+
+// 🔴 Summary
+// Har socket apne default room (socket.id) mein hota hai.
+// socket.join(uuid) se ek naye ya existing room mein add ho jate ho.
+// io.in(uuid).fetchSockets() se check kar sakte ho ki room mein kitne log hain.
+// io.to(uuid).emit("message", msg) se sirf room ke andar message send hoga.
+// socket.leave(uuid) se room leave kar sakte ho.
+
+
+
+
+// const rooms = Array.from(io.sockets.adapter.rooms.keys());
+// console.log("Active rooms:", rooms);
+
+// Each socket ID is a room->
+// When a client connects, it is automatically added to a "room" with its own socket.id.
+
+// Example: If a client has socket.id = "abcd1234", there will be a room "abcd1234" with only that socket inside it.
+// Custom rooms can contain multiple sockets->
+// When you use socket.join("room123"), that socket joins "room123", and many other sockets can also join it.
