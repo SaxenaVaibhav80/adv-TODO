@@ -100,7 +100,7 @@ const checkLoginState = (req, res, next) => {
 const authenticated = async(req,res,next)=>
 {
     const token = req.cookies.token
-    console.log("tokennnnnnn :", token)
+    // console.log("tokennnnnnn :", token)
     if(token)
     {
         try{
@@ -211,6 +211,9 @@ app.post("/accessUid",authenticated,async(req,res)=>
         
     }
 })
+
+
+
 //--------------------------- adding data to the db ----------------------------------------->
 
 
@@ -1048,12 +1051,12 @@ app.get("/getCurrent", authenticated, async (req, res) => {
             });
         }
         else if(mode==="Dual Mode" && filter!=null){
-            console.log("filtterrrrrrrrrrrrrrrrrrrr",filter)
+            // console.log("filtterrrrrrrrrrrrrrrrrrrr",filter)
     
             if(filter.roomId!=null)
             {
                 const relatedUsers = await userModel.find({ $or: [{ roomId: filter.roomId }, { joinId: filter.roomId }] });
-                console.log("userssssssss", relatedUsers)
+                // console.log("userssssssss", relatedUsers)
                 const relatedTasks = await Promise.all(
                 relatedUsers.map(async (relatedUser) => {
                     const tasksData = await taskModel.findOne({ userid: relatedUser._id });
@@ -1063,7 +1066,7 @@ app.get("/getCurrent", authenticated, async (req, res) => {
                     };
                 })
             );
-            console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
+            // console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
             return res.json({ mode: "dual", users: relatedTasks });
             }else if(filter.joinId!=null)
             {
@@ -1079,7 +1082,7 @@ app.get("/getCurrent", authenticated, async (req, res) => {
                     };
                 })
             );
-            console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
+            // console.log("taskkkkkkkkkkkkkkkkkkkkk", relatedTasks)
             return res.json({ mode: "dual", users: relatedTasks });
             }
         }

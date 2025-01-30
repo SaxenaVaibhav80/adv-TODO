@@ -133,8 +133,10 @@ async function deleteTask(id)
         console.log(taskElement)
         taskElement.remove()
     }
-    console.log(flexContainer.children.length)
-    if (flexContainer.children.length==0 || !flexContainer) {
+
+    console.log(flexContainer)
+
+    if (!flexContainer || flexContainer.children.length===0) {
         const emptyMessage = document.querySelector(".emptymsg");
         if (emptyMessage) {
             emptyMessage.style.display = "block";
@@ -155,7 +157,7 @@ async function deleteTask(id)
             img.classList.add("emptytwo");
 
             const btn = document.createElement("div");
-            btn.textContent = "Add items to lists";
+            btn.textContent = "No task available";
             if(theme =="Dark mode")
             {
                 btn.id = "addTODO";
@@ -164,9 +166,9 @@ async function deleteTask(id)
             }
             
             btn.classList.add("emptybtn")
-            btn.addEventListener('click', () => {
-                document.getElementById('overlay').classList.add('show');
-            });
+            // btn.addEventListener('click', () => {
+            //     document.getElementById('overlay').classList.add('show');
+            // });
             document.getElementById("progressValue").innerHTML = "0%";
             div.appendChild(img);
             div.appendChild(btn);
@@ -644,7 +646,7 @@ async function displaySoloMode(user) {
             img.classList.add("empty");
 
             const btn = document.createElement("div");
-            btn.textContent = "Add items to lists";
+            btn.textContent = "No tasks available ";
             btn.classList.add("emptybtn")
             if(theme=="Dark mode")
             {
@@ -653,9 +655,9 @@ async function displaySoloMode(user) {
                 btn.id="addTODOLight"
             }
             
-            btn.addEventListener('click', () => {
-                document.getElementById('overlay').classList.add('show');
-            });
+            // btn.addEventListener('click', () => {
+            //     document.getElementById('overlay').classList.add('show');
+            // });
             document.getElementById("progressValue").innerHTML = `${0}%`;
             div.appendChild(img);
             div.appendChild(btn);
@@ -730,9 +732,14 @@ async function displaySoloMode(user) {
             options.classList.add("options");
 
             const edit = document.createElement("img");
-            edit.setAttribute("src", "/img/editing.png");
+            if(task.priority==="high")
+            {
+                edit.setAttribute("src", "/img/high.png");
+            }else{
+                edit.setAttribute("src", "/img/low.png");
+            }
             edit.classList.add("footer-icon");
-            edit.classList.add("edit");
+            edit.classList.add("priority");
     
 
             const del = document.createElement("img");
@@ -852,7 +859,7 @@ function clickUser1()
                             img.classList.add("empty");
                 
                             const btn = document.createElement("div");
-                            btn.textContent = "Add items to lists";
+                            btn.textContent = "No tasks available";
                             btn.classList.add("emptybtn")
                             if(theme=="Dark mode")
                             {
@@ -861,9 +868,9 @@ function clickUser1()
                                 btn.id="addTODOLight"
                             }
                             
-                            btn.addEventListener('click', () => {
-                                document.getElementById('overlay').classList.add('show');
-                            });
+                            // btn.addEventListener('click', () => {
+                            //     document.getElementById('overlay').classList.add('show');
+                            // });
                             document.getElementById("progressValue").innerHTML =  `${0}%`;
                             div.appendChild(img);
                             div.appendChild(btn);
@@ -937,9 +944,15 @@ function clickUser1()
                         options.classList.add("options");
             
                         const edit = document.createElement("img");
-                        edit.setAttribute("src", "/img/editing.png");
+                        if(task.priority==="high")
+                        {
+                            edit.setAttribute("src", "/img/high.png");
+                        }else{
+                            edit.setAttribute("src", "/img/low.png");
+                        }
+                        // edit.setAttribute("src", "/img/editing.png");
                         edit.classList.add("footer-icon");
-                        edit.classList.add("edit");
+                        edit.classList.add("priority");
                 
             
                         const del = document.createElement("img");
@@ -1068,7 +1081,7 @@ function clickUser2()
                             img.classList.add("empty");
                 
                             const btn = document.createElement("div");
-                            btn.textContent = "Add items to lists";
+                            btn.textContent = "No tasks available";
                             btn.classList.add("emptybtn")
                             if(theme=="Dark mode")
                             {
@@ -1094,6 +1107,7 @@ function clickUser2()
                         flexContainer.classList.add("flex-container");
                 user.tasks.tasks.forEach(task=>
                 {
+                    console.log(task)
                     const main = document.createElement("div");
                     main.classList.add("main");
                     main.id=`${task._id}` 
@@ -1278,7 +1292,7 @@ function displayDualMode(users) {
     
  if(user2Element || user2Element!=null)
     {
-        user2Element.removeEventListener("click", clickUser2); // Works only if `clickUser2` was previously added
+        user2Element.removeEventListener("click", clickUser2);
         user2Element.addEventListener("click", clickUser2);
     }
 
@@ -1754,13 +1768,51 @@ document.getElementById('close').addEventListener('click', () => {
     document.getElementById('overlay').classList.remove('show');
 });
 
+function getCategoryImg(category)
+{
+    if(category==="cooking")
+    {
+        return "/img/chef.png"
+    }
+
+    if(category==="cleaning")
+    {
+        return "/img/cleaning.png"
+    } 
+    if(category==="car washing")
+    {
+        return "/img/cleaning.png"
+    }
+    if(category==="diet")
+    {
+        return "/img/diet.png"
+    }
+    if(category==="workout")
+    {
+        return "/img/gym.png"
+    }
+    if(category==="social work")
+    {
+        return "/img/social-help.png"
+    }
+    if(category==="skills developement")
+    {
+        return "/img/learning.png"
+    }
+    if(category==="self care")
+    {
+        return "/img/heart.png"
+    }
+}
+
 document.getElementById("addit").addEventListener("click", (e) => {
 
     const category = document.getElementById('category').value;
+    // console.log(`category: ${category} and`,typeof(category) )
     const title = document.getElementById('title').value;
     const priority = document.getElementById('priority').value;
     const data = document.getElementById('data').value;
-   
+    const imgUrl = getCategoryImg(category);
 
     if(priority==="")
     {
@@ -1780,7 +1832,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
   
     console.log(created_at)
    
-    const imgUrl = '/img/users.png';
+    
 
     const task = {
         title: title,
@@ -1798,6 +1850,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            category:category,
             title: task.title,
             priority: task.priority,
             data: task.data,
@@ -1839,7 +1892,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
                     <div class="status-options">
                         <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                         <div class="options">
-                            <img src="/img/editing.png" class="footer-icon edit ${data.taskid}" alt="edit" />
+                            <img src="${task.priority === 'high' ? '/img/high.png' : '/img/low.png'}" class="footer-icon priority ${data.taskid}" alt="priority" />
                             <img src="/img/bin.png" class="footer-icon delete ${data.taskid}" alt="delete" />
                             <img src="/img/sync.png" class="footer-icon refresh ${data.taskid}" alt="refresh" />
                         </div>
@@ -1901,7 +1954,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
                     <div class="status-options">
                         <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                         <div class="options">
-                                <img src="/img/editing.png" class="footer-icon edit" alt="edit" />
+                                <img src="${task.priority === 'high' ? '/img/high.png' : '/img/low.png'}" class="footer-icon priority ${data.taskid}" alt="priority" />
                                 <img src="/img/bin.png" class="footer-icon delete" alt="delete" />
                                 <img src="/img/sync.png" class="footer-icon refresh" alt="refresh" />
                         </div>
@@ -2029,7 +2082,7 @@ socket.on("dualtask",async(data)=>
                 <div class="status-options">
                     <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                     <div class="options">
-                        <img src="/img/editing.png" class="footer-icon edit ${taskid}" alt="edit" />
+                        <img src="${task.priority === 'high' ? '/img/high.png' : '/img/low.png'}" class="footer-icon priority ${data.taskid}" alt="priority" />
                         <img src="/img/bin.png" class="footer-icon delete ${taskid}" alt="delete" />
                         <img src="/img/sync.png" class="footer-icon refresh ${taskid}" alt="refresh" />
                     </div>
@@ -2048,7 +2101,7 @@ socket.on("dualtask",async(data)=>
             taskDiv.querySelector(".status-button").addEventListener("click",async()=>
             {   
                 const statusButton=taskDiv.querySelector(".status-button")
-                console.log(statusButton)
+                // console.log(statusButton)
                 if (statusButton.innerHTML=="Complete") {
                     console.log("completed")
                     const result = await setstatus(taskid, "Completed");
@@ -2067,7 +2120,7 @@ socket.on("dualtask",async(data)=>
                 if (taskDiv.querySelector(".status-button").innerHTML=="Completed") {
                     const result = await setstatus(taskid, "Complete");
 
-                    if (result === "done") {  // Ensure it's completed
+                    if (result === "done") { 
                         statusButton.textContent = "Complete";
                         statusButton.classList.add("pending");
                         statusButton.classList.remove("complete");
@@ -2094,7 +2147,7 @@ socket.on("dualtask",async(data)=>
                 <div class="status-options">
                     <button class="status-button ${task.status.toLowerCase()}">${task.status}</button>
                     <div class="options">
-                            <img src="/img/editing.png" class="footer-icon edit" alt="edit" />
+                            <img src="${task.priority === 'high' ? '/img/high.png' : '/img/low.png'}" class="footer-icon priority ${data.taskid}" alt="priority" />
                             <img src="/img/bin.png" class="footer-icon delete" alt="delete" />
                             <img src="/img/sync.png" class="footer-icon refresh" alt="refresh" />
                     </div>

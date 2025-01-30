@@ -41,9 +41,12 @@ body{
     border-radius: 7px;
     color:white;
     background-color: rgb(169, 169, 188);
+    /* : rgb(95, 92, 113); */
     animation: slideDown 0.5s ease-in-out forwards;
     opacity: 1;
 }
+
+
 @keyframes slideDown {
     from {
         top: 0;
@@ -350,6 +353,7 @@ a::after{
     top: 55px;
     left: 75px;
 }
+
 .progress-ring svg {
     transform: rotate(-90deg); 
 }
@@ -481,7 +485,7 @@ a::after{
 }
 
 #addTODO{
-    cursor: pointer;
+    /* cursor: pointer; */
     text-align: center;
     width: 27%;
     margin-left: 48px;
@@ -495,7 +499,7 @@ a::after{
 }
 
 #addTODOLight{
-    cursor: pointer;
+    /* cursor: pointer; */
     text-align: center;
     width: 27%;
     margin-left: 48px;
@@ -724,7 +728,7 @@ a::after{
 .skills {
     width: 75px;
     height: 75px;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     object-fit: cover;
 }
 
@@ -739,7 +743,8 @@ a::after{
 .title {
     font-size: 20px;
     font-weight: bold;
-    color: rgb(113 113 151);
+    /* color: rgb(113 113 151); */
+    color: rgb(90 90 125);
     margin-bottom: 10px;
 }
 
@@ -943,6 +948,30 @@ body.dark-mode .home,body.dark-mode .contact,body.dark-mode .setting,body.dark-m
     color: #d1d7e0;
     cursor: pointer;
 }
+body.dark-mode #notify {
+    position: absolute;
+    top: 0; /* Start from top 0 */
+    left: 690px;
+    /* border: 1px solid black; */
+    padding: 10px 20px;
+    border-radius: 7px;
+    color:white;
+    background-color: rgb(95, 92, 113);
+    animation: slideDown 0.5s ease-in-out forwards;
+    opacity: 1;
+}
+
+body.dark-mode .hidden {
+    position: absolute;
+    top: 80px; 
+    left: 690px;
+    color: white;
+    /* border: 1px solid black; */
+    padding: 10px 20px;
+    border-radius: 7px;
+    background-color: rgb(95, 92, 113);
+    animation: slideUp 0.5s ease-in-out forwards;
+}
 body.dark-mode .contact-description,body.dark-mode .home-description,body.dark-mode .setting-description,body.dark-mode .logout-description{
     margin-left: 10px;
     color: #ffffff;
@@ -952,6 +981,17 @@ body.dark-mode .navaddtask{
     margin-left: 60px;
     color: #d1d7e0;
     text-decoration: none;
+}
+
+body.dark-mode #timer-shift{
+    position: relative;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #d1d7e0;
+    width: 156px;
+    top: 55px;
+    left: 75px;
 }
 body.dark-mode .joinroombtn,body.dark-mode .adduserbtn{
     margin-left: 65px;
@@ -1065,7 +1105,7 @@ body.dark-mode #timer {
     margin-top: 10px;
     font-size: 16px;
     font-weight: bold;
-    color: #ffffff;
+    color: #d1d7e0;
     width: 156px;
     top: 200px;
     left: 75px;
@@ -1073,7 +1113,19 @@ body.dark-mode #timer {
 body.dark-mode .background-circle {
     stroke: #55367a;
 }
+
+body.dark-mode .background-circle2 {
+    stroke: #55367a;
+}
 body.dark-mode .progress-circle {
+    stroke: #8d65be;
+    stroke-width: 7;
+    stroke-dasharray: 440; 
+    stroke-dashoffset: 440; 
+    transition: stroke-dashoffset 0.5s ease;
+}
+
+body.dark-mode .progress-circle2 {
     stroke: #8d65be;
     stroke-width: 7;
     stroke-dasharray: 440; 
@@ -1089,7 +1141,22 @@ body.dark-mode .progress-value {
     font-weight: bold;
     color: #d1d7e0;
 }
+body.dark-mode .progress-value2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15px;
+    font-weight: bold;
+    color: #d1d7e0;
+}
 body.dark-mode #progress-fill {
+    height: 100%;
+    background-color: #8154b8;
+    width: 0%; 
+    transition: width 1s linear;
+}
+body.dark-mode #progress-fill2 {
     height: 100%;
     background-color: #8154b8;
     width: 0%; 
@@ -1106,15 +1173,18 @@ body.dark-mode .main {
     align-items: center;
     margin-bottom: 15px;
 }
+
 body.dark-mode .title {
     font-size: 20px;
     font-weight: bold;
-    color: #bfb5ca;
+    /* color: #bfb5ca; */
+    color: #0f0a2d;
     margin-bottom: 10px;
 }
 body.dark-mode .data {
     font-size: 14px;
-    color: #d1d7e0;
+    /* color: #d1d7e0; */
+    color: #a2a0ad;
     margin-bottom: 10px;
 }
 body.dark-mode .created-on {
