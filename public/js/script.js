@@ -9,7 +9,6 @@ localStorage.setItem("reload","0")
 socket.on("connect", () => {
     console.log("Connected to server. My socket ID:", socket.id);
 
-
     if (localStorage.getItem("reload") === "0") {
         localStorage.setItem("reload", "1");
     } else {

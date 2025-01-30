@@ -444,8 +444,7 @@ io.on("connection", async(socket) => {
     // console.log(socket.id)
 
     
-    // const rooms = Array.from(io.sockets.adapter.rooms.keys());
-    // console.log("Active rooms:", rooms);
+ 
     
     socket.on("token",async(token)=>
     {
@@ -491,6 +490,9 @@ io.on("connection", async(socket) => {
         socketsInRoom.forEach((s) => {
             console.log(`Socket ID: ${s.id}`);
         });
+
+        // const rooms = Array.from(io.sockets.adapter.rooms.keys());
+        // console.log("Active rooms:", rooms);
     }
     socket.on("ijoined",(data)=>
     {
