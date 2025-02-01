@@ -1805,7 +1805,7 @@ function getCategoryImg(category)
 }
 
 document.getElementById("addit").addEventListener("click", (e) => {
-
+    
     const category = document.getElementById('category').value;
     // console.log(`category: ${category} and`,typeof(category) )
     const title = document.getElementById('title').value;
@@ -1842,7 +1842,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
         priority: priority
     };
 
-    
+    document.getElementById('overlay').classList.remove('show');
     fetch('/TODO', {
         method: 'POST',
         headers: {
@@ -1998,7 +1998,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
             
             }
 
-            document.getElementById('overlay').classList.remove('show');
+            
 
         }
 
@@ -2010,7 +2010,7 @@ document.getElementById("addit").addEventListener("click", (e) => {
             console.log("sala sender",sender)
             socket.emit("message", [task, data.id,sender,data.taskid]);
 
-            document.getElementById('overlay').classList.remove('show');
+            
         }
 
         
