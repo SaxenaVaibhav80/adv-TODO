@@ -2259,7 +2259,7 @@ socket.on("dualtask",async(data)=>
         }      
     }
 
-    document.getElementById('overlay').classList.remove('show');
+    // document.getElementById('overlay').classList.remove('show');
 })
 
 
