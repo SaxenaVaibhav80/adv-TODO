@@ -338,6 +338,40 @@ app.get("/history",authenticated,async(req,res)=>
         }
     })
 
+
+// sendHistoryDataToClinet
+
+app.post("/taskHistory", authenticated, async (req, res) => {
+    const token = req.cookies.token;
+    const date = req.body.date;
+
+    if (token) {
+        try {
+            const verification = jwt.verify(token, secret_key);
+            const id = verification.id;
+            const task = await taskModel.findOne({ userid: id });
+
+            if (!task) {
+                return res.status(404).json({ error: "No task found" });
+            }
+            const reqTask = task.history.find(entry => entry.date === date);
+
+            if (!reqTask) {
+                return res.status(404).json({ error: "No tasks found for this date" });
+            }
+
+            res.json({ history: reqTask.data });
+
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    } else {
+        res.status(401).json({ error: "Unauthorized" });
+    }
+});
+
+
+
 // handling join room handler----------------------------------->
 
 app.post("/joined",authenticated,async(req,res)=>

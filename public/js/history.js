@@ -1,4 +1,12 @@
 alert("hii")
+
+// document.addEventListener("DOMContentLoaded", function () {
+//     flatpickr("#date", {
+//         dateFormat: "d-m-Y",  // Custom format DD-MM-YYYY
+//     });
+// });
+
+
 function themestate() {
     fetch("/themeState", {
         method: "POST"
@@ -27,6 +35,9 @@ function themestate() {
     }); 
 }
 
+
+
+
 function generateLast30Dates() {
     const today = new Date();
     const dates = [];
@@ -51,16 +62,44 @@ function updateSelectedDate(dates) {
 
 // Initialize slider with last 30 dates
 const dates = generateLast30Dates();
-updateSelectedDate(dates); // Set initial date display
+updateSelectedDate(dates); 
 
-// Event listener for slider change
+
 const slider = document.getElementById("date-slider");
 slider.addEventListener("input", () => updateSelectedDate(dates));
 
-// Event listener for search button
+
 const searchBtn = document.getElementById("search-btn");
 searchBtn.addEventListener("click", () => {
     const selectedDate = dates[slider.value];
     alert(`Search for tasks on: ${selectedDate}`);
     // Implement your search logic here
 });
+
+// search btn pr click krne pr date jyegi backend me or task lake degi 
+
+// const searchbtn = document.getElementById("getdate");
+
+// searchbtn.addEventListener("click", () => {
+
+//     const date = document.getElementById("date");
+//     const acceptedDate = date.value;
+
+
+
+    //    fetch("/taskHistory",{
+    //     method:POST,
+    //     headers:{
+    //        'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({date:acceptedDate}),
+    //    }).then(response => response.json())
+    //    .then(data => {
+
+            // yhn array ayega tasks ka 
+
+
+    //    })
+
+   
+// });
