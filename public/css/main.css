@@ -713,7 +713,7 @@ a::after{
     margin-bottom: 15px;
 }
 
-icon {
+.icon {
     padding: 7px;
     border-radius: 12px;
     background-color: rgb(167, 167, 185);
@@ -965,7 +965,7 @@ body.dark-mode #notify {
 body.dark-mode .icon {
     padding: 7px;
     border-radius: 10px;
-    background-color: rgb(136 136 154);
+    background-color: rgb(111 111 123);
     width: 82px;
     height: 82px;
     margin-right: 25px;
