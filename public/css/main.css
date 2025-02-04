@@ -713,12 +713,13 @@ a::after{
     margin-bottom: 15px;
 }
 
-/* First part: Image section */
-.icon {
+icon {
+    padding: 7px;
+    border-radius: 12px;
+    background-color: rgb(167, 167, 185);
     width: 82px;
     height: 82px;
-    border-radius: 12px;
-    /* background-color: #c0c0c0; */
+    border-radius: 10px;
     margin-right: 25px;
     display: flex;
     justify-content: center;
@@ -961,6 +962,18 @@ body.dark-mode #notify {
     opacity: 1;
 }
 
+body.dark-mode .icon {
+    padding: 7px;
+    border-radius: 10px;
+    background-color: rgb(136 136 154);
+    width: 82px;
+    height: 82px;
+    margin-right: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 body.dark-mode .hidden {
     position: absolute;
     top: 80px; 
@@ -982,6 +995,16 @@ body.dark-mode .navaddtask{
     color: #d1d7e0;
     text-decoration: none;
 }
+
+
+
+/* taskimg -->
+
+padding: 7px;
+border-radius: 10px;
+background-color: rgb(167, 167, 185); */
+
+/*  dark mode -->     background-color: rgb(136 136 154); */
 
 body.dark-mode #timer-shift{
     position: relative;
