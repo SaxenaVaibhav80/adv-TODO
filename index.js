@@ -1167,7 +1167,7 @@ app.get("/addUser",authenticated,async(req,res)=>
     }else{
         res.render("addUser")
     }
-   
+
 })
 
 // ---------------------------------------------------contact us route--------------------------->
@@ -1176,7 +1176,6 @@ app.get("/contactus",authenticated,async(req,res)=>
 {
 
     const user =  await userby_id(req,res)
-
     res.render("contactus",{firstname:user.firstname})
 })
 
