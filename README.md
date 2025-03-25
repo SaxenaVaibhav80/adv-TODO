@@ -1,87 +1,79 @@
-Adv Todo - A Smart Collaborative Task Manager
 
-🚀 Overview
+# <span style="color:#FF5733">Adv Todo - A Smart Collaborative Task Manager</span>
 
-Adv Todo is an advanced to-do application that allows users to manage tasks efficiently while enabling real-time collaboration. Users can create tasks, track progress, and maintain a history of updates. The system supports room-based collaboration, ensuring that two users with the same room ID can share tasks but edit only their own.
+## 🚀 <span style="color:#3498db">Overview</span>
 
-🔥 Features
+**Adv Todo** is an advanced to-do application that allows users to manage tasks efficiently while enabling real-time collaboration. Users can create tasks, track progress, and maintain a history of updates. The system supports **room-based collaboration**, ensuring that two users with the same room ID can share tasks but edit only their own.
 
-✅ Collaborative Task Management – Users join a room using a generated room ID.
+## 🔥 <span style="color:#2ecc71">Features</span>
 
-🔄 Real-time Updates – Tasks sync instantly between collaborators.
+- ✅ **Collaborative Task Management** – Users join a room using a generated room ID.
+- 🔄 **Real-time Updates** – Tasks sync instantly between collaborators.
+- 📊 **Progress Meter** – Track completion percentage for tasks.
+- 📜 **Task History** – Keep track of the previous 30 days' tasks.
+- 🔒 **Restricted Editing** – Users can modify only their own tasks.
+- 💡 **Task Suggestions** – Smart recommendations for task ideas.
 
-📊 Progress Meter – Track completion percentage for tasks.
+## 🛠️ <span style="color:#e74c3c">Tech Stack</span>
 
-📜 Task History – keep the track of previous 30 days tasks.
+- **Frontend:** EJS, CSS, JS
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB (Atlas)
+- **Real-time:** Socket.io
+- **Authentication:** JWT
 
-🔒 Restricted Editing – Users can modify only their own tasks.
+## 🎮 <span style="color:#9b59b6">How It Works</span>
 
-💡 Task Suggestions – Smart recommendations for task ideas.
+1. **Create or Join a Room** – If you want to create a room, go to **Add User** and join the room. The ID will automatically be copied to your clipboard; now send this ID to the other user you want to collaborate with.
+2. **Add Tasks** – Users can create and manage their own tasks.
+3. **View & Collaborate** – Both users see each other's tasks as well as their own in real-time.
+4. **Edit Privileges** – Users can edit only the tasks they created.
+5. **Track Progress** – A meter displays task completion status.
 
-🛠️ Tech Stack
+## 🏗️ <span style="color:#f39c12">Installation & Setup</span>
 
-Frontend: EJS , CSS , JS
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/yourusername/adv-todo.git
+   cd adv-todo
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm init 
+   npm i mongoose body-parser ejs cookie-parser jsonwebtoken socket.io --save-dev nodemon
+   ```
+3. **Start the server:**
+   - Go to `package.json` and edit the **start** field value as:
+     ```json
+     "scripts": {
+       "start": "node index.js",
+       "dev": "nodemon index.js"
+     }
+     ```
+   - Then run on the terminal:
+     ```sh
+     npm run dev
+     ```
 
-Backend: Node.js, Express.js
+## 🔐 <span style="color:#1abc9c">Environment Variables</span>
 
-Database: MongoDB (Atlas)
-
-Real-time: Socket.io
-
-Authentication: JWT
-
-🎮 How It Works
-
-Create or Join a Room – if you want to create room the go to add user and join the room ,the id will automatically copied to your clipboard, now send this id to other user you want to make him/her collab.
-
-Add Tasks – Users can create and manage their own tasks.
-
-View & Collaborate – Both users see each others tasks as well as their own tasks in real-time.
-
-Edit Privileges – Users can edit only the tasks they created.
-
-Track Progress – A meter displays task completion status.
-
-
-
-🏗️ Installation & Setup
-
-Clone the repository:
-
-git clone https://github.com/yourusername/adv-todo.git
-cd adv-todo
-
-Install dependencies:
-
-npm init
-npm i mongoose body-parser ejs cookie-parser jasonwebtoken socket.io --save-dev nodemon
-
-Start the server:
-
-go to package.json 
-edit the "start" field value as:-
- "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-  },
-
-then run on terminal "npm run dev" (without quotation marks)
-
-🔐 Environment Variables
-
-Create a .env file and add:
-
+Create a `.env` file and add:
+```
 MONGO_URI=your_mongo_connection_string
 JWT_SECRET=your_secret_key
 PORT=1000
+```
 
-🤝 Contributing
+## 🤝 <span style="color:#34495e">Contributing</span>
 
 Pull requests are welcome! For major changes, please open an issue first to discuss what you’d like to change.
 
-📩 Contact
+## 📩 <span style="color:#d35400">Contact</span>
 
-For queries, reach out to vaibhavsaxena599@gmail.com or create an issue in the repository.
+For queries, reach out to **vaibhavsaxena599@gmail.com** or create an issue in the repository.
 
-Made with ❤️ by vaibhav saxena 🚀
+---
+Made with ❤️ by **Vaibhav Saxena** 🚀
+
+
 
