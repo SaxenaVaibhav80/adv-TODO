@@ -58,7 +58,14 @@ npm i mongoose body-parser ejs cookie-parser jasonwebtoken socket.io --save-dev 
 
 Start the server:
 
+go to package.json 
+edit the "start" field value as:-
+ "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
 
+then run on terminal "npm run dev" (without quotation marks)
 
 🔐 Environment Variables
 
