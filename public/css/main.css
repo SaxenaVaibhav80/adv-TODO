@@ -996,6 +996,24 @@ body.dark-mode .navaddtask{
     text-decoration: none;
 }
 
+body.dark-mode .you{
+    position: absolute;
+    top: 52%;
+    left: 42%;
+    font-size: 15px;
+    /* font-weight: bold; */
+    color:  #d1d7e0;
+}
+
+    body.dark-mode .other{
+    position: absolute;
+    top: 52%;
+    left: 39%;
+    font-size: 15px;
+    /* font-weight: bold; */
+    color:  #d1d7e0;
+}
+
 
 
 /* taskimg -->
