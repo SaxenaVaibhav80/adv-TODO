@@ -41,7 +41,7 @@
 2. **Install dependencies:**
    ```sh
    npm init 
-   npm i mongoose body-parser ejs cookie-parser jsonwebtoken socket.io --save-dev nodemon
+   npm i mongoose body-parser ejs cookie-parser jsonwebtoken socket.io --save-dev nodemon dotenv bcrypt
    ```
 3. **Start the server:**
    - Go to `package.json` and edit the **start** field value as:
