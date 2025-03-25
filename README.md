@@ -77,7 +77,19 @@ For queries, reach out to [**vaibhavsaxena599@gmail.com**](mailto\:vaibhavsaxena
 ---
 
 
+![homepage](https://github.com/user-attachments/assets/4b95e6f5-13fc-4aef-aa7e-5efaa5d60daa)
+![signup form](https://github.com/user-attachments/assets/d7e16472-6eb7-4e73-aedc-ade746675708)
+![login form](https://github.com/user-attachments/assets/74ed587e-eae3-4b05-964a-53f49a9eb38f)
+![solo mode ui](https://github.com/user-attachments/assets/ac056b4f-9692-42e0-be95-97093fc4fa93)
+![solomode dark](https://github.com/user-attachments/assets/e16e2ac4-9288-4b65-a253-cf58d392ed8b)
+![task adding](https://github.com/user-attachments/assets/80a8deaf-980e-4ca9-9688-53aad88cf5e5)
+![added tasks solo](https://github.com/user-attachments/assets/bd17ac7f-55e9-4a80-9972-8bd301a3296a)
+![joining room admin](https://github.com/user-attachments/assets/42adce01-22d4-406a-bcd6-645adf91bcae)
+![join room by admin id](https://github.com/user-attachments/assets/649c7d7c-33ab-4b79-86c0-70daf8b664ab)
+![other user added](https://github.com/user-attachments/assets/c128e595-e698-4512-bd3d-e2b2952e8bce)
+![dual mode light](https://github.com/user-attachments/assets/bcd655ba-0f02-4598-b35f-b680e7e91a9f)
 
 
 Made with ❤️ by **Vaibhav Saxena** 🚀
+
 
