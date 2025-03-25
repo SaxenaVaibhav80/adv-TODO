@@ -53,7 +53,8 @@ cd adv-todo
 
 Install dependencies:
 
-npm install
+npm init
+npm i mongoose body-parser ejs cookie-parser jasonwebtoken socket.io --save-dev nodemon
 
 Start the server:
 
